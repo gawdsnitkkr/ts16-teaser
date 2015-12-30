@@ -210,8 +210,7 @@
                             }
                         });
                         t.to(SVGElements.Browser, 0.5, {
-                            x: '-=400',
-                            opacity: 0,
+                            x: '-=735',
                             ease: Power3.easeOut
                         });
                         Functions.SmartClassAppEnterAnimation();
@@ -269,6 +268,18 @@
                     ease: Linear.easeNone
                 }, 0.1);
             },
+            PathAnimation: function (path, time, ease, inverse, callback) {
+                var PathLength = path.getTotalLength();
+                t.fromTo(path, time, {
+                    strokeDasharray: PathLength + ' ' + PathLength,
+                    strokeDashoffset: (inverse ? -1 : 1) * PathLength,
+                    opacity: 1
+                }, {
+                    strokeDashoffset: 0,
+                    ease: ease,
+                    onComplete: callback
+                });
+            },
             SkyEnter: function () {
                 t.to(SVGElements.Classroom, 1, {
                     y: 500,
@@ -304,7 +315,8 @@
                         ease: ElasticEasingOut
                     }, 0.1, function () {
                         Functions.CloudsAnimation();
-                        Functions.WindmillEnter();
+                        Functions.PathAnimation(SVGElements.PowerLineWire[0], 7, Linear.easeNone, false);
+                        setTimeout(Functions.WindmillEnter, 2000);
                     });
                 }, 1000);
             },
@@ -559,6 +571,9 @@
                     ease: Power4.easeOut,
                     delay: 0.25
                 });
+                SVGElements.ProjectorWires.each(function () {
+                    Functions.PathAnimation(this, 1.5, Power3.easeInOut, true);
+                });
                 t.fromTo(SVGElements.BulbWireGroup, 1.5, {
                     y: -100
                 }, {
@@ -617,7 +632,7 @@
             SVGElements.StudentBottomGroupArray = SVGElements.StudentBottomGroup.find('g');
             SVGElements.Projecter = $('#Projecter', SVGRootObject);
             SVGElements.ProjectorShadow = $('#ProjectorShadow', SVGRootObject).css('opacity', 0);
-            SVGElements.ProjectorWires = $('#ProjectorWires', SVGRootObject);
+            SVGElements.ProjectorWires = $('#ProjectorWires path', SVGRootObject).css('opacity', 0);
             SVGElements.ProjectorLight = $('#ProjectorLight', SVGRootObject);
             SVGElements.ClassRoomWire = $('#ClassRoomWire', SVGRootObject);
             SVGElements.BulbWireGroup = $('#BulbWireGroup', SVGRootObject);
@@ -627,7 +642,6 @@
             SVGElements.Blackout = $('#Blackout', SVGRootObject).css('opacity', 0);
             SVGElements.Sky = $('#Sky', SVGRootObject).css({opacity: 0, display: 'block'});
             SVGElements.SkyPaths = SVGElements.Sky.find('path');
-            SVGElements.WindmillGroup = $('#WindmillGroup', SVGRootObject);
             SVGElements.Clouds = $('.Clouds', SVGRootObject);
             SVGElements.PowerLine = $('#PowerLine', SVGRootObject).css({opacity: 0, display: 'block'});
             SVGElements.PowerLineElements = SVGElements.PowerLine.children();
@@ -638,6 +652,7 @@
                 x: '+=1'
             });
             SVGElements.PowerLineWholeGroup = $('#PowerLineWholeGroup', SVGRootObject);
+            SVGElements.PowerLineWire = $('#PowerLineWire', SVGRootObject).css('opacity', 0);
             SVGElements.WindmillFans = $('.Fans', SVGRootObject);
             Functions.Start();
         });
