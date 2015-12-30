@@ -223,7 +223,7 @@
                     display: 'block',
                     rotation: 30,
                     x: 100,
-                    y: 100
+                    y: 200
                 }, {
                     opacity: 1,
                     rotation: 0,
@@ -241,10 +241,154 @@
                             ease: Power3.easeOut
                         });
                         Functions.TextEnterAnimation('irctc.co.in', function () {
-                            Functions.QueueExitAnimation(Functions.HandEnterAnimation);
+                            t.to(SVGElements.Website, 0.5, {
+                                opacity: 1,
+                                ease: Power3.easeOut
+                            });
+                            t.to(SVGElements.PeopleGroup, 0.5, {
+                                x: '+=10',
+                                y: '+=50',
+                                scale: 0.8,
+                                transformOrigin: '50% 50%',
+                                ease: Power3.easeOut,
+                                onComplete: function () {
+                                    Functions.QueueExitAnimation(Functions.HandEnterAnimation);
+                                }
+                            });
                         });
                     }
                 });
+            },
+            End: function () {
+                t.to(SVGElements.PathToHome, 1, {
+                    opacity: 0,
+                    ease: Power3.easeOut,
+                    onComplete: function () {
+                        t.to(SVGElements.India, 3, {
+                            x: '+=590',
+                            y: '+=1300',
+                            scale: 10,
+                            transformOrigin: '50% 50%',
+                            ease: ElasticEasingOut,
+                            onComplete: function () {
+                                t.to(SVGElements.HomeMarker, 1, {
+                                    opacity: 0,
+                                    y: 10,
+                                    scale: 0,
+                                    transformOrigin: '50% 50%',
+                                    ease: ElasticEasingIn
+                                });
+                                t.to(SVGElements.India, 2, {
+                                    opacity: 0,
+                                    x: '+=380',
+                                    y: '+=800',
+                                    scale: 16,
+                                    transformOrigin: '50% 50%',
+                                    ease: ElasticEasingIn,
+                                    onComplete: function () {
+                                        t.fromTo(SVGElements.Techspardha, 4, {
+                                            opacity: 0,
+                                            scale: 0.7,
+                                            transformOrigin: '50% 50%'
+                                        }, {
+                                            opacity: 1,
+                                            scale: 1,
+                                            transformOrigin: '50% 50%',
+                                            ease: Power3.easeOut
+                                        });
+                                        SVGElements.TechspardhaText.each(function () {
+                                            Functions.PathAnimation(this, 4, Power3.easeOut, false, 1);
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            },
+            IndiaPathToHomeEnterAnimation: function () {
+                SVGElements.PathToHome.each(function () {
+                    Functions.PathAnimation(this, 3, Power3.easeOut, false, 1);
+                });
+                t.to(SVGElements.Ways, 1, {
+                    opacity: 0,
+                    ease: Power3.easeOut
+                });
+                setTimeout(Functions.End, 3000);
+            },
+            IndiaHomeMarkerEnterAnimation: function () {
+                t.fromTo(SVGElements.HomeMarker, 1, {
+                    opacity: 0,
+                    y: 30,
+                    scale: 0,
+                    transformOrigin: '50% 50%'
+                }, {
+                    opacity: 1,
+                    y: 6,
+                    scale: 0.7,
+                    transformOrigin: '50% 50%',
+                    ease: ElasticEasingOut,
+                    onComplete: Functions.IndiaPathToHomeEnterAnimation
+                });
+            },
+            IndiaWaysEnterAnimation: function () {
+                SVGElements.Ways.each(function () {
+                    Functions.PathAnimation(this, 3, Power3.easeOut, false, 1);
+                });
+                setTimeout(function () {
+                    SVGElements.WaysOverlay.each(function () {
+                        Functions.PathAnimation(this, 3, Power3.easeOut, false, 10);
+                        t.to(this, 0.5, {
+                            opacity: 0,
+                            delay: 0.5,
+                            ease: Power3.easeOut
+                        });
+                    });
+                    setTimeout(function () {
+                        SVGElements.WaysOverlay.each(function () {
+                            Functions.PathAnimation(this, 3, Power3.easeOut, false, 10);
+                            t.to(this, 0.5, {
+                                opacity: 0,
+                                delay: 0.5,
+                                ease: Power3.easeOut
+                            });
+                        });
+                        setTimeout(Functions.IndiaHomeMarkerEnterAnimation, 1000);
+                    }, 1000);
+                }, 2000);
+            },
+            IndiaEnterAnimation: function () {
+                t.fromTo(SVGElements.India, 1.5, {
+                    opacity: 1,
+                    y: -550
+                }, {
+                    y: 0,
+                    ease: Power3.easeOut,
+                    onComplete: function () {
+                        Functions.IndiaWaysEnterAnimation();
+                    }
+                });
+            },
+            WindmillExitAnimation: function () {
+                Functions.IndiaEnterAnimation();
+                t.to(SVGElements.Sky, 2, {
+                    opacity: 0,
+                    ease: Power3.easeOut
+                });
+                t.to(SVGElements.PowerLine, 2, {
+                    opacity: 0,
+                    ease: Power3.easeOut
+                });
+                //t.to(SVGElements.PowerLineWholeGroup, 1, {
+                //    y: 400,
+                //    ease: ElasticEasingIn
+                //});
+                //t.to(SVGElements.Sky, 1, {
+                //    y: 485,
+                //    delay: 0.25,
+                //    ease: ElasticEasingIn
+                //});
+                //setTimeout(Functions.IndiaEnterAnimation, 1000);
             },
             CloudsAnimation: function () {
                 var i = 0,
@@ -255,7 +399,7 @@
                         ease: Linear.easeNone
                     });
             },
-            WindmillEnter: function () {
+            WindmillEnterAnimation: function () {
                 t.to(SVGElements.PowerLineWholeGroup, 4, {
                     rotation: 20,
                     x: 960,
@@ -267,11 +411,14 @@
                     transformOrigin: '39.83% 56.3%',
                     ease: Linear.easeNone
                 }, 0.1);
+                setTimeout(Functions.WindmillExitAnimation, 6000);
             },
-            PathAnimation: function (path, time, ease, inverse, callback) {
-                var PathLength = path.getTotalLength();
+            PathAnimation: function (path, time, ease, inverse, divisor, callback) {
+                divisor = divisor || 1;
+                var PathLength = path.getTotalLength(),
+                    DividePathLength = PathLength / divisor;
                 t.fromTo(path, time, {
-                    strokeDasharray: PathLength + ' ' + PathLength,
+                    strokeDasharray: DividePathLength + ' ' + PathLength,
                     strokeDashoffset: (inverse ? -1 : 1) * PathLength,
                     opacity: 1
                 }, {
@@ -315,8 +462,8 @@
                         ease: ElasticEasingOut
                     }, 0.1, function () {
                         Functions.CloudsAnimation();
-                        Functions.PathAnimation(SVGElements.PowerLineWire[0], 7, Linear.easeNone, false);
-                        setTimeout(Functions.WindmillEnter, 2000);
+                        Functions.PathAnimation(SVGElements.PowerLineWire[0], 7, Linear.easeNone, false, 1);
+                        setTimeout(Functions.WindmillEnterAnimation, 2000);
                     });
                 }, 1000);
             },
@@ -437,6 +584,16 @@
                                 onComplete: function () {
                                     t.to(SVGElements.ProjectorShadow, 0.5, {
                                         opacity: 1,
+                                        ease: Power3.easeOut
+                                    });
+                                }
+                            });
+                            t.to(SVGElements.SmartClassAppBack, 0.5, {
+                                fill: '#FFECB3',
+                                ease: Power3.easeOut,
+                                onComplete: function () {
+                                    t.to(SVGElements.SmartClassAppBack, 0.5, {
+                                        fill: '#FFF9C4',
                                         ease: Power3.easeOut
                                     });
                                 }
@@ -572,7 +729,7 @@
                     delay: 0.25
                 });
                 SVGElements.ProjectorWires.each(function () {
-                    Functions.PathAnimation(this, 1.5, Power3.easeInOut, true);
+                    Functions.PathAnimation(this, 1.5, Power3.easeInOut, true, 1);
                 });
                 t.fromTo(SVGElements.BulbWireGroup, 1.5, {
                     y: -100
@@ -600,21 +757,21 @@
         SVGObject = $('#SVG').on('load', function () {
             SVGRoot = SVGObject[0].contentDocument.documentElement;
             SVGRootObject = $(SVGRoot);
-            SVGElements.TabletShadow = $('#TabletShadow', SVGRootObject);
-            SVGElements.TabletBody = $('#TabletBody', SVGRootObject);
-            SVGElements.TabletHand = $('#TabletHand', SVGRootObject).css('opacity', 0);
+            SVGElements.TabletBody = $('#TabletBody', SVGRootObject).css({opacity: 0, display: 'block'});
+            SVGElements.TabletHand = $('#TabletHand', SVGRootObject).css({opacity: 0});
             SVGElements.PeopleGroup = $('#PeopleGroup', SVGRootObject).css({opacity: 0, display: 'block'});
             SVGElements.PeopleArray = SVGElements.PeopleGroup.find('g');
-            SVGElements.Browser = $('#Browser', SVGRootObject);
+            SVGElements.Browser = $('#Browser', SVGRootObject).css({opacity: 0, display: 'block'});
             SVGElements.BrowserBack = $('#BrowserBack', SVGRootObject);
             SVGElements.BrowserAddress = $('#BrowserAddress', SVGRootObject);
             SVGElements.BrowserAddressText = SVGElements.BrowserAddress.find('tspan').html('');
-            SVGElements.SmartClassApp = $('#SmartClassApp', SVGRootObject);
+            SVGElements.Website = $('#Website', SVGRootObject).css({opacity: 0});
+            SVGElements.SmartClassApp = $('#SmartClassApp', SVGRootObject).css({opacity: 0, display: 'block'});
             SVGElements.SmartClassAppIcon = $('#SmartClassAppIcon', SVGRootObject);
             SVGElements.SmartClassAppIconHead = $('#SmartClassAppIconHead', SVGRootObject);
             SVGElements.SmartClassAppTitle = $('#SmartClassAppTitle', SVGRootObject);
             SVGElements.SmartClassAppBack = $('#SmartClassAppBack', SVGRootObject);
-            SVGElements.SmartClassAppClickBack = $('#SmartClassAppClickBack', SVGRootObject).css('opacity', 0);
+            SVGElements.SmartClassAppClickBack = $('#SmartClassAppClickBack', SVGRootObject).css({opacity: 0});
             SVGElements.Classroom = $('#Classroom', SVGRootObject);
             SVGElements.ClassRoomBack = $('#ClassRoomBack', SVGRootObject);
             SVGElements.ClassRoomWall = $('#ClassRoomWall', SVGRootObject);
@@ -631,15 +788,15 @@
             SVGElements.StudentBottomGroup = $('#StudentBottomGroup', SVGRootObject);
             SVGElements.StudentBottomGroupArray = SVGElements.StudentBottomGroup.find('g');
             SVGElements.Projecter = $('#Projecter', SVGRootObject);
-            SVGElements.ProjectorShadow = $('#ProjectorShadow', SVGRootObject).css('opacity', 0);
-            SVGElements.ProjectorWires = $('#ProjectorWires path', SVGRootObject).css('opacity', 0);
+            SVGElements.ProjectorShadow = $('#ProjectorShadow', SVGRootObject).css({opacity: 0});
+            SVGElements.ProjectorWires = $('#ProjectorWires path', SVGRootObject).css({opacity: 0});
             SVGElements.ProjectorLight = $('#ProjectorLight', SVGRootObject);
             SVGElements.ClassRoomWire = $('#ClassRoomWire', SVGRootObject);
             SVGElements.BulbWireGroup = $('#BulbWireGroup', SVGRootObject);
             SVGElements.Bulb = $('#Bulb', SVGRootObject);
-            SVGElements.LightBubbleOne = $('#LightBubbleOne', SVGRootObject).css('opacity', 0);
-            SVGElements.LightBubbleTwo = $('#LightBubbleTwo', SVGRootObject).css('opacity', 0);
-            SVGElements.Blackout = $('#Blackout', SVGRootObject).css('opacity', 0);
+            SVGElements.LightBubbleOne = $('#LightBubbleOne', SVGRootObject).css({opacity: 0});
+            SVGElements.LightBubbleTwo = $('#LightBubbleTwo', SVGRootObject).css({opacity: 0});
+            SVGElements.Blackout = $('#Blackout', SVGRootObject).css({opacity: 0});
             SVGElements.Sky = $('#Sky', SVGRootObject).css({opacity: 0, display: 'block'});
             SVGElements.SkyPaths = SVGElements.Sky.find('path');
             SVGElements.Clouds = $('.Clouds', SVGRootObject);
@@ -652,8 +809,15 @@
                 x: '+=1'
             });
             SVGElements.PowerLineWholeGroup = $('#PowerLineWholeGroup', SVGRootObject);
-            SVGElements.PowerLineWire = $('#PowerLineWire', SVGRootObject).css('opacity', 0);
+            SVGElements.PowerLineWire = $('#PowerLineWire', SVGRootObject).css({opacity: 0});
             SVGElements.WindmillFans = $('.Fans', SVGRootObject);
+            SVGElements.India = $('#India', SVGRootObject).css({opacity: 0, display: 'block'});
+            SVGElements.Ways = $('#Ways path', SVGRootObject).css({opacity: 0});
+            SVGElements.WaysOverlay = $('#WaysOverlay path', SVGRootObject).css({opacity: 0});
+            SVGElements.PathToHome = $('#PathToHome path', SVGRootObject).css({opacity: 0});
+            SVGElements.HomeMarker = $('#HomeMarker', SVGRootObject).css({opacity: 0});
+            SVGElements.Techspardha = $('#Techspardha', SVGRootObject).css({opacity: 0, display: 'block'});
+            SVGElements.TechspardhaText = $('#TechspardhaText path', SVGRootObject).css({opacity: 0});
             Functions.Start();
         });
     });
