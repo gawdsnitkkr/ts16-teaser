@@ -1,5 +1,7 @@
 (function (w, d, wO, dO, $, t) {
-    var SVGObject,
+    var Width = w.innerWidth,
+        Height = w.innerHeight,
+        SVGObject,
         SVGRoot,
         SVGRootObject,
         SVGElements = {},
@@ -750,9 +752,32 @@
                 }, 1000);
             },
             Start: function () {
+                SVGObject.css({opacity: 1});
                 Functions.QueueEnterAnimation();
             }
         };
+
+    function PerformResize() {
+        Width = w.innerWidth;
+        Height = w.innerHeight;
+        var SVGWidth = Width,
+            SVGHeight = Height,
+            SVGMarginTop = 0,
+            AspectRatio = Width / Height,
+            DefaultAspectRatio = 1.78;
+        if (AspectRatio > DefaultAspectRatio) {
+            SVGWidth = Math.ceil(SVGHeight * DefaultAspectRatio);
+        } else if (AspectRatio < DefaultAspectRatio) {
+            SVGHeight = Math.ceil(SVGWidth / DefaultAspectRatio);
+            SVGMarginTop = (Height - SVGHeight) / 2;
+        }
+        t.to(SVGObject, 0.5, {
+            width: SVGWidth,
+            height: SVGHeight,
+            marginTop: SVGMarginTop
+        });
+    }
+
     dO.on('ready', function () {
         SVGObject = $('#SVG').on('load', function () {
             SVGRoot = SVGObject[0].contentDocument.documentElement;
@@ -818,7 +843,9 @@
             SVGElements.HomeMarker = $('#HomeMarker', SVGRootObject).css({opacity: 0});
             SVGElements.Techspardha = $('#Techspardha', SVGRootObject).css({opacity: 0, display: 'block'});
             SVGElements.TechspardhaText = $('#TechspardhaText path', SVGRootObject).css({opacity: 0});
-            Functions.Start();
+            setTimeout(Functions.Start, 500);
         });
+        PerformResize();
     });
+    wO.on('resize', PerformResize);
 })(window, document, jQuery(window), jQuery(document), jQuery, TweenMax);
