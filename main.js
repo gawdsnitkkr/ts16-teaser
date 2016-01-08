@@ -1,13 +1,49 @@
 (function (w, d, wO, dO, $, t) {
     var Width = w.innerWidth,
         Height = w.innerHeight,
+        MainFrameObject,
         SVGObject,
         SVGRoot,
         SVGRootObject,
         SVGElements = {},
+        XMLNS = 'http://www.w3.org/2000/svg',
         ElasticEasingIn = Elastic.easeIn.config(2, 1),
         ElasticEasingOut = Elastic.easeOut.config(2, 1),
         Functions = {
+            SetText: function (text, x, y, fS, wT, o, f) {
+                if (x === undefined) x = 0;
+                if (y === undefined) y = 0;
+                if (f === undefined) f = 'Segoe UI';
+                if (fS === undefined) fS = 20;
+                if (wT === undefined) wT = 400;
+                if (o === undefined) o = 1;
+                SVGElements.TextFrame.children().remove();
+                return Functions.AddText(text, x, y, fS, wT, o, f);
+            },
+            AddText: function (text, x, y, fS, wT, o, f) {
+                if (f === undefined) f = 'Segoe UI';
+                var Text = d.createElementNS(XMLNS, 'text'),
+                    TextNode = d.createTextNode(text);
+                Text.style.fontFamily = f;
+                Text.style.fontSize = fS;
+                Text.style.fontWeight = wT;
+                Text.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+                Text.style.opacity = o;
+                Text.appendChild(TextNode);
+                SVGElements.TextFrame[0].appendChild(Text);
+                return Functions;
+            },
+            TextEmphasis: function (delay) {
+                t.fromTo(SVGElements.TextFrame, 15, {
+                    scale: 1,
+                    transformOrigin: '50% 50%'
+                }, {
+                    scale: 1.3,
+                    transformOrigin: '50% 50%',
+                    delay: delay,
+                    ease: Power4.easeOut
+                });
+            },
             DequeAnimation: function (i, callback) {
                 t.to(SVGElements.PeopleArray[i], 0.5, {
                     opacity: 0,
@@ -28,6 +64,31 @@
                 }, 0.1, callback);
             },
             QueueEnterAnimation: function () {
+                Functions.SetText('Remember waiting in unending queues...');
+                Functions.TextEmphasis(1);
+                t.fromTo(SVGElements.TextFrame, 2, {
+                    opacity: 0,
+                    x: 500,
+                    y: 180
+                }, {
+                    opacity: 1,
+                    x: 450,
+                    ease: Power4.easeIn,
+                    onComplete: function () {
+                        t.to(SVGElements.TextFrame, 2, {
+                            x: 400,
+                            ease: Linear.easeNone,
+                            onComplete: function () {
+                                t.to(SVGElements.TextFrame, 1, {
+                                    opacity: 0,
+                                    x: 375,
+                                    transformOrigin: '50% 50%',
+                                    ease: Power4.easeOut
+                                });
+                            }
+                        });
+                    }
+                });
                 t.fromTo(SVGElements.PeopleGroup, 2.2, {
                     opacity: 1,
                     display: 'block',
@@ -72,6 +133,31 @@
                     }, 100);
             },
             SmartClassAppEnterAnimation: function () {
+                t.killTweensOf(SVGElements.TextFrame);
+                Functions.SetText('To change the way young minds are moulded...');
+                Functions.TextEmphasis(1);
+                t.fromTo(SVGElements.TextFrame, 1, {
+                    opacity: 0,
+                    x: 230,
+                    y: 125,
+                    scale: 0.8,
+                    transformOrigin: '50% 50%'
+                }, {
+                    opacity: 1,
+                    scale: 1,
+                    transformOrigin: '50% 50%',
+                    ease: Power4.easeIn,
+                    onComplete: function () {
+                        t.to(SVGElements.TextFrame, 1, {
+                            opacity: 0,
+                            y: 80,
+                            scale: 1.5,
+                            transformOrigin: '50% 50%',
+                            delay: 2.5,
+                            ease: Power4.easeOut
+                        });
+                    }
+                });
                 t.fromTo(SVGElements.SmartClassApp, 0.5, {
                     opacity: 0,
                     display: 'block',
@@ -242,6 +328,34 @@
                             y: -572,
                             ease: Power3.easeOut
                         });
+                        t.killTweensOf(SVGElements.TextFrame);
+                        t.killTweensOf(SVGElements.TextFrame.children());
+                        Functions.SetText('... and then things became smarter.');
+                        Functions.TextEmphasis(1);
+                        t.fromTo(SVGElements.TextFrame, 2, {
+                            opacity: 0,
+                            x: 140,
+                            y: 245
+                        }, {
+                            opacity: 1,
+                            x: 160,
+                            delay: 0.15,
+                            ease: Power4.easeIn,
+                            onComplete: function () {
+                                t.to(SVGElements.TextFrame, 1.5, {
+                                    x: 190,
+                                    ease: Linear.easeNone,
+                                    onComplete: function () {
+                                        t.to(SVGElements.TextFrame, 1, {
+                                            opacity: 0,
+                                            x: 210,
+                                            transformOrigin: '50% 50%',
+                                            ease: Power4.easeOut
+                                        });
+                                    }
+                                });
+                            }
+                        });
                         Functions.TextEnterAnimation('irctc.co.in', function () {
                             t.to(SVGElements.Website, 0.5, {
                                 opacity: 1,
@@ -402,6 +516,88 @@
                     });
             },
             WindmillEnterAnimation: function () {
+                setTimeout(function () {
+                    t.killTweensOf(SVGElements.TextFrame);
+                    t.killTweensOf(SVGElements.TextFrame.children());
+                    Functions.SetText('Power Up!', 0, 0, 44, 700, 1, 'Rockwell');
+                    t.fromTo(SVGElements.TextFrame, 1, {
+                        fill: '#ffffff',
+                        opacity: 0,
+                        x: 600,
+                        y: 320,
+                        rotation: 5,
+                        scale: 0.8,
+                        transformOrigin: '50% 50%'
+                    }, {
+                        opacity: 1,
+                        y: 295,
+                        scale: 1,
+                        transformOrigin: '50% 50%',
+                        ease: Elastic.easeOut.config(3, 1),
+                        onComplete: function () {
+                            t.to(this.target, 0.5, {
+                                opacity: 0,
+                                scale: 0.8,
+                                transformOrigin: '50% 50%',
+                                ease: ElasticEasingIn,
+                                onComplete: function () {
+                                    t.killTweensOf(SVGElements.TextFrame);
+                                    t.killTweensOf(SVGElements.TextFrame.children());
+                                    Functions.SetText('Our energy sources', 7, 5, 20, 400, 0)
+                                        .AddText('a bit more', 45, 50, 20, 400, 0).AddText('renewable', 20, 100, 32, 600, 0);
+                                    t.set(SVGElements.TextFrame, {
+                                        fill: '#ffffff',
+                                        opacity: 1,
+                                        x: 380,
+                                        y: 330,
+                                        rotation: 0,
+                                        scale: 1,
+                                        transformOrigin: '50% 50%'
+                                    });
+                                    var TextArray = SVGElements.TextFrame.find('text');
+                                    t.fromTo(TextArray[0], 1, {
+                                        attr: {
+                                            x: '-30'
+                                        },
+                                        opacity: 0
+                                    }, {
+                                        attr: {
+                                            x: 0
+                                        },
+                                        opacity: 1,
+                                        ease: ElasticEasingOut
+                                    });
+                                    t.fromTo(TextArray[1], 1, {
+                                        attr: {
+                                            x: '30'
+                                        },
+                                        opacity: 0
+                                    }, {
+                                        attr: {
+                                            x: 0
+                                        },
+                                        opacity: 1,
+                                        delay: 0.75,
+                                        ease: ElasticEasingOut
+                                    });
+                                    t.fromTo(TextArray[2], 1, {
+                                        attr: {
+                                            y: '30'
+                                        },
+                                        opacity: 0
+                                    }, {
+                                        attr: {
+                                            y: 0
+                                        },
+                                        opacity: 1,
+                                        delay: 1.5,
+                                        ease: ElasticEasingOut
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }, 3000);
                 t.to(SVGElements.PowerLineWholeGroup, 4, {
                     rotation: 20,
                     x: 960,
@@ -413,7 +609,7 @@
                     transformOrigin: '39.83% 56.3%',
                     ease: Linear.easeNone
                 }, 0.1);
-                setTimeout(Functions.WindmillExitAnimation, 6000);
+                setTimeout(Functions.WindmillExitAnimation, 8000);
             },
             PathAnimation: function (path, time, ease, inverse, divisor, callback) {
                 divisor = divisor || 1;
@@ -430,7 +626,7 @@
                 });
             },
             SkyEnter: function () {
-                t.to(SVGElements.Classroom, 1, {
+                t.to(SVGElements.ClassRoom, 1, {
                     y: 500,
                     ease: ElasticEasingIn
                 });
@@ -463,9 +659,37 @@
                         y: 0,
                         ease: ElasticEasingOut
                     }, 0.1, function () {
+                        t.killTweensOf(SVGElements.TextFrame);
+                        t.killTweensOf(SVGElements.TextFrame.children());
+                        Functions.SetText('To', 740, 0, 20, 400, 0).AddText('change', 559, 0, 20, 400, 0)
+                            .AddText('the', 430, 0, 20, 400, 0).AddText('way we', 270, 0, 20, 400, 0);
+                        t.fromTo(SVGElements.TextFrame, 0.5, {
+                            fill: '#ffffff',
+                            opacity: 0,
+                            x: 55,
+                            y: 250,
+                            scale: 1,
+                            transformOrigin: '50% 50%'
+                        }, {
+                            opacity: 1,
+                            ease: Power4.easeOut,
+                            onComplete: function () {
+                                t.staggerFromTo(SVGElements.TextFrame.find('text'), 1, {
+                                    opacity: 0,
+                                    attr: {y: 30}
+                                }, {
+                                    opacity: 1,
+                                    attr: {y: 0},
+                                    ease: ElasticEasingOut
+                                }, 0.75);
+                                setTimeout(function () {
+                                    t.staggerTo(SVGElements.TextFrame.find('text'), 0.5, {opacity: 0}, 0.1);
+                                }, 2500);
+                            }
+                        });
                         Functions.CloudsAnimation();
                         Functions.PathAnimation(SVGElements.PowerLineWire[0], 7, Linear.easeNone, false, 1);
-                        setTimeout(Functions.WindmillEnterAnimation, 2000);
+                        setTimeout(Functions.WindmillEnterAnimation, 2500);
                     });
                 }, 1000);
             },
@@ -532,6 +756,11 @@
                                 transformOrigin: '50% 50%',
                                 ease: ElasticEasingIn,
                                 onComplete: function () {
+                                    t.to(SVGElements.TextFrame, 1, {
+                                        opacity: 0,
+                                        delay: 1,
+                                        ease: Power4.easeOut
+                                    });
                                     t.to(SVGElements.Bulb, 0.5, {
                                         fill: '#989898',
                                         ease: Power3.easeOut
@@ -567,6 +796,29 @@
                 });
             },
             ClassRoomAnimation: function (n, callback) {
+                t.killTweensOf(SVGElements.TextFrame);
+                t.killTweensOf(SVGElements.TextFrame.children());
+                Functions.SetText('Education', 0, 0, 24, 400, 0).AddText('is now', 20, 25, 18, 200, 0)
+                    .AddText('possible in the', 25, 50, 20, 200, 0).AddText('remotest village.', 35, 80, 26, 600, 0);
+                t.fromTo(SVGElements.TextFrame, 1, {
+                    fill: '#363636',
+                    opacity: 0,
+                    x: 360,
+                    y: 110,
+                    scale: 1,
+                    transformOrigin: '50% 50%'
+                }, {
+                    opacity: 1,
+                    ease: Power4.easeOut,
+                    onComplete: function () {
+                        t.staggerFromTo(SVGElements.TextFrame.find('text'), 1, {
+                            opacity: 0
+                        }, {
+                            opacity: 1,
+                            ease: Power4.easeOut
+                        }, 0.5);
+                    }
+                });
                 var i = 0,
                     ClassRoomInterval = setInterval(function () {
                         if (i < n) {
@@ -590,56 +842,56 @@
                                     });
                                 }
                             });
-                            t.to(SVGElements.SmartClassAppBack, 0.5, {
-                                fill: '#FFECB3',
-                                ease: Power3.easeOut,
-                                onComplete: function () {
-                                    t.to(SVGElements.SmartClassAppBack, 0.5, {
-                                        fill: '#FFF9C4',
-                                        ease: Power3.easeOut
-                                    });
-                                }
-                            });
-                            t.to(SVGElements.SmartClassAppIcon, 0.5, {
-                                rotation: 10,
-                                scale: 6.2,
-                                transformOrigin: '50% 50%',
-                                ease: ElasticEasingIn,
-                                onComplete: function () {
-                                    t.to(SVGElements.SmartClassAppIcon, 0.5, {
-                                        rotation: -10,
-                                        scale: 5.8,
-                                        transformOrigin: '50% 50%',
-                                        ease: ElasticEasingOut
-                                    });
-                                }
-                            });
-                            t.to(SVGElements.SmartClassAppIconHead, 0.5, {
-                                y: '-=1',
-                                ease: Power3.easeOut,
-                                onComplete: function () {
-                                    t.to(SVGElements.SmartClassAppIconHead, 0.5, {
-                                        y: '+=1',
-                                        ease: Power3.easeOut
-                                    });
-                                }
-                            });
-                            t.to(SVGElements.TeacherHead, 0.5, {
-                                rotation: 10,
-                                x: '+=2',
-                                y: '+=2',
-                                transformOrigin: '50% 50%',
-                                ease: Power3.easeOut,
-                                onComplete: function () {
-                                    t.to(SVGElements.TeacherHead, 0.5, {
-                                        rotation: 0,
-                                        x: '-=2',
-                                        y: '-=2',
-                                        transformOrigin: '50% 50%',
-                                        ease: Power3.easeOut
-                                    });
-                                }
-                            });
+                            //t.to(SVGElements.SmartClassAppBack, 0.5, {
+                            //    fill: '#FFECB3',
+                            //    ease: Power3.easeOut,
+                            //    onComplete: function () {
+                            //        t.to(SVGElements.SmartClassAppBack, 0.5, {
+                            //            fill: '#FFF9C4',
+                            //            ease: Power3.easeOut
+                            //        });
+                            //    }
+                            //});
+                            //t.to(SVGElements.SmartClassAppIcon, 0.5, {
+                            //    rotation: 10,
+                            //    scale: 6.2,
+                            //    transformOrigin: '50% 50%',
+                            //    ease: ElasticEasingIn,
+                            //    onComplete: function () {
+                            //        t.to(SVGElements.SmartClassAppIcon, 0.5, {
+                            //            rotation: -10,
+                            //            scale: 5.8,
+                            //            transformOrigin: '50% 50%',
+                            //            ease: ElasticEasingOut
+                            //        });
+                            //    }
+                            //});
+                            //t.to(SVGElements.SmartClassAppIconHead, 0.5, {
+                            //    y: '-=1',
+                            //    ease: Power3.easeOut,
+                            //    onComplete: function () {
+                            //        t.to(SVGElements.SmartClassAppIconHead, 0.5, {
+                            //            y: '+=1',
+                            //            ease: Power3.easeOut
+                            //        });
+                            //    }
+                            //});
+                            //t.to(SVGElements.TeacherHead, 0.5, {
+                            //    rotation: 10,
+                            //    x: '+=2',
+                            //    y: '+=2',
+                            //    transformOrigin: '50% 50%',
+                            //    ease: Power3.easeOut,
+                            //    onComplete: function () {
+                            //        t.to(SVGElements.TeacherHead, 0.5, {
+                            //            rotation: 0,
+                            //            x: '-=2',
+                            //            y: '-=2',
+                            //            transformOrigin: '50% 50%',
+                            //            ease: Power3.easeOut
+                            //        });
+                            //    }
+                            //});
                             t.staggerTo(SVGElements.StudentTopGroup, 0.5, {
                                 y: '+=3',
                                 ease: Power3.easeOut,
@@ -694,6 +946,7 @@
                             });
                         }
                     }, 1000);
+
             },
             ClassRoomEnterAnimation: function () {
                 t.to(SVGElements.SmartClassApp, 1.5, {
@@ -702,7 +955,13 @@
                     scaleX: 0.403,
                     scaleY: 0.384,
                     transformOrigin: '50% 50%',
-                    ease: Power4.easeOut
+                    ease: Power4.easeOut,
+                    onComplete: function () {
+                        t.to(SVGElements.SmartClassApp, 0.5, {
+                            opacity: 0,
+                            ease: Power4.easeOut
+                        });
+                    }
                 });
                 t.to(SVGElements.SmartClassAppBack, 1.5, {
                     fill: '#ffffff',
@@ -716,9 +975,9 @@
                     fill: '#333333',
                     ease: Power4.easeOut
                 });
-                t.fromTo(SVGElements.Classroom, 1.5, {
+                t.fromTo(SVGElements.ClassRoom, 1.5, {
                     y: -480,
-                    display: 'block'
+                    opacity: 1
                 }, {
                     y: 0,
                     ease: Power4.easeOut
@@ -740,7 +999,7 @@
                     ease: Power4.easeOut,
                     delay: 0.25
                 });
-                t.staggerFromTo([SVGElements.Teacher, SVGElements.DeskTopGroup, SVGElements.DeskBottomGroup, SVGElements.StudentTopGroup, SVGElements.StudentBottomGroup], 1.5, {
+                t.staggerFromTo(SVGElements.ClassRoomStudentDeskArray, 1.5, {
                     y: 100
                 }, {
                     y: 0,
@@ -757,16 +1016,18 @@
             }
         };
 
-    function PerformResize() {
+    function PerformResizeFull() {
         Width = w.innerWidth;
         Height = w.innerHeight;
         var SVGWidth = Width,
             SVGHeight = Height,
             SVGMarginTop = 0,
+            SVGMarginLeft = 0,
             AspectRatio = Width / Height,
             DefaultAspectRatio = 1.78;
         if (AspectRatio > DefaultAspectRatio) {
             SVGWidth = Math.ceil(SVGHeight * DefaultAspectRatio);
+            SVGMarginLeft = (Width - SVGWidth) / 2;
         } else if (AspectRatio < DefaultAspectRatio) {
             SVGHeight = Math.ceil(SVGWidth / DefaultAspectRatio);
             SVGMarginTop = (Height - SVGHeight) / 2;
@@ -774,12 +1035,69 @@
         t.to(SVGObject, 0.5, {
             width: SVGWidth,
             height: SVGHeight,
-            marginTop: SVGMarginTop
+            marginTop: SVGMarginTop,
+            marginLeft: SVGMarginLeft
+        });
+    }
+
+    function PerformResizeFillByWidth() {
+        Width = w.innerWidth;
+        Height = w.innerHeight;
+        var SVGWidth = Width,
+            SVGHeight = Height,
+            SVGMarginTop,
+            SVGMarginLeft = 0,
+            AspectRatio = Width / Height,
+            DefaultAspectRatio = 1.78;
+        if (AspectRatio > DefaultAspectRatio) {
+            SVGWidth = Width;
+            SVGHeight = Math.ceil(SVGWidth / DefaultAspectRatio);
+        } else if (AspectRatio < DefaultAspectRatio) {
+            SVGHeight = Math.ceil(SVGWidth / DefaultAspectRatio);
+        }
+        SVGMarginTop = (Height - SVGHeight) / 2;
+        t.to(SVGObject, 0.5, {
+            width: SVGWidth,
+            height: SVGHeight,
+            marginTop: SVGMarginTop,
+            marginLeft: SVGMarginLeft
+        });
+    }
+
+    function PerformResizeFill() {
+        Width = w.innerWidth;
+        Height = w.innerHeight;
+        var SVGWidth = Width,
+            SVGHeight = Height,
+            SVGMarginTop = 0,
+            SVGMarginLeft = 0,
+            AspectRatio = Width / Height,
+            DefaultAspectRatio = 1.78;
+        if (AspectRatio > DefaultAspectRatio) {
+            SVGWidth = Width;
+            SVGHeight = Math.ceil(SVGWidth / DefaultAspectRatio);
+            SVGMarginTop = (Height - SVGHeight) / 2;
+        } else if (AspectRatio < DefaultAspectRatio) {
+            SVGHeight = Height;
+            SVGWidth = Math.ceil(SVGHeight * DefaultAspectRatio);
+            SVGMarginLeft = (Width - SVGWidth) / 2;
+        }
+        t.to(SVGObject, 0.5, {
+            width: SVGWidth,
+            height: SVGHeight,
+            marginTop: SVGMarginTop,
+            marginLeft: SVGMarginLeft
         });
     }
 
     dO.on('ready', function () {
-        SVGObject = $('#SVG').on('load', function () {
+        if (w.orientation !== undefined) {
+            MainFrameObject = $('#MainFrame', d)[0];
+            w.addEventListener('orientationchange', function () {
+                // Problem...
+            });
+        }
+        SVGObject = $('#SVG', d).on('load', function () {
             SVGRoot = SVGObject[0].contentDocument.documentElement;
             SVGRootObject = $(SVGRoot);
             SVGElements.TabletBody = $('#TabletBody', SVGRootObject).css({opacity: 0, display: 'block'});
@@ -797,7 +1115,7 @@
             SVGElements.SmartClassAppTitle = $('#SmartClassAppTitle', SVGRootObject);
             SVGElements.SmartClassAppBack = $('#SmartClassAppBack', SVGRootObject);
             SVGElements.SmartClassAppClickBack = $('#SmartClassAppClickBack', SVGRootObject).css({opacity: 0});
-            SVGElements.Classroom = $('#Classroom', SVGRootObject);
+            SVGElements.ClassRoom = $('#ClassRoom', SVGRootObject).css({opacity: 0, display: 'block'});
             SVGElements.ClassRoomBack = $('#ClassRoomBack', SVGRootObject);
             SVGElements.ClassRoomWall = $('#ClassRoomWall', SVGRootObject);
             SVGElements.WhiteBoard = $('#WhiteBoard', SVGRootObject);
@@ -812,6 +1130,7 @@
             SVGElements.StudentTopGroupArray = SVGElements.StudentTopGroup.find('g');
             SVGElements.StudentBottomGroup = $('#StudentBottomGroup', SVGRootObject);
             SVGElements.StudentBottomGroupArray = SVGElements.StudentBottomGroup.find('g');
+            SVGElements.ClassRoomStudentDeskArray = [SVGElements.Teacher, SVGElements.DeskTopGroup, SVGElements.DeskBottomGroup, SVGElements.StudentTopGroup, SVGElements.StudentBottomGroup];
             SVGElements.Projecter = $('#Projecter', SVGRootObject);
             SVGElements.ProjectorShadow = $('#ProjectorShadow', SVGRootObject).css({opacity: 0});
             SVGElements.ProjectorWires = $('#ProjectorWires path', SVGRootObject).css({opacity: 0});
@@ -843,9 +1162,10 @@
             SVGElements.HomeMarker = $('#HomeMarker', SVGRootObject).css({opacity: 0});
             SVGElements.Techspardha = $('#Techspardha', SVGRootObject).css({opacity: 0, display: 'block'});
             SVGElements.TechspardhaText = $('#TechspardhaText path', SVGRootObject).css({opacity: 0});
+            SVGElements.TextFrame = $('#TextFrame', SVGRootObject).css({opacity: 0, display: 'block'});
             setTimeout(Functions.Start, 500);
         });
-        PerformResize();
+        PerformResizeFillByWidth();
     });
-    wO.on('resize', PerformResize);
+    wO.on('resize', PerformResizeFillByWidth);
 })(window, document, jQuery(window), jQuery(document), jQuery, TweenMax);
