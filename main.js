@@ -17,7 +17,23 @@
                 if (fS === undefined) fS = 20;
                 if (wT === undefined) wT = 400;
                 if (o === undefined) o = 1;
-                SVGElements.TextFrame.children().remove();
+                t.killTweensOf(SVGElements.TextFrame);
+                t.killTweensOf(SVGElements.TextFrame.find('text'));
+                //SVGElements.TextFrame.css({
+                //    '-webkit-transform': '',
+                //    '-moz-transform': '',
+                //    '-o-transform': '',
+                //    'msTransform': '',
+                //    'transform': ''
+                //});
+                t.set(SVGElements.TextFrame, {
+                    x: 0,
+                    y: 0,
+                    rotation: 0,
+                    scale: 1,
+                    transformOrigin: '50% 50%'
+                });
+                SVGElements.TextFrame.find('text').remove();
                 return Functions.AddText(text, x, y, fS, wT, o, f);
             },
             AddText: function (text, x, y, fS, wT, o, f) {
@@ -32,17 +48,6 @@
                 Text.appendChild(TextNode);
                 SVGElements.TextFrame[0].appendChild(Text);
                 return Functions;
-            },
-            TextEmphasis: function (delay) {
-                t.fromTo(SVGElements.TextFrame, 15, {
-                    scale: 1,
-                    transformOrigin: '50% 50%'
-                }, {
-                    scale: 1.3,
-                    transformOrigin: '50% 50%',
-                    delay: delay,
-                    ease: Power4.easeOut
-                });
             },
             DequeAnimation: function (i, callback) {
                 t.to(SVGElements.PeopleArray[i], 0.5, {
@@ -65,7 +70,6 @@
             },
             QueueEnterAnimation: function () {
                 Functions.SetText('Remember waiting in unending queues...');
-                Functions.TextEmphasis(1);
                 t.fromTo(SVGElements.TextFrame, 2, {
                     opacity: 0,
                     x: 500,
@@ -133,9 +137,7 @@
                     }, 100);
             },
             SmartClassAppEnterAnimation: function () {
-                t.killTweensOf(SVGElements.TextFrame);
                 Functions.SetText('To change the way young minds are moulded...');
-                Functions.TextEmphasis(1);
                 t.fromTo(SVGElements.TextFrame, 1, {
                     opacity: 0,
                     x: 230,
@@ -148,13 +150,19 @@
                     transformOrigin: '50% 50%',
                     ease: Power4.easeIn,
                     onComplete: function () {
-                        t.to(SVGElements.TextFrame, 1, {
-                            opacity: 0,
-                            y: 80,
-                            scale: 1.5,
+                        t.to(SVGElements.TextFrame, 2.5, {
+                            scale: 1.3,
                             transformOrigin: '50% 50%',
-                            delay: 2.5,
-                            ease: Power4.easeOut
+                            ease: Linear.easeNone,
+                            onComplete: function () {
+                                t.to(SVGElements.TextFrame, 1, {
+                                    opacity: 0,
+                                    y: 60,
+                                    scale: 1.5,
+                                    transformOrigin: '50% 50%',
+                                    ease: Power4.easeOut
+                                });
+                            }
                         });
                     }
                 });
@@ -328,34 +336,33 @@
                             y: -572,
                             ease: Power3.easeOut
                         });
-                        t.killTweensOf(SVGElements.TextFrame);
-                        t.killTweensOf(SVGElements.TextFrame.children());
-                        Functions.SetText('... and then things became smarter.');
-                        Functions.TextEmphasis(1);
-                        t.fromTo(SVGElements.TextFrame, 2, {
-                            opacity: 0,
-                            x: 140,
-                            y: 245
-                        }, {
-                            opacity: 1,
-                            x: 160,
-                            delay: 0.15,
-                            ease: Power4.easeIn,
-                            onComplete: function () {
-                                t.to(SVGElements.TextFrame, 1.5, {
-                                    x: 190,
-                                    ease: Linear.easeNone,
-                                    onComplete: function () {
-                                        t.to(SVGElements.TextFrame, 1, {
-                                            opacity: 0,
-                                            x: 210,
-                                            transformOrigin: '50% 50%',
-                                            ease: Power4.easeOut
-                                        });
-                                    }
-                                });
-                            }
-                        });
+                        setTimeout(function () {
+                            Functions.SetText('... and then things became smarter.');
+                            t.fromTo(SVGElements.TextFrame, 2, {
+                                opacity: 0,
+                                x: 140,
+                                y: 245,
+                                scale: 1,
+                                transformOrigin: '50% 50%'
+                            }, {
+                                opacity: 1,
+                                x: 160,
+                                ease: Power4.easeIn,
+                                onComplete: function () {
+                                    t.to(SVGElements.TextFrame, 1.5, {
+                                        x: 190,
+                                        ease: Linear.easeNone,
+                                        onComplete: function () {
+                                            t.to(SVGElements.TextFrame, 1, {
+                                                opacity: 0,
+                                                x: 210,
+                                                ease: Power4.easeOut
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }, 150);
                         Functions.TextEnterAnimation('irctc.co.in', function () {
                             t.to(SVGElements.Website, 0.5, {
                                 opacity: 1,
@@ -380,6 +387,27 @@
                     opacity: 0,
                     ease: Power3.easeOut,
                     onComplete: function () {
+                        setTimeout(function () {
+                            Functions.SetText('NIT Kurukshetra', 0, 0, 32, 700, 0).AddText('Haryana, IN', 0, 24, 24, 600, 0);
+                            SVGElements.TextFrame.appendTo(SVGRootObject);
+                            t.set(SVGElements.TextFrame, {
+                                opacity: 1,
+                                x: 455,
+                                y: 305,
+                                fill: '#263238'
+                            });
+                            t.staggerFromTo(SVGElements.TextFrame.find('text'), 1, {
+                                attr: {
+                                    y: 30
+                                }
+                            }, {
+                                attr: {
+                                    y: 0
+                                },
+                                opacity: 1,
+                                ease: ElasticEasingOut
+                            }, 0.15);
+                        }, 1750);
                         t.to(SVGElements.India, 3, {
                             x: '+=590',
                             y: '+=1300',
@@ -387,6 +415,18 @@
                             transformOrigin: '50% 50%',
                             ease: ElasticEasingOut,
                             onComplete: function () {
+                                t.staggerTo(SVGElements.TextFrame.find('text'), 1, {
+                                    attr: {
+                                        y: 30
+                                    },
+                                    opacity: 0,
+                                    ease: ElasticEasingIn
+                                }, -0.15);
+                                t.to(SVGElements.TextFrame, 1, {
+                                    scale: 0.7,
+                                    transformOrigin: '0% 100%',
+                                    ease: ElasticEasingIn
+                                });
                                 t.to(SVGElements.HomeMarker, 1, {
                                     opacity: 0,
                                     y: 10,
@@ -433,6 +473,36 @@
                 setTimeout(Functions.End, 3000);
             },
             IndiaHomeMarkerEnterAnimation: function () {
+                t.staggerFromTo(SVGElements.TextFrame.find('text'), 1, {
+                    attr: {
+                        y: 0
+                    }
+                }, {
+                    attr: {
+                        y: 50
+                    },
+                    opacity: 0,
+                    ease: ElasticEasingIn
+                }, -0.15, function () {
+                    SVGElements.TextFrame.appendTo(SVGElements.India);
+                    Functions.SetText('This', 0, 0, 24, 400, 0).AddText('FEBRUARY', 50, 0, 32, 900, 0).AddText('explore smart India at', 0, 24, 24, 200, 0);
+                    t.set(SVGElements.TextFrame, {
+                        x: 50,
+                        y: 120,
+                        opacity: 1
+                    });
+                    t.staggerFromTo(SVGElements.TextFrame.find('text'), 1, {
+                        attr: {
+                            y: 30
+                        }
+                    }, {
+                        attr: {
+                            y: 0
+                        },
+                        opacity: 1,
+                        ease: ElasticEasingOut
+                    }, 0.15);
+                });
                 t.fromTo(SVGElements.HomeMarker, 1, {
                     opacity: 0,
                     y: 30,
@@ -474,6 +544,32 @@
                 }, 2000);
             },
             IndiaEnterAnimation: function () {
+                setTimeout(function () {
+                    Functions.SetText('Building a connected nation', 0, 0, 24, 600, 1)
+                        .AddText('UNITING INDIA', 60, 32, 32, 900, 0);
+                    t.fromTo(SVGElements.TextFrame, 1, {
+                        x: 500,
+                        y: 335,
+                        opacity: 0
+                    }, {
+                        y: 360,
+                        opacity: 1,
+                        ease: ElasticEasingOut
+                    });
+                    t.fromTo(SVGElements.TextFrame.find('text:last-child'), 1, {
+                        attr: {
+                            y: -30
+                        },
+                        opacity: 0
+                    }, {
+                        attr: {
+                            y: 0
+                        },
+                        opacity: 1,
+                        delay: 1.5,
+                        ease: ElasticEasingOut
+                    });
+                }, 1500);
                 t.fromTo(SVGElements.India, 1.5, {
                     opacity: 1,
                     y: -550
@@ -517,39 +613,35 @@
             },
             WindmillEnterAnimation: function () {
                 setTimeout(function () {
-                    t.killTweensOf(SVGElements.TextFrame);
-                    t.killTweensOf(SVGElements.TextFrame.children());
                     Functions.SetText('Power Up!', 0, 0, 44, 700, 1, 'Rockwell');
                     t.fromTo(SVGElements.TextFrame, 1, {
                         fill: '#ffffff',
                         opacity: 0,
-                        x: 600,
-                        y: 320,
+                        x: 540,
+                        y: 340,
                         rotation: 5,
                         scale: 0.8,
                         transformOrigin: '50% 50%'
                     }, {
                         opacity: 1,
-                        y: 295,
+                        y: 313,
                         scale: 1,
                         transformOrigin: '50% 50%',
                         ease: Elastic.easeOut.config(3, 1),
                         onComplete: function () {
-                            t.to(this.target, 0.5, {
+                            t.to(SVGElements.TextFrame, 0.5, {
                                 opacity: 0,
                                 scale: 0.8,
                                 transformOrigin: '50% 50%',
                                 ease: ElasticEasingIn,
                                 onComplete: function () {
-                                    t.killTweensOf(SVGElements.TextFrame);
-                                    t.killTweensOf(SVGElements.TextFrame.children());
-                                    Functions.SetText('Our energy sources', 7, 5, 20, 400, 0)
-                                        .AddText('a bit more', 45, 50, 20, 400, 0).AddText('renewable', 20, 100, 32, 600, 0);
+                                    Functions.SetText('Our energy sources are', -5, 5, 20, 400, 0)
+                                        .AddText('a bit more', 45, 50, 20, 400, 0).AddText('renewable', 20, 90, 32, 600, 0);
                                     t.set(SVGElements.TextFrame, {
                                         fill: '#ffffff',
                                         opacity: 1,
-                                        x: 380,
-                                        y: 330,
+                                        x: 326,
+                                        y: 335,
                                         rotation: 0,
                                         scale: 1,
                                         transformOrigin: '50% 50%'
@@ -571,6 +663,7 @@
                                         attr: {
                                             x: '30'
                                         },
+                                        fill: '#252525',
                                         opacity: 0
                                     }, {
                                         attr: {
@@ -584,6 +677,7 @@
                                         attr: {
                                             y: '30'
                                         },
+                                        fill: '#252525',
                                         opacity: 0
                                     }, {
                                         attr: {
@@ -593,6 +687,14 @@
                                         delay: 1.5,
                                         ease: ElasticEasingOut
                                     });
+                                    t.staggerTo(TextArray, 1, {
+                                        attr: {
+                                            y: 50
+                                        },
+                                        opacity: 0,
+                                        delay: 2.5,
+                                        ease: ElasticEasingIn
+                                    }, 0.15);
                                 }
                             });
                         }
@@ -659,34 +761,27 @@
                         y: 0,
                         ease: ElasticEasingOut
                     }, 0.1, function () {
-                        t.killTweensOf(SVGElements.TextFrame);
-                        t.killTweensOf(SVGElements.TextFrame.children());
                         Functions.SetText('To', 740, 0, 20, 400, 0).AddText('change', 559, 0, 20, 400, 0)
                             .AddText('the', 430, 0, 20, 400, 0).AddText('way we', 270, 0, 20, 400, 0);
-                        t.fromTo(SVGElements.TextFrame, 0.5, {
+                        t.set(SVGElements.TextFrame, {
                             fill: '#ffffff',
+                            opacity: 1,
+                            x: 1,
+                            y: 270
+                        });
+                        t.staggerFromTo(SVGElements.TextFrame.find('text'), 1, {
                             opacity: 0,
-                            x: 55,
-                            y: 250,
-                            scale: 1,
-                            transformOrigin: '50% 50%'
+                            attr: {y: 30}
                         }, {
                             opacity: 1,
-                            ease: Power4.easeOut,
-                            onComplete: function () {
-                                t.staggerFromTo(SVGElements.TextFrame.find('text'), 1, {
-                                    opacity: 0,
-                                    attr: {y: 30}
-                                }, {
-                                    opacity: 1,
-                                    attr: {y: 0},
-                                    ease: ElasticEasingOut
-                                }, 0.75);
-                                setTimeout(function () {
-                                    t.staggerTo(SVGElements.TextFrame.find('text'), 0.5, {opacity: 0}, 0.1);
-                                }, 2500);
-                            }
-                        });
+                            attr: {y: 0},
+                            delay: 0.5,
+                            ease: ElasticEasingOut
+                        }, 0.75);
+                        t.staggerTo(SVGElements.TextFrame.find('text'), 0.5, {
+                            opacity: 0,
+                            delay: 2.85
+                        }, 0.1);
                         Functions.CloudsAnimation();
                         Functions.PathAnimation(SVGElements.PowerLineWire[0], 7, Linear.easeNone, false, 1);
                         setTimeout(Functions.WindmillEnterAnimation, 2500);
@@ -796,15 +891,13 @@
                 });
             },
             ClassRoomAnimation: function (n, callback) {
-                t.killTweensOf(SVGElements.TextFrame);
-                t.killTweensOf(SVGElements.TextFrame.children());
                 Functions.SetText('Education', 0, 0, 24, 400, 0).AddText('is now', 20, 25, 18, 200, 0)
                     .AddText('possible in the', 25, 50, 20, 200, 0).AddText('remotest village.', 35, 80, 26, 600, 0);
                 t.fromTo(SVGElements.TextFrame, 1, {
                     fill: '#363636',
                     opacity: 0,
-                    x: 360,
-                    y: 110,
+                    x: 306,
+                    y: 130,
                     scale: 1,
                     transformOrigin: '50% 50%'
                 }, {
