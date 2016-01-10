@@ -42,7 +42,7 @@
                 var Text = d.createElementNS(XMLNS, 'text'),
                     TextNode = d.createTextNode(text);
                 Text.style.fontFamily = f;
-                Text.style.fontSize = fS;
+                Text.style.fontSize = fS + 'px';
                 Text.style.fontWeight = wT;
                 Text.style.transform = 'translate(' + x + 'px,' + y + 'px)';
                 Text.style.opacity = o;
@@ -400,6 +400,7 @@
                 GooglePlusLinkObject.Show();
                 TwitterLinkObject.Show();
                 GAWDSLinkObject.Show();
+                LoadFacebookShareButton();
                 t.to($('#FacebookShareButton'), 1, {
                     opacity: 1,
                     ease: Power4.easeOut
@@ -1119,7 +1120,7 @@
             ClassRoomEnterAnimation: function () {
                 t.to(SVGElements.SmartClassApp, 1.5, {
                     y: -74.2,
-                    x: -5.35,
+                    x: -4.5,
                     scaleX: 0.403,
                     scaleY: 0.384,
                     transformOrigin: '50% 50%',
@@ -1302,6 +1303,26 @@
         return Functions;
     };
 
+    function LoadFacebookShareButton() {
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '634792329995421',
+                xfbml: true,
+                version: 'v2.5'
+            });
+        };
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    }
+
     //function PerformResizeFull() {
     //    var SVGWidth = Width,
     //        SVGHeight = Height,
@@ -1385,12 +1406,6 @@
     }
 
     dO.on('ready', function () {
-        //if (w.orientation !== undefined) {
-        //    MainFrameObject = $('#MainFrame', d)[0];
-        //    w.addEventListener('orientationchange', function () {
-        //        // Problem...
-        //    });
-        //}
         SVGObject = $('#SVG', d).on('load', function () {
             SVGRoot = SVGObject[0].contentDocument.documentElement;
             SVGRootObject = $(SVGRoot);
@@ -1462,10 +1477,11 @@
             SVGElements.SmartIndiaText = $('#SmartIndiaText', SVGRootObject).css({opacity: 0});
             SVGElements.TextFrame = $('#TextFrame', SVGRootObject).css({opacity: 0, display: 'block'});
             BackgroundMusic = $('#BackgroundMusic', d)[0];
-            BackgroundMusic.oncanplay = function () {
+            BackgroundMusic.load();
+            BackgroundMusic.addEventListener('canplaythrough', function () {
                 BackgroundMusic.play();
                 setTimeout(Functions.Start, 1075);
-            };
+            }, false);
         });
         FacebookLinkObject = $('#FacebookLink', d).Link({
             X: 'left',
