@@ -1375,12 +1375,12 @@
     }
 
     dO.on('ready', function () {
-        if (w.orientation !== undefined) {
-            MainFrameObject = $('#MainFrame', d)[0];
-            w.addEventListener('orientationchange', function () {
-                // Problem...
-            });
-        }
+        //if (w.orientation !== undefined) {
+        //    MainFrameObject = $('#MainFrame', d)[0];
+        //    w.addEventListener('orientationchange', function () {
+        //        // Problem...
+        //    });
+        //}
         SVGObject = $('#SVG', d).on('load', function () {
             SVGRoot = SVGObject[0].contentDocument.documentElement;
             SVGRootObject = $(SVGRoot);
@@ -1473,7 +1473,7 @@
                 w.open('http://www.gawds.in');
             }
         }).Position(Width, Height, HalfWidth, HalfHeight);
-        PerformResizeFillByWidth();
+        PerformResize();
     });
     wO.on('resize', PerformResize);
 })(window, document, jQuery(window), jQuery(document), jQuery, TweenMax);
