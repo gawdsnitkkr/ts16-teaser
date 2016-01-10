@@ -2,7 +2,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, user-scalable=0"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <meta name="application-name" content="GAWDS">
@@ -13,10 +14,34 @@
     <script type="text/javascript" src="resources/main.js"></script>
 </head>
 <body>
+<script>
+    // Facebook SDK
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '634792329995421',
+            xfbml: true,
+            version: 'v2.5'
+        });
+    };
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
 <div id="MainFrame">
     <object data="resources/drawable/main.svg" type="image/svg+xml" id="SVG"></object>
-    <object data="resources/drawable/facebook.svg" type="image/svg+xml" class="Link" id="FacebookLink" width="48px" height="48px"></object>
-    <object data="resources/drawable/gawds.svg" type="image/svg+xml" class="Link" id="GAWDSLink" width="128px" height="64px"></object>
+    <object data="resources/drawable/facebook.svg" type="image/svg+xml" class="Link" id="FacebookLink" width="48px"
+            height="48px"></object>
+    <object data="resources/drawable/gawds.svg" type="image/svg+xml" class="Link" id="GAWDSLink" width="128px"
+            height="64px"></object>
+    <div id="FacebookShareButton" class="fb-share-button" data-href="http://techspardha.org/"
+         data-layout="button"></div>
 </div>
 </body>
 </html>

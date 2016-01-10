@@ -393,6 +393,10 @@
                 });
                 FacebookLinkObject.Show();
                 GAWDSLinkObject.Show();
+                t.to($('#FacebookShareButton'), 1, {
+                    opacity: 1,
+                    ease: Power4.easeOut
+                });
             },
             End: function () {
                 t.to(SVGElements.PathToHome, 1, {
@@ -1292,8 +1296,6 @@
     };
 
     //function PerformResizeFull() {
-    //    Width = w.innerWidth;
-    //    Height = w.innerHeight;
     //    var SVGWidth = Width,
     //        SVGHeight = Height,
     //        SVGMarginTop = 0,
@@ -1316,10 +1318,6 @@
     //}
 
     function PerformResizeFillByWidth() {
-        Width = w.innerWidth;
-        Height = w.innerHeight;
-        HalfWidth = Width / 2;
-        HalfHeight = Height / 2;
         var SVGWidth = Width,
             SVGHeight = Height,
             SVGMarginTop,
@@ -1341,9 +1339,8 @@
         });
     }
 
+
     //function PerformResizeFill() {
-    //    Width = w.innerWidth;
-    //    Height = w.innerHeight;
     //    var SVGWidth = Width,
     //        SVGHeight = Height,
     //        SVGMarginTop = 0,
@@ -1366,6 +1363,16 @@
     //        marginLeft: SVGMarginLeft
     //    });
     //}
+
+    function PerformResize() {
+        Width = w.innerWidth;
+        Height = w.innerHeight;
+        HalfWidth = Width / 2;
+        HalfHeight = Height / 2;
+        PerformResizeFillByWidth();
+        FacebookLinkObject.Position(Width, Height, HalfWidth, HalfHeight);
+        GAWDSLinkObject.Position(Width, Height, HalfWidth, HalfHeight);
+    }
 
     dO.on('ready', function () {
         if (w.orientation !== undefined) {
@@ -1468,5 +1475,5 @@
         }).Position(Width, Height, HalfWidth, HalfHeight);
         PerformResizeFillByWidth();
     });
-    wO.on('resize', PerformResizeFillByWidth);
+    wO.on('resize', PerformResize);
 })(window, document, jQuery(window), jQuery(document), jQuery, TweenMax);

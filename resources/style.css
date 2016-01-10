@@ -28,3 +28,11 @@ body {
     position: fixed;
     z-index: 99;
 }
+
+#FacebookShareButton {
+    position: fixed;
+    Z-index: 99;
+    top: 26px;
+    left: 24px;
+    opacity: 0;
+}
