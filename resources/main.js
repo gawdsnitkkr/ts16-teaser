@@ -12,6 +12,9 @@
         ElasticEasingIn = Elastic.easeIn.config(2, 1),
         ElasticEasingOut = Elastic.easeOut.config(2, 1),
         FacebookLinkObject,
+        YoutubeLinkObject,
+        GooglePlusLinkObject,
+        TwitterLinkObject,
         GAWDSLinkObject,
         Functions = {
             SetText: function (text, x, y, fS, wT, o, f) {
@@ -392,6 +395,9 @@
                     ease: Power4.easeOut
                 });
                 FacebookLinkObject.Show();
+                YoutubeLinkObject.Show();
+                GooglePlusLinkObject.Show();
+                TwitterLinkObject.Show();
                 GAWDSLinkObject.Show();
                 t.to($('#FacebookShareButton'), 1, {
                     opacity: 1,
@@ -1371,6 +1377,9 @@
         HalfHeight = Height / 2;
         PerformResizeFillByWidth();
         FacebookLinkObject.Position(Width, Height, HalfWidth, HalfHeight);
+        GooglePlusLinkObject.Position(Width, Height, HalfWidth, HalfHeight);
+        YoutubeLinkObject.Position(Width, Height, HalfWidth, HalfHeight);
+        TwitterLinkObject.Position(Width, Height, HalfWidth, HalfHeight);
         GAWDSLinkObject.Position(Width, Height, HalfWidth, HalfHeight);
     }
 
@@ -1461,6 +1470,36 @@
             CallBackBind: 'click',
             CallBack: function () {
                 w.open('http://www.facebook.com/gawdsnitkkr?fref=photo');
+            }
+        }).Position(Width, Height, HalfWidth, HalfHeight);
+        YoutubeLinkObject = $('#YoutubeLink').Link({
+            X: 'left',
+            Y: 'bottom',
+            OffsetX: 24,
+            OffsetY: -80,
+            CallBackBind: 'click',
+            CallBack: function () {
+                w.open('https://www.youtube.com/channel/UCAzrQemb7hxtpDNgvudqyPQ');
+            }
+        }).Position(Width, Height, HalfWidth, HalfHeight);
+        GooglePlusLinkObject = $('#GooglePlusLink').Link({
+            X: 'left',
+            Y: 'bottom',
+            OffsetX: 24,
+            OffsetY: -136,
+            CallBackBind: 'click',
+            CallBack: function () {
+                w.open('https://plus.google.com/+TechspardhaNITKuruksehtra');
+            }
+        }).Position(Width, Height, HalfWidth, HalfHeight);
+        TwitterLinkObject = $('#TwitterLink').Link({
+            X: 'left',
+            Y: 'bottom',
+            OffsetX: 24,
+            OffsetY: -190,
+            CallBackBind: 'click',
+            CallBack: function () {
+                w.open('https://twitter.com/tsnitkkr');
             }
         }).Position(Width, Height, HalfWidth, HalfHeight);
         GAWDSLinkObject = $('#GAWDSLink').Link({
