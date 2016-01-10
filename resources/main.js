@@ -17,14 +17,9 @@
         TwitterLinkObject,
         GAWDSLinkObject,
         BackgroundMusic,
+        IsFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1,
         Functions = {
             SetText: function (text, x, y, fS, wT, o, f) {
-                if (x === undefined) x = 0;
-                if (y === undefined) y = 0;
-                if (f === undefined) f = 'Segoe UI';
-                if (fS === undefined) fS = 20;
-                if (wT === undefined) wT = 400;
-                if (o === undefined) o = 1;
                 t.killTweensOf(SVGElements.TextFrame);
                 t.killTweensOf(SVGElements.TextFrame.find('text'));
                 t.set(SVGElements.TextFrame, {
@@ -38,16 +33,18 @@
                 return Functions.AddText(text, x, y, fS, wT, o, f);
             },
             AddText: function (text, x, y, fS, wT, o, f) {
-                if (f === undefined) f = 'Segoe UI';
-                var Text = d.createElementNS(XMLNS, 'text'),
-                    TextNode = d.createTextNode(text);
+                var Text = d.createElementNS(XMLNS, 'text');
                 Text.style.fontFamily = f;
                 Text.style.fontSize = fS + 'px';
                 Text.style.fontWeight = wT;
                 Text.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+                Text.style.webkitTransform = 'translate(' + x + 'px,' + y + 'px)';
+                Text.style.oTransform = 'translate(' + x + 'px,' + y + 'px)';
+                Text.style.msTransform = 'translate(' + x + 'px,' + y + 'px)';
+                Text.style.mozTransform = 'translate(' + x + 'px,' + y + 'px)';
                 Text.style.opacity = o;
-                Text.appendChild(TextNode);
-                SVGElements.TextFrame[0].appendChild(Text);
+                Text.appendChild(d.createTextNode(text));
+                SVGElements.TextFrame.append(Text);
                 return Functions;
             },
             DequeAnimation: function (i, callback) {
@@ -70,7 +67,7 @@
                 }, 0.1, callback);
             },
             QueueEnterAnimation: function () {
-                Functions.SetText('Remember waiting in unending queues...');
+                Functions.SetText('Remember waiting in unending queues...', 0, 0, 20, 400, 1, 'Segoe UI');
                 t.fromTo(SVGElements.TextFrame, 2, {
                     opacity: 0,
                     x: 500,
@@ -138,7 +135,7 @@
                     }, 100);
             },
             SmartClassAppEnterAnimation: function () {
-                Functions.SetText('To change the way young minds are moulded...');
+                Functions.SetText('To change the way young minds are moulded...', 0, 0, 20, 400, 1, 'Segoe UI');
                 t.fromTo(SVGElements.TextFrame, 1, {
                     opacity: 0,
                     x: 230,
@@ -338,7 +335,7 @@
                             ease: Power3.easeOut
                         });
                         setTimeout(function () {
-                            Functions.SetText('... and then things became smarter.');
+                            Functions.SetText('... and then things became smarter.', 0, 0, 20, 400, 1, 'Segoe UI');
                             t.fromTo(SVGElements.TextFrame, 2, {
                                 opacity: 0,
                                 x: 140,
@@ -384,7 +381,7 @@
                 });
             },
             ShowDetails: function () {
-                Functions.SetText('26 - 29 FEB \'16', 0, 0, 18, 400, 1);
+                Functions.SetText('26 - 29 FEB \'16', 0, 0, 18, 400, 1, 'Segoe UI');
                 t.fromTo(SVGElements.TextFrame, 1, {
                     x: 303,
                     y: 265,
@@ -412,7 +409,7 @@
                     ease: Power3.easeOut,
                     onComplete: function () {
                         setTimeout(function () {
-                            Functions.SetText('NIT Kurukshetra', 0, 0, 44, 700, 0).AddText('Haryana, IN', 0, 30, 30, 600, 0);
+                            Functions.SetText('NIT Kurukshetra', 0, 0, 44, 700, 0, 'Segoe UI').AddText('Haryana, IN', 0, 30, 30, 600, 0, 'Segoe UI');
                             SVGElements.TextFrame.appendTo(SVGRootObject);
                             t.set(SVGElements.TextFrame, {
                                 opacity: 1,
@@ -560,7 +557,9 @@
                     ease: ElasticEasingIn
                 }, -0.15, function () {
                     SVGElements.TextFrame.appendTo(SVGElements.India);
-                    Functions.SetText('This', 0, 0, 24, 400, 0).AddText('FEBRUARY', 50, 0, 32, 900, 0).AddText('explore smart India at', 0, 24, 24, 200, 0);
+                    Functions.SetText('This', 0, 0, 24, 400, 0, 'Segoe UI')
+                        .AddText('FEBRUARY', 50, 0, 32, 900, 0, 'Segoe UI')
+                        .AddText('explore smart India at', 0, 24, 24, 200, 0, 'Segoe UI');
                     t.set(SVGElements.TextFrame, {
                         x: 50,
                         y: 120,
@@ -620,8 +619,8 @@
             },
             IndiaEnterAnimation: function () {
                 setTimeout(function () {
-                    Functions.SetText('Building a connected nation', 0, 0, 24, 600, 1)
-                        .AddText('UNITING INDIA', 60, 32, 32, 900, 0);
+                    Functions.SetText('Building a connected nation', 0, 0, 24, 600, 1, 'Segoe UI')
+                        .AddText('UNITING INDIA', 60, 32, 32, 900, 0, 'Segoe UI');
                     t.fromTo(SVGElements.TextFrame, 1, {
                         x: 500,
                         y: 335,
@@ -693,13 +692,13 @@
                         fill: '#ffffff',
                         opacity: 0,
                         x: 540,
-                        y: 340,
+                        y: IsFirefox ? 320 : 340,
                         rotation: 5,
                         scale: 0.8,
                         transformOrigin: '50% 50%'
                     }, {
                         opacity: 1,
-                        y: 313,
+                        y: IsFirefox ? 293 : 313,
                         scale: 1,
                         transformOrigin: '50% 50%',
                         ease: Elastic.easeOut.config(3, 1),
@@ -710,13 +709,14 @@
                                 transformOrigin: '50% 50%',
                                 ease: ElasticEasingIn,
                                 onComplete: function () {
-                                    Functions.SetText('Our energy sources are', -5, 5, 20, 400, 0)
-                                        .AddText('a bit more', 45, 50, 20, 400, 0).AddText('renewable', 20, 90, 32, 600, 0);
+                                    Functions.SetText('Our energy sources are', 0, 5, 20, 400, 0, 'Segoe UI')
+                                        .AddText('a bit more', 50, 50, 20, 400, 0, 'Segoe UI')
+                                        .AddText('renewable', 25, 90, 32, 600, 0, 'Segoe UI');
                                     t.set(SVGElements.TextFrame, {
                                         fill: '#ffffff',
                                         opacity: 1,
-                                        x: 326,
-                                        y: 335,
+                                        x: IsFirefox ? 325 : 320,
+                                        y: IsFirefox ? 315 : 335,
                                         rotation: 0,
                                         scale: 1,
                                         transformOrigin: '50% 50%'
@@ -837,8 +837,10 @@
                         y: 0,
                         ease: ElasticEasingOut
                     }, 0.1, function () {
-                        Functions.SetText('To', 740, 0, 20, 400, 0).AddText('change', 559, 0, 20, 400, 0)
-                            .AddText('the', 430, 0, 20, 400, 0).AddText('way we', 270, 0, 20, 400, 0);
+                        Functions.SetText('To', 740, 0, 20, 400, 0, 'Segoe UI')
+                            .AddText('change', 559, 0, 20, 400, 0, 'Segoe UI')
+                            .AddText('the', 430, 0, 20, 400, 0, 'Segoe UI')
+                            .AddText('way we', 270, 0, 20, 400, 0, 'Segoe UI');
                         t.set(SVGElements.TextFrame, {
                             fill: '#ffffff',
                             opacity: 1,
@@ -967,8 +969,10 @@
                 });
             },
             ClassRoomAnimation: function (n, callback) {
-                Functions.SetText('Education', 0, 0, 24, 400, 0).AddText('is now', 20, 25, 18, 200, 0)
-                    .AddText('possible in the', 25, 50, 20, 200, 0).AddText('remotest village.', 35, 80, 26, 600, 0);
+                Functions.SetText('Education', 0, 0, 24, 400, 0, 'Segoe UI')
+                    .AddText('is now', 20, 25, 18, 200, 0, 'Segoe UI')
+                    .AddText('possible in the', 25, 50, 20, 200, 0, 'Segoe UI')
+                    .AddText('remotest village.', 35, 80, 26, 600, 0, 'Segoe UI');
                 t.fromTo(SVGElements.TextFrame, 1, {
                     fill: '#363636',
                     opacity: 0,
