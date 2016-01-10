@@ -1451,7 +1451,7 @@
             SVGElements.TechspardhaText = $('#TechspardhaText', SVGRootObject);
             SVGElements.SmartIndiaText = $('#SmartIndiaText', SVGRootObject).css({opacity: 0});
             SVGElements.TextFrame = $('#TextFrame', SVGRootObject).css({opacity: 0, display: 'block'});
-            setTimeout(Functions.End, 500);
+            setTimeout(Functions.Start, 500);
         });
         FacebookLinkObject = $('#FacebookLink').Link({
             X: 'left',
