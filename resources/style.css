@@ -23,3 +23,8 @@ body {
     height: 480px;
     margin: auto auto auto auto;
 }
+
+.Link {
+    position: fixed;
+    z-index: 99;
+}

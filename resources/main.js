@@ -1,6 +1,8 @@
 (function (w, d, wO, dO, $, t) {
     var Width = w.innerWidth,
         Height = w.innerHeight,
+        HalfWidth = Width / 2,
+        HalfHeight = Height / 2,
         MainFrameObject,
         SVGObject,
         SVGRoot,
@@ -9,6 +11,8 @@
         XMLNS = 'http://www.w3.org/2000/svg',
         ElasticEasingIn = Elastic.easeIn.config(2, 1),
         ElasticEasingOut = Elastic.easeOut.config(2, 1),
+        FacebookLinkObject,
+        GAWDSLinkObject,
         Functions = {
             SetText: function (text, x, y, fS, wT, o, f) {
                 if (x === undefined) x = 0;
@@ -19,13 +23,6 @@
                 if (o === undefined) o = 1;
                 t.killTweensOf(SVGElements.TextFrame);
                 t.killTweensOf(SVGElements.TextFrame.find('text'));
-                //SVGElements.TextFrame.css({
-                //    '-webkit-transform': '',
-                //    '-moz-transform': '',
-                //    '-o-transform': '',
-                //    'msTransform': '',
-                //    'transform': ''
-                //});
                 t.set(SVGElements.TextFrame, {
                     x: 0,
                     y: 0,
@@ -259,13 +256,13 @@
                                                             onComplete: function () {
                                                                 t.to(SVGElements.SmartClassAppClickBack, 0.25, {
                                                                     opacity: 1,
-                                                                    scale: 40,
+                                                                    scale: 10,
                                                                     transformOrigin: '50% 50%',
                                                                     ease: Linear.easeOut,
                                                                     onComplete: function () {
                                                                         t.to(SVGElements.SmartClassAppClickBack, 2, {
                                                                             opacity: 0,
-                                                                            scale: 100,
+                                                                            scale: 20,
                                                                             transformOrigin: '50% 50%',
                                                                             ease: Power4.easeOut
                                                                         });
@@ -382,13 +379,28 @@
                     }
                 });
             },
+            ShowDetails: function () {
+                Functions.SetText('26 - 29 FEB \'16', 0, 0, 18, 400, 1);
+                t.fromTo(SVGElements.TextFrame, 1, {
+                    x: 303,
+                    y: 265,
+                    opacity: 0,
+                    fill: '#ffffff'
+                }, {
+                    y: 280,
+                    opacity: 1,
+                    ease: Power4.easeOut
+                });
+                FacebookLinkObject.Show();
+                GAWDSLinkObject.Show();
+            },
             End: function () {
                 t.to(SVGElements.PathToHome, 1, {
                     opacity: 0,
                     ease: Power3.easeOut,
                     onComplete: function () {
                         setTimeout(function () {
-                            Functions.SetText('NIT Kurukshetra', 0, 0, 32, 700, 0).AddText('Haryana, IN', 0, 24, 24, 600, 0);
+                            Functions.SetText('NIT Kurukshetra', 0, 0, 44, 700, 0).AddText('Haryana, IN', 0, 30, 30, 600, 0);
                             SVGElements.TextFrame.appendTo(SVGRootObject);
                             t.set(SVGElements.TextFrame, {
                                 opacity: 1,
@@ -450,10 +462,61 @@
                                             opacity: 1,
                                             scale: 1,
                                             transformOrigin: '50% 50%',
-                                            ease: Power3.easeOut
+                                            ease: Power3.easeOut,
+                                            onComplete: function () {
+                                                //Functions.PathAnimation(SVGElements.ForeGround, 2, Power3.easeOut, false);
+                                            }
                                         });
-                                        SVGElements.TechspardhaText.each(function () {
-                                            Functions.PathAnimation(this, 4, Power3.easeOut, false, 1);
+                                        t.staggerFromTo(SVGElements.TechspardhaChildren, 1, {
+                                            scale: 0.7,
+                                            transformOrigin: '50% 50%'
+                                        }, {
+                                            scale: 1,
+                                            transformOrigin: '50% 50%',
+                                            ease: Power4.easeOut
+                                        }, 0.15);
+                                        Functions.PathAnimation(SVGElements.BackGround, 20, Power4.easeOut, false, 1, 500, 1);
+                                        Functions.PathAnimation(SVGElements.ForeGround, 20, Power4.easeOut, false, 1, 500, 1.15);
+                                        t.to(SVGElements.TechspardhaText, 0.15, {
+                                            fill: '#8bc34a',
+                                            delay: 4,
+                                            ease: Power4.easeOut,
+                                            onComplete: function () {
+                                                t.to(SVGElements.TechspardhaText, 0.075, {
+                                                    fill: '#444444',
+                                                    ease: Power4.easeOut,
+                                                    onComplete: function () {
+                                                        t.to(SVGElements.TechspardhaText, 0.075, {
+                                                            fill: '#8bc34a',
+                                                            ease: Power4.easeOut,
+                                                            onComplete: function () {
+                                                                t.to(SVGElements.TechspardhaText, 0.075, {
+                                                                    fill: '#444444',
+                                                                    ease: Power4.easeOut,
+                                                                    onComplete: function () {
+                                                                        t.to(SVGElements.TechspardhaText, 0.5, {
+                                                                            fill: '#8bc34a',
+                                                                            delay: 0.2,
+                                                                            ease: Power4.easeOut,
+                                                                            onComplete: function () {
+                                                                                t.fromTo(SVGElements.SmartIndiaText, 1, {
+                                                                                    attr: {y: '-=15'},
+                                                                                    opacity: 0
+                                                                                }, {
+                                                                                    attr: {y: '+=15'},
+                                                                                    opacity: 1,
+                                                                                    ease: Power4.easeOut
+                                                                                });
+                                                                                Functions.ShowDetails();
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            }
                                         });
                                     }
                                 });
@@ -713,9 +776,9 @@
                 }, 0.1);
                 setTimeout(Functions.WindmillExitAnimation, 8000);
             },
-            PathAnimation: function (path, time, ease, inverse, divisor, callback) {
+            PathAnimation: function (path, time, ease, inverse, divisor, pathLength, delay, callback) {
                 divisor = divisor || 1;
-                var PathLength = path.getTotalLength(),
+                var PathLength = pathLength || path.getTotalLength(),
                     DividePathLength = PathLength / divisor;
                 t.fromTo(path, time, {
                     strokeDasharray: DividePathLength + ' ' + PathLength,
@@ -724,6 +787,7 @@
                 }, {
                     strokeDashoffset: 0,
                     ease: ease,
+                    delay: delay,
                     onComplete: callback
                 });
             },
@@ -1109,33 +1173,153 @@
             }
         };
 
-    function PerformResizeFull() {
-        Width = w.innerWidth;
-        Height = w.innerHeight;
-        var SVGWidth = Width,
-            SVGHeight = Height,
-            SVGMarginTop = 0,
-            SVGMarginLeft = 0,
-            AspectRatio = Width / Height,
-            DefaultAspectRatio = 1.78;
-        if (AspectRatio > DefaultAspectRatio) {
-            SVGWidth = Math.ceil(SVGHeight * DefaultAspectRatio);
-            SVGMarginLeft = (Width - SVGWidth) / 2;
-        } else if (AspectRatio < DefaultAspectRatio) {
-            SVGHeight = Math.ceil(SVGWidth / DefaultAspectRatio);
-            SVGMarginTop = (Height - SVGHeight) / 2;
-        }
-        t.to(SVGObject, 0.5, {
-            width: SVGWidth,
-            height: SVGHeight,
-            marginTop: SVGMarginTop,
-            marginLeft: SVGMarginLeft
+    $.fn.Link = function (o) {
+        var Element = this,
+            RootObject,
+            Base,
+            Options = $.extend({
+                Width: 48,
+                Height: 48,
+                X: 'left',
+                Y: 'bottom',
+                OffsetX: 0,
+                OffsetY: 0,
+                Duration: 0.5,
+                Easing: Power4.easeOut,
+                CallBackBind: undefined,
+                CallBack: undefined
+            }, o),
+            Width = Options.Width,
+            Height = Options.Height,
+            HalfWidth = Width / 2,
+            HalfHeight = Height / 2,
+            X = Options.X,
+            Y = Options.Y,
+            OffsetX = Options.OffsetX,
+            OffsetY = Options.OffsetY,
+            Duration = Options.Duration,
+            HalfDuration = Duration / 2,
+            Easing = Options.Easing,
+            CallBackBind = Options.CallBackBind,
+            CallBack = Options.CallBack;
+        var Functions = {
+            Position: function (WindowWidth, WindowHeight, HalfWindowWidth, HalfWindowHeight) {
+                var x = OffsetX,
+                    y = OffsetY;
+                switch (X) {
+                    case 'left':
+                        x += 0;
+                        break;
+                    case 'middle':
+                        x += HalfWindowWidth - HalfWidth;
+                        break;
+                    case 'right':
+                        x += WindowWidth - Width;
+                        break;
+                }
+                switch (Y) {
+                    case 'top':
+                        y += 0;
+                        break;
+                    case 'middle':
+                        y += HalfWindowHeight - HalfHeight;
+                        break;
+                    case 'bottom':
+                        y += WindowHeight - Height;
+                        break;
+                }
+                Element.css({
+                    left: x,
+                    top: y
+                });
+                return Functions;
+            },
+            Hide: function () {
+                TweenMax.to(Element, HalfDuration, {
+                    opacity: 0,
+                    scale: 0.5,
+                    transformOrigin: '50% 50%',
+                    ease: Easing,
+                    onComplete: function () {
+                        Element.css('z-index', '-99');
+                    }
+                });
+            },
+            Show: function () {
+                Element.css('z-index', '99');
+                TweenMax.to(Element, Duration, {
+                    opacity: 1,
+                    scale: 1,
+                    transformOrigin: '50% 50%',
+                    ease: Easing
+                });
+            }
+        };
+        Element.on('load', function () {
+            RootObject = $(Element[0].contentDocument.documentElement)
+                .on(CallBackBind, CallBack)
+                .on('mouseover', function () {
+                    TweenMax.to(Base, Duration, {
+                        scale: 1,
+                        transformOrigin: '50% 50%',
+                        fill: '#8bc34a',
+                        ease: Easing
+                    });
+                })
+                .on('mouseout', function () {
+                    TweenMax.to(Base, Duration, {
+                        scale: 0.75,
+                        transformOrigin: '50% 50%',
+                        fill: '#ffffff',
+                        ease: Easing
+                    });
+                })
+                .css({
+                    cursor: 'pointer'
+                });
+            Base = $('#Base', RootObject);
+            TweenMax.set(Base, {
+                scale: 0.75,
+                transformOrigin: '50% 50%'
+            });
+            TweenMax.set(Element, {
+                opacity: 0,
+                scale: 0.5,
+                transformOrigin: '50% 50%'
+            });
         });
-    }
+        return Functions;
+    };
+
+    //function PerformResizeFull() {
+    //    Width = w.innerWidth;
+    //    Height = w.innerHeight;
+    //    var SVGWidth = Width,
+    //        SVGHeight = Height,
+    //        SVGMarginTop = 0,
+    //        SVGMarginLeft = 0,
+    //        AspectRatio = Width / Height,
+    //        DefaultAspectRatio = 1.78;
+    //    if (AspectRatio > DefaultAspectRatio) {
+    //        SVGWidth = Math.ceil(SVGHeight * DefaultAspectRatio);
+    //        SVGMarginLeft = (Width - SVGWidth) / 2;
+    //    } else if (AspectRatio < DefaultAspectRatio) {
+    //        SVGHeight = Math.ceil(SVGWidth / DefaultAspectRatio);
+    //        SVGMarginTop = (Height - SVGHeight) / 2;
+    //    }
+    //    t.to(SVGObject, 0.5, {
+    //        width: SVGWidth,
+    //        height: SVGHeight,
+    //        marginTop: SVGMarginTop,
+    //        marginLeft: SVGMarginLeft
+    //    });
+    //}
 
     function PerformResizeFillByWidth() {
         Width = w.innerWidth;
         Height = w.innerHeight;
+        HalfWidth = Width / 2;
+        HalfHeight = Height / 2;
         var SVGWidth = Width,
             SVGHeight = Height,
             SVGMarginTop,
@@ -1148,7 +1332,7 @@
         } else if (AspectRatio < DefaultAspectRatio) {
             SVGHeight = Math.ceil(SVGWidth / DefaultAspectRatio);
         }
-        SVGMarginTop = (Height - SVGHeight) / 2;
+        SVGMarginTop = HalfHeight - (SVGHeight / 2);
         t.to(SVGObject, 0.5, {
             width: SVGWidth,
             height: SVGHeight,
@@ -1157,31 +1341,31 @@
         });
     }
 
-    function PerformResizeFill() {
-        Width = w.innerWidth;
-        Height = w.innerHeight;
-        var SVGWidth = Width,
-            SVGHeight = Height,
-            SVGMarginTop = 0,
-            SVGMarginLeft = 0,
-            AspectRatio = Width / Height,
-            DefaultAspectRatio = 1.78;
-        if (AspectRatio > DefaultAspectRatio) {
-            SVGWidth = Width;
-            SVGHeight = Math.ceil(SVGWidth / DefaultAspectRatio);
-            SVGMarginTop = (Height - SVGHeight) / 2;
-        } else if (AspectRatio < DefaultAspectRatio) {
-            SVGHeight = Height;
-            SVGWidth = Math.ceil(SVGHeight * DefaultAspectRatio);
-            SVGMarginLeft = (Width - SVGWidth) / 2;
-        }
-        t.to(SVGObject, 0.5, {
-            width: SVGWidth,
-            height: SVGHeight,
-            marginTop: SVGMarginTop,
-            marginLeft: SVGMarginLeft
-        });
-    }
+    //function PerformResizeFill() {
+    //    Width = w.innerWidth;
+    //    Height = w.innerHeight;
+    //    var SVGWidth = Width,
+    //        SVGHeight = Height,
+    //        SVGMarginTop = 0,
+    //        SVGMarginLeft = 0,
+    //        AspectRatio = Width / Height,
+    //        DefaultAspectRatio = 1.78;
+    //    if (AspectRatio > DefaultAspectRatio) {
+    //        SVGWidth = Width;
+    //        SVGHeight = Math.ceil(SVGWidth / DefaultAspectRatio);
+    //        SVGMarginTop = (Height - SVGHeight) / 2;
+    //    } else if (AspectRatio < DefaultAspectRatio) {
+    //        SVGHeight = Height;
+    //        SVGWidth = Math.ceil(SVGHeight * DefaultAspectRatio);
+    //        SVGMarginLeft = (Width - SVGWidth) / 2;
+    //    }
+    //    t.to(SVGObject, 0.5, {
+    //        width: SVGWidth,
+    //        height: SVGHeight,
+    //        marginTop: SVGMarginTop,
+    //        marginLeft: SVGMarginLeft
+    //    });
+    //}
 
     dO.on('ready', function () {
         if (w.orientation !== undefined) {
@@ -1254,10 +1438,34 @@
             SVGElements.PathToHome = $('#PathToHome path', SVGRootObject).css({opacity: 0});
             SVGElements.HomeMarker = $('#HomeMarker', SVGRootObject).css({opacity: 0});
             SVGElements.Techspardha = $('#Techspardha', SVGRootObject).css({opacity: 0, display: 'block'});
-            SVGElements.TechspardhaText = $('#TechspardhaText path', SVGRootObject).css({opacity: 0});
+            SVGElements.TechspardhaChildren = SVGElements.Techspardha.children();
+            SVGElements.BackGround = $('#BackGround', SVGRootObject).css({opacity: 0})[0];
+            SVGElements.ForeGround = $('#ForeGround', SVGRootObject).css({opacity: 0})[0];
+            SVGElements.TechspardhaText = $('#TechspardhaText', SVGRootObject);
+            SVGElements.SmartIndiaText = $('#SmartIndiaText', SVGRootObject).css({opacity: 0});
             SVGElements.TextFrame = $('#TextFrame', SVGRootObject).css({opacity: 0, display: 'block'});
-            setTimeout(Functions.Start, 500);
+            setTimeout(Functions.End, 500);
         });
+        FacebookLinkObject = $('#FacebookLink').Link({
+            X: 'left',
+            Y: 'bottom',
+            OffsetX: 24,
+            OffsetY: -24,
+            CallBackBind: 'click',
+            CallBack: function () {
+                w.open('http://www.facebook.com/gawdsnitkkr?fref=photo');
+            }
+        }).Position(Width, Height, HalfWidth, HalfHeight);
+        GAWDSLinkObject = $('#GAWDSLink').Link({
+            X: 'right',
+            Y: 'bottom',
+            OffsetX: -96,
+            OffsetY: -24,
+            CallBackBind: 'click',
+            CallBack: function () {
+                w.open('http://www.gawds.in');
+            }
+        }).Position(Width, Height, HalfWidth, HalfHeight);
         PerformResizeFillByWidth();
     });
     wO.on('resize', PerformResizeFillByWidth);
