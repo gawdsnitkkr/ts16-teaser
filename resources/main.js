@@ -16,6 +16,7 @@
         GooglePlusLinkObject,
         TwitterLinkObject,
         GAWDSLinkObject,
+        BackgroundMusic,
         Functions = {
             SetText: function (text, x, y, fS, wT, o, f) {
                 if (x === undefined) x = 0;
@@ -1460,9 +1461,13 @@
             SVGElements.TechspardhaText = $('#TechspardhaText', SVGRootObject);
             SVGElements.SmartIndiaText = $('#SmartIndiaText', SVGRootObject).css({opacity: 0});
             SVGElements.TextFrame = $('#TextFrame', SVGRootObject).css({opacity: 0, display: 'block'});
-            setTimeout(Functions.Start, 500);
+            BackgroundMusic = $('#BackgroundMusic', d)[0];
+            BackgroundMusic.oncanplay = function () {
+                BackgroundMusic.play();
+                setTimeout(Functions.Start, 1075);
+            };
         });
-        FacebookLinkObject = $('#FacebookLink').Link({
+        FacebookLinkObject = $('#FacebookLink', d).Link({
             X: 'left',
             Y: 'bottom',
             OffsetX: 24,
@@ -1472,7 +1477,7 @@
                 w.open('http://www.facebook.com/gawdsnitkkr?fref=photo');
             }
         }).Position(Width, Height, HalfWidth, HalfHeight);
-        YoutubeLinkObject = $('#YoutubeLink').Link({
+        YoutubeLinkObject = $('#YoutubeLink', d).Link({
             X: 'left',
             Y: 'bottom',
             OffsetX: 24,
@@ -1482,7 +1487,7 @@
                 w.open('https://www.youtube.com/channel/UCAzrQemb7hxtpDNgvudqyPQ');
             }
         }).Position(Width, Height, HalfWidth, HalfHeight);
-        GooglePlusLinkObject = $('#GooglePlusLink').Link({
+        GooglePlusLinkObject = $('#GooglePlusLink', d).Link({
             X: 'left',
             Y: 'bottom',
             OffsetX: 24,
@@ -1492,7 +1497,7 @@
                 w.open('https://plus.google.com/+TechspardhaNITKuruksehtra');
             }
         }).Position(Width, Height, HalfWidth, HalfHeight);
-        TwitterLinkObject = $('#TwitterLink').Link({
+        TwitterLinkObject = $('#TwitterLink', d).Link({
             X: 'left',
             Y: 'bottom',
             OffsetX: 24,
@@ -1502,7 +1507,7 @@
                 w.open('https://twitter.com/tsnitkkr');
             }
         }).Position(Width, Height, HalfWidth, HalfHeight);
-        GAWDSLinkObject = $('#GAWDSLink').Link({
+        GAWDSLinkObject = $('#GAWDSLink', d).Link({
             X: 'right',
             Y: 'bottom',
             OffsetX: -96,
