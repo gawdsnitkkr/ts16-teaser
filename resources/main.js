@@ -67,7 +67,7 @@
                 }, 0.1, callback);
             },
             QueueEnterAnimation: function () {
-                Functions.SetText('Remember waiting in unending queues...', 0, 0, 20, 400, 1, 'Roboto');
+                Functions.SetText('Remember waiting in unending queues...', 0, 0, 20, 400, 1, 'Segoe UI');
                 t.fromTo(SVGElements.TextFrame, 2, {
                     opacity: 0,
                     x: 500,
