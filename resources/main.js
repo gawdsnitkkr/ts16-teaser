@@ -34,7 +34,7 @@
             },
             AddText: function (text, x, y, fS, wT, o, f) {
                 var Text = d.createElementNS(XMLNS, 'text');
-                Text.style.fontFamily = f;
+                Text.style.fontFamily = f+'';
                 Text.style.fontSize = fS + 'px';
                 Text.style.fontWeight = wT;
                 Text.style.transform = 'translate(' + x + 'px,' + y + 'px)';
@@ -67,7 +67,7 @@
                 }, 0.1, callback);
             },
             QueueEnterAnimation: function () {
-                Functions.SetText('Remember waiting in unending queues...', 0, 0, 20, 400, 1, 'Segoe UI');
+                Functions.SetText('Remember waiting in unending queues...', 0, 0, 20, 400, 1, 'Roboto');
                 t.fromTo(SVGElements.TextFrame, 2, {
                     opacity: 0,
                     x: 500,
@@ -1371,7 +1371,6 @@
         });
     }
 
-
     //function PerformResizeFill() {
     //    var SVGWidth = Width,
     //        SVGHeight = Height,
@@ -1483,6 +1482,8 @@
             BackgroundMusic = $('#BackgroundMusic', d)[0];
             BackgroundMusic.load();
             BackgroundMusic.addEventListener('canplaythrough', function () {
+                console.log("playing");
+                w.LoadingDone = true;
                 BackgroundMusic.play();
                 setTimeout(Functions.Start, 1075);
             }, false);
