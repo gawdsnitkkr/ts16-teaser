@@ -3,7 +3,6 @@
         Height = w.innerHeight,
         HalfWidth = Width / 2,
         HalfHeight = Height / 2,
-        MainFrameObject,
         SVGObject,
         SVGRoot,
         SVGRootObject,
@@ -34,7 +33,7 @@
             },
             AddText: function (text, x, y, fS, wT, o, f) {
                 var Text = d.createElementNS(XMLNS, 'text');
-                Text.style.fontFamily = f+'';
+                Text.style.fontFamily = f + '';
                 Text.style.fontSize = fS + 'px';
                 Text.style.fontWeight = wT;
                 Text.style.transform = 'translate(' + x + 'px,' + y + 'px)';
@@ -1217,7 +1216,8 @@
             HalfDuration = Duration / 2,
             Easing = Options.Easing,
             CallBackBind = Options.CallBackBind,
-            CallBack = Options.CallBack;
+            CallBack = Options.CallBack,
+            zIndex = 2;
         var Functions = {
             Position: function (WindowWidth, WindowHeight, HalfWindowWidth, HalfWindowHeight) {
                 var x = OffsetX,
@@ -1251,19 +1251,19 @@
                 return Functions;
             },
             Hide: function () {
-                TweenMax.to(Element, HalfDuration, {
+                t.to(Element, HalfDuration, {
                     opacity: 0,
                     scale: 0.5,
                     transformOrigin: '50% 50%',
                     ease: Easing,
                     onComplete: function () {
-                        Element.css('z-index', '-99');
+                        Element.css('z-index', -zIndex);
                     }
                 });
             },
             Show: function () {
-                Element.css('z-index', '99');
-                TweenMax.to(Element, Duration, {
+                Element.css('z-index', zIndex);
+                t.to(Element, Duration, {
                     opacity: 1,
                     scale: 1,
                     transformOrigin: '50% 50%',
@@ -1271,11 +1271,11 @@
                 });
             }
         };
-        Element.on('load', function () {
+        Element[0].onload = function () {
             RootObject = $(Element[0].contentDocument.documentElement)
                 .on(CallBackBind, CallBack)
                 .on('mouseover', function () {
-                    TweenMax.to(Base, Duration, {
+                    t.to(Base, Duration, {
                         scale: 1,
                         transformOrigin: '50% 50%',
                         fill: '#8bc34a',
@@ -1283,7 +1283,7 @@
                     });
                 })
                 .on('mouseout', function () {
-                    TweenMax.to(Base, Duration, {
+                    t.to(Base, Duration, {
                         scale: 0.75,
                         transformOrigin: '50% 50%',
                         fill: '#ffffff',
@@ -1294,16 +1294,17 @@
                     cursor: 'pointer'
                 });
             Base = $('#Base', RootObject);
-            TweenMax.set(Base, {
+            t.set(Base, {
                 scale: 0.75,
                 transformOrigin: '50% 50%'
             });
-            TweenMax.set(Element, {
+            t.set(Element, {
                 opacity: 0,
                 scale: 0.5,
                 transformOrigin: '50% 50%'
             });
-        });
+        };
+        Element.load();
         return Functions;
     };
 
@@ -1409,7 +1410,8 @@
     }
 
     dO.on('ready', function () {
-        SVGObject = $('#SVG', d).on('load', function () {
+        SVGObject = $('#SVG', d);
+        SVGObject[0].onload = function () {
             SVGRoot = SVGObject[0].contentDocument.documentElement;
             SVGRootObject = $(SVGRoot);
             SVGElements.TabletBody = $('#TabletBody', SVGRootObject).css({opacity: 0, display: 'block'});
@@ -1482,12 +1484,12 @@
             BackgroundMusic = $('#BackgroundMusic', d)[0];
             BackgroundMusic.load();
             BackgroundMusic.addEventListener('canplaythrough', function () {
-                console.log("playing");
                 w.LoadingDone = true;
                 BackgroundMusic.play();
                 setTimeout(Functions.Start, 1075);
             }, false);
-        });
+        };
+        SVGObject.load();
         FacebookLinkObject = $('#FacebookLink', d).Link({
             X: 'left',
             Y: 'bottom',

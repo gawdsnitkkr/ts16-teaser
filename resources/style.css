@@ -15,6 +15,11 @@ body {
     height: 100%;
     position: fixed;
     text-align: center;
+    z-index: 1;
+}
+
+#Loader {
+    z-index: 3;
 }
 
 #MainSVG {
@@ -22,16 +27,17 @@ body {
     width: 854px;
     height: 480px;
     margin: auto auto auto auto;
+    z-index: 1;
 }
 
 .Link {
     position: fixed;
-    z-index: 99;
+    z-index: 2;
 }
 
 #FacebookShareButton {
     position: fixed;
-    Z-index: 99;
+    z-index: 2;
     top: 26px;
     left: 24px;
     opacity: 0;
