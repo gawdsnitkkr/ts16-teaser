@@ -32,7 +32,6 @@
     <link rel="stylesheet" href="resources/style.css" type="text/css"/>
     <script type="text/javascript" src="resources/jquery.js"></script>
     <script type="text/javascript" src="resources/TweenMax.js"></script>
-    <script type="text/javascript" src="resources/main.js"></script>
     <!-- Google Analytics -->
     <script>
         (function (i, s, o, g, r, a, m) {
@@ -89,7 +88,6 @@
 
         function Loading() {
             if (!window.LoadingDone) {
-                console.log(window.LoadingDone);
                 t.to(LoaderOuter, 1, {
                     rotation: 90,
                     scale: 1.3,
@@ -148,7 +146,7 @@
     <audio id="BackgroundMusic" preload="auto">
         <source src="resources/media/bg.mp3" type="audio/mpeg">
     </audio>
-    <object data="resources/drawable/main.svg" type="image/svg+xml" id="SVG"></object>
+    <object data="resources/drawable/main.svg" type="image/svg+xml" id="MainSVG"></object>
     <object data="resources/drawable/facebook.svg" type="image/svg+xml" class="Link" id="FacebookLink" width="48px"
             height="48px"></object>
     <object data="resources/drawable/twitter.svg" type="image/svg+xml" class="Link" id="TwitterLink" width="48px"
