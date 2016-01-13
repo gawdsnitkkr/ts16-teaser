@@ -383,7 +383,7 @@
                     OffsetY: -24,
                     CallBackBind: 'click',
                     CallBack: function () {
-                        w.open('http://www.facebook.com/gawdsnitkkr?fref=photo');
+                        w.open('https://www.facebook.com/techspardha.nitkkr/?fref=ts');
                     }
                 }).Position(Width, Height, HalfWidth, HalfHeight).Show();
                 YoutubeLinkObject = $('#YoutubeLink', d).Link({
