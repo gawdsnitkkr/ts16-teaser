@@ -1,0 +1,19 @@
+{
+  "name": "techspardha",
+  "homepage": "www.techspardha.org",
+  "authors": [
+    "gawds.nitk@gmail.com"
+  ],
+  "description": "Techspardha '16",
+  "main": "",
+  "moduleType": [],
+  "license": "none",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
