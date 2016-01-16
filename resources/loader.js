@@ -1,5 +1,4 @@
-
-(function (w, t) {
+(function (w, $, t) {
     w.LoadingDone = false;
     var Width = w.innerWidth,
         Height = w.innerHeight,
@@ -20,11 +19,17 @@
         SVGHeight = Math.ceil(SVGWidth / DefaultAspectRatio);
     }
     SVGMarginTop = (Height - SVGHeight) / 2;
-    t.to(LoaderSVG, 0.5, {
+    t.fromTo(LoaderSVG, 0.5, {
         width: SVGWidth,
         height: SVGHeight,
+        marginTop: SVGMarginTop + 100,
+        marginLeft: SVGMarginLeft,
+        opacity: 0
+    }, {
         marginTop: SVGMarginTop,
         marginLeft: SVGMarginLeft,
+        opacity: 1,
+        ease: Power4.easeOut,
         onComplete: Loading
     });
 
@@ -81,4 +86,4 @@
             });
         }
     }
-})(window, TweenMax);
+})(window, jQuery, TweenMax);

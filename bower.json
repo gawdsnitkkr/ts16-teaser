@@ -19,6 +19,7 @@
   "dependencies": {
     "bootstrap": "~3.3.6",
     "jquery": "~2.2.0",
-    "gsap": "~1.18.2"
+    "gsap": "~1.18.2",
+    "jkit": "~1.1.21"
   }
 }
