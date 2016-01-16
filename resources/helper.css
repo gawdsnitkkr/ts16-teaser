@@ -1,3 +1,12 @@
+.roboto{
+	font-family: Roboto Slab !important;
+}
+.abel{
+	font-family: Abel;
+}
+.size-2{
+	font-size:2em;
+}
 .full-dimension{
 	position: relative;
 	height: 100%;
@@ -76,6 +85,10 @@
 	position: relative;
 	padding: 2px !important;
 }
+.padding-5{
+	position: relative;
+	padding: 5px !important;
+}
 .padding-top-10{
 	position: relative;
 	padding-top: 10px !important;
@@ -97,9 +110,27 @@
 .margin-0{
 	margin: 0 !important;
 }
+.margin-33{
+	position:relative;
+	margin:33% !important;
+}
+.margin-bottom-10{
+	margin-bottom:50px !important;
+}
 .margin-top-10{
 	position: relative;
 	margin-top: 10px !important;
+}
+.margin-top-bottom-20{
+	position: relative;
+	margin-top: 20px !important;
+	margin-bottom: 20px !important;
+}
+.margin-top-bottom-10{
+	position: relative;
+	position: relative;
+	margin-top: 10px !important;
+	margin-bottom: 10px !important;
 }
 .margin-left-right-7{
 	position: relative;
@@ -142,6 +173,9 @@
 }
 .text-grey{
 	color:#757575;
+}
+.text-center{
+	text-align: center;
 }
 .hide-overflow{
 	overflow-y:hidden;
@@ -194,4 +228,26 @@ md-tab-item span{
 }
 .border-top{
 	border-top:1px solid #757575;
+}
+.centering{
+	position: relative;
+	left:50%;
+	transform:translateX(-50%);
+}
+.half-width{
+	position: relative;
+	width: 50%;
+}
+.inline{
+	display: inline;
+}
+.float-left{
+	float: left;
+}
+.float-right{
+	float: right;
+}
+.border-top-bottom-1{
+	border-top: 1px solid #fff;
+	border-bottom: 1px solid #fff;
 }
