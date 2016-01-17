@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', sans-serif-light, sans-serif;
-    background: #111111;
+    background: #070707;
     color: #ffffff;
     overflow: hidden;
     -webkit-font-smoothing: antialiased;
@@ -17,6 +17,7 @@ body {
     position: fixed;
     text-align: center;
     z-index: 1;
+    perspective: 1000px;
 }
 
 #Loader {
@@ -38,6 +39,12 @@ body {
     opacity: 0;
 }
 
+.Helper {
+    position: fixed;
+    z-index: 2;
+    opacity: 0;
+}
+
 #FacebookShareButton {
     position: fixed;
     z-index: 2;
@@ -46,14 +53,35 @@ body {
     opacity: 0;
 }
 
-#Header {
+#MenuFrame {
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 100px;
-    background-color: #181818;
+    width: 230px;
+    height: 100%;
+    background: #0c0c0e;
     position: absolute;
     z-index: 2;
+    text-align: center;
+    opacity: 0;
+}
+
+#Logo {
+    margin-top: 45px;
+    margin-bottom: 20px;
+}
+
+#MenuFrame a {
+    text-decoration: none;
+    color: #b0b0b0;
+    font-size: 1.2em;
+    font-weight: 600;
+    padding: 30px 0 0 35px;
+    display: flex;
+}
+
+#MainFrame a object {
+    margin-right: 20px;
+    margin-top: 1px;
 }
 
 #CategoryFrame {
@@ -64,6 +92,8 @@ body {
     word-wrap: normal;
     position: absolute;
     z-index: 1;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .Category {
@@ -79,6 +109,7 @@ body {
     height: 0;
     position: relative;
     perspective: 1000px;
+    overflow: hidden;
 }
 
 .Event {
@@ -87,6 +118,7 @@ body {
     height: 250px;
     background-color: #274f17;
     margin-right: 10px;
+    cursor: pointer;
 }
 
 .Event .Head {

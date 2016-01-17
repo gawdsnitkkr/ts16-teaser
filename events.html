@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="resources/style.css" type="text/css"/>
     <script type="text/javascript" src="bower_components/gsap/src/minified/TweenMax.min.js"></script>
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="resources/jquery_mousewheel.js"></script>
     <script type="text/javascript" src="bower_components/jkit/jquery.jkit.1.1.21.min.js"></script>
     <!-- Resources -->
 </head>
@@ -25,9 +26,16 @@
 <script type="text/javascript" src="resources/loader.js"></script>
 <!-- Loader -->
 <div id="MainFrame">
-    <div id="Header"></div>
+    <div id="MenuFrame">
+        <object id="Logo" data="resources/drawable/logo.svg" type="image/svg+xml" width="125px" height="125px"></object>
+        <a href="#Register"><object data="resources/drawable/register.svg" type="image/svg+xml" width="24px" height="24px"></object>Register</a>
+        <a href="#Events"><object data="resources/drawable/events.svg" type="image/svg+xml" width="24px" height="24px"></object>Events</a>
+        <a href="#Gallery"><object data="resources/drawable/gallery.svg" type="image/svg+xml" width="24px" height="24px"></object>Gallery</a>
+        <a href="#Sponsors"><object data="resources/drawable/sponsor.svg" type="image/svg+xml" width="24px" height="24px"></object>Sponsors</a>
+    </div>
     <div id="CategoryFrame">
     </div>
+    <object id="Arrow" class="Helper" data="resources/drawable/arrow.svg" type="image/svg+xml" width="45px" height="30px"></object>
 </div>
 </body>
 <script type="text/javascript" src="resources/events.js"></script>
