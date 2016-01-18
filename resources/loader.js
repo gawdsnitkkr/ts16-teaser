@@ -72,6 +72,7 @@
                 ease: Easing,
                 onComplete: function () {
                     LoaderSVG.remove();
+                    if (w.LoadingCallBack) w.LoadingCallBack();
                 }
             });
             t.to(LoaderOuter, 1, {

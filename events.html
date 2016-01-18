@@ -9,9 +9,13 @@
     <!-- Meta Tags -->
     <title>Techspardha '16</title>
     <!-- Resources -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css"/>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" type="text/css"/>
     <link rel="stylesheet" href="resources/style.css" type="text/css"/>
+    <link rel="stylesheet" href="resources/helper.css" type="text/css"/>
     <script type="text/javascript" src="bower_components/gsap/src/minified/TweenMax.min.js"></script>
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="resources/jquery_mousewheel.js"></script>
     <script type="text/javascript" src="bower_components/jkit/jquery.jkit.1.1.21.min.js"></script>
     <!-- Resources -->
@@ -28,14 +32,52 @@
 <div id="MainFrame">
     <div id="MenuFrame">
         <object id="Logo" data="resources/drawable/logo.svg" type="image/svg+xml" width="125px" height="125px"></object>
-        <a href="#Register"><object data="resources/drawable/register.svg" type="image/svg+xml" width="24px" height="24px"></object>Register</a>
-        <a href="#Events"><object data="resources/drawable/events.svg" type="image/svg+xml" width="24px" height="24px"></object>Events</a>
-        <a href="#Gallery"><object data="resources/drawable/gallery.svg" type="image/svg+xml" width="24px" height="24px"></object>Gallery</a>
-        <a href="#Sponsors"><object data="resources/drawable/sponsor.svg" type="image/svg+xml" width="24px" height="24px"></object>Sponsors</a>
+        <a id="Register" href="#Register">
+            <object data="resources/drawable/register.svg" type="image/svg+xml" width="24px" height="24px"></object>
+            Register</a>
+        <a href="#Events">
+            <object data="resources/drawable/events.svg" type="image/svg+xml" width="24px" height="24px"></object>
+            Events</a>
+        <a href="#Gallery">
+            <object data="resources/drawable/gallery.svg" type="image/svg+xml" width="24px" height="24px"></object>
+            Gallery</a>
+        <a href="#Sponsors">
+            <object data="resources/drawable/sponsor.svg" type="image/svg+xml" width="24px" height="24px"></object>
+            Sponsors</a>
     </div>
-    <div id="CategoryFrame">
+    <div id="CategoryFrame"></div>
+</div>
+<div id="mod" class="modal fade flat-edge">
+    <div class="modal-dialog">
+        <div class="modal-body">
+            <div class="modal-content bg-black">
+                <div style="padding:0;" class="modal-body">
+                    <div name="Heading"
+                         class="full-width margin-top-bottom-10 bg-ghorblack text-center text-white padding-5">
+                        <span class="title margin-top-bottom-10 segoe size-2">Register</span>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <img class="icon" src="resources/drawable/cross2.svg"/>
+                        </button>
+                    </div>
+                    <div class="content full-width">
+                        <div class="login full-width">
+                            <button class="flat-button fb-button centering margin-top-bottom-20">
+                                <img class="icon" src="resources/drawable/facebook.svg"/>Sign In with facebook
+                            </button>
+                            <hr class="centering" style="width:150px;margin:0;">
+                            <button class="flat-button google-button centering margin-top-bottom-20">
+                                <img class="icon" src="resources/drawable/google.svg"/>Sign In with Google
+                            </button>
+                        </div>
+                    </div>
+                    <div class="footer full-width bg-ghorblack padding-5">
+                            <span class="text-white margin-left-right-7" style="font-size:1.2em;">Name - 9026337563</span>
+                        <span class="text-white margin-left-right-7" style="font-size:1.2em;float:right;">Name - 9026337563</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <object id="Arrow" class="Helper" data="resources/drawable/arrow.svg" type="image/svg+xml" width="45px" height="30px"></object>
 </div>
 </body>
 <script type="text/javascript" src="resources/events.js"></script>

@@ -1,27 +1,13 @@
 (function (w, wO, d, dO, $, t) {
     var Categories = ['Managerial', 'Quizzes', 'FunZone', 'Online Events', 'Paper Events', 'Technopolis', 'Design', 'Brain Storming', 'Future Builder'],
-        Events = [
-            ['Event One', 'Event Two', 'Event Three', 'Event Four', 'Event Five', 'Event Six', 'Event Seven', 'Event Eight', 'Event Nine', 'Event Ten', 'Event Eleven', 'Event Twelve', 'Event Thirteen', 'Event Fourteen'],
-            ['Event One', 'Event Two', 'Event Three', 'Event Four', 'Event Five'],
-            ['Event One', 'Event Two', 'Event Three', 'Event Four', 'Event Five'],
-            ['Event One', 'Event Two', 'Event Three', 'Event Four', 'Event Five'],
-            ['Event One', 'Event Two', 'Event Three', 'Event Four', 'Event Five'],
-            ['Event One', 'Event Two', 'Event Three', 'Event Four', 'Event Five'],
-            ['Event One', 'Event Two', 'Event Three', 'Event Four', 'Event Five'],
-            ['Event One', 'Event Two', 'Event Three', 'Event Four', 'Event Five'],
-            ['Event One', 'Event Two', 'Event Three', 'Event Four', 'Event Five']
-        ],
-        Descriptions = [
-            ['Description One', 'Description Two', 'Description Three', 'Description Four', 'Description Five', 'Description Six', 'Description Seven', 'Description Eight', 'Description Nine', 'Description Ten', 'Description Eleven', 'Description Twelve', 'Description Thirteen', 'Description Fourteen'],
-            ['Description One', 'Description Two', 'Description Three', 'Description Four', 'Description Five'],
-            ['Description One', 'Description Two', 'Description Three', 'Description Four', 'Description Five'],
-            ['Description One', 'Description Two', 'Description Three', 'Description Four', 'Description Five'],
-            ['Description One', 'Description Two', 'Description Three', 'Description Four', 'Description Five'],
-            ['Description One', 'Description Two', 'Description Three', 'Description Four', 'Description Five'],
-            ['Description One', 'Description Two', 'Description Three', 'Description Four', 'Description Five'],
-            ['Description One', 'Description Two', 'Description Three', 'Description Four', 'Description Five'],
-            ['Description One', 'Description Two', 'Description Three', 'Description Four', 'Description Five']
-        ],
+        Events = [[], [], [], [], [], [], [], [], []],
+        Descriptions = [[], [], [], [], [], [], [], [], []],
+        Rules = [[], [], [], [], [], [], [], [], []],
+        DateOfEvent = [[], [], [], [], [], [], [], [], []],
+        TimeOfEvent = [[], [], [], [], [], [], [], [], []],
+        Venue = [[], [], [], [], [], [], [], [], []],
+        Coordinator = [[], [], [], [], [], [], [], [], []],
+        PhoneNumber = [[], [], [], [], [], [], [], [], []],
         CategoriesTop = [],
         CurrentCategory = 0,
         PreviousCategory = 0,
@@ -34,6 +20,9 @@
         EventsOpening = [],
         EventsClosing = [],
         EventsChanging = [],
+        EventOpened = false,
+        EventOpening = false,
+        EventClosing = false,
         Objects = {},
         Width = w.innerWidth,
         Height = w.innerHeight,
@@ -41,6 +30,7 @@
         HalfHeight = Height / 2,
         CategoriesFrameLeft = 275,
         CategoriesFrameTop = HalfHeight - 150,
+        MenuWidth = 230,
         Functions = {
             PathAnimation: function (path, time, ease, inverse, divisor, pathLength, delay, callback) {
                 divisor = divisor || 1;
@@ -163,54 +153,64 @@
                             EventsMouseOver = false;
                         })
                         .on('mousewheel', function (e) {
-                            if (EventsOpen[CurrentCategory]) {
+                            if (EventsOpen[CurrentCategory] && !EventOpened && !EventOpening) {
                                 if (e.deltaY > 0) Functions.EventsLeft();
                                 else if (e.deltaY < 0) Functions.EventsRight();
                             }
                         });
                     Objects.EventsFrames.push(EventsFrame);
                     EventsObjectArray = [];
-                    for (; j < m; j++) EventsObjectArray.push($('<div id="Events-' + Category + '-' + EventsArray[j].replace(' ', '+') + '" class="Event" data-category="' + i + '"  data-event="' + j + '"><table border="0" cellspacing="0" cellpadding="0"><tbody><tr><td class="Head">' + EventsArray[j] + '</td></tr><tr><td class="Description">' + DescriptionsArray[j] + '</td></tr></tbody></table></div>')
-                        .appendTo(EventsFrame)
-                        .on('click', function () {
-                            var This = $(this),
-                                Opacity = parseFloat(This.attr('data-opacity')),
-                                Category = parseInt(This.attr('data-category'), 10),
-                                Event = parseInt(This.attr('data-event'), 10);
-                            if (EventsOpen[Category] && Opacity > 0) {
-                                if (Event !== CurrentEvent) {
-                                    CurrentEvent = Event;
-                                    Functions.EventsChangeAnimation();
+                    for (; j < m; j++)
+                        EventsObjectArray.push($('<div id="Events-' + Category + '-' + EventsArray[j].replace(' ', '+') + '" class="Event" data-category="' + i + '"  data-event="' + j + '">' +
+                            '<table border="0" cellspacing="0" cellpadding="0"><tbody><tr>' +
+                            '<td class="Head"><span>' + EventsArray[j] + '</span><a class="CloseEvent" href="#CloseEvent"></a></td></tr><tr>' +
+                            '<td class="Content"><div class="SmallDescription">' + DescriptionsArray[j].substring(0, 200) + '...</div><div class="DetailedContent">' +
+                            '<span class="ContentHeader">Description</span><hr><p>' + DescriptionsArray[j] + '</p>' +
+                            '<span class="ContentHeader">Venue</span><hr><p>' + Venue[i][j] + ', ' + DateOfEvent[i][j] + ' ' + TimeOfEvent[i][j] + '</p>' +
+                            '<span class="ContentHeader">Rules</span><hr><p>' + Rules[j] + '</p>' +
+                            '</div></td></tr><tr><td class="ContactDetail"><span class="Left">' + Coordinator[i][j][0] + ' - ' + PhoneNumber[i][j][0] + '</span><span class="Right">' + Coordinator[i][j][1] + ' - ' + PhoneNumber[i][j][1] + '</span></td></tr></tbody></table></div>')
+                            .appendTo(EventsFrame)
+                            .on('click', function () {
+                                var This = $(this),
+                                    Opacity = parseFloat(This.attr('data-opacity')),
+                                    Category = parseInt(This.attr('data-category'), 10),
+                                    Event = parseInt(This.attr('data-event'), 10);
+                                if (EventsOpen[Category] && !EventOpened && !EventOpening && Opacity > 0) {
+                                    if (Event !== CurrentEvent) {
+                                        CurrentEvent = Event;
+                                        Functions.EventsChangeAnimation(Category, function () {
+                                            Functions.EventOpenAnimation(This)
+                                        });
+                                    } else Functions.EventOpenAnimation(This);
                                 }
-                            }
-                        })
-                        .on('mouseover', function () {
-                            var This = $(this),
-                                Opacity = parseFloat(This.attr('data-opacity')),
-                                Category = parseInt(This.attr('data-category'), 10);
-                            if (EventsOpen[Category] && Opacity > 0) {
-                                t.to(This, 1, {
-                                    opacity: 1,
-                                    scale: 1,
-                                    transformOrigin: '50% 50%',
-                                    ease: Power4.easeOut
-                                });
-                            }
-                        })
-                        .on('mouseout', function () {
-                            var This = $(this),
-                                Opacity = parseFloat(This.attr('data-opacity')),
-                                Category = parseInt(This.attr('data-category'), 10),
-                                Event = parseInt(This.attr('data-event'), 10);
-                            if (EventsOpen[Category] && Opacity > 0) {
-                                t.to(This, 1, {
-                                    opacity: Event === CurrentEvent ? 1 : Opacity,
-                                    scale: Event === CurrentEvent ? 1 : 0.9,
-                                    transformOrigin: '50% 50%',
-                                    ease: Power4.easeOut
-                                });
-                            }
-                        }));
+                            })
+                            .on('mouseover', function () {
+                                var This = $(this),
+                                    Opacity = parseFloat(This.attr('data-opacity')),
+                                    Category = parseInt(This.attr('data-category'), 10);
+                                if (EventsOpen[Category] && !EventOpened && !EventOpening && Opacity > 0) {
+                                    t.to(This, 1, {
+                                        opacity: 1,
+                                        scale: 1,
+                                        transformOrigin: '50% 50%',
+                                        ease: Power4.easeOut
+                                    });
+                                }
+                            })
+                            .on('mouseout', function () {
+                                var This = $(this),
+                                    Opacity = parseFloat(This.attr('data-opacity')),
+                                    Category = parseInt(This.attr('data-category'), 10),
+                                    Event = parseInt(This.attr('data-event'), 10);
+                                if (EventsOpen[Category] && !EventOpened && !EventOpening && Opacity > 0) {
+                                    t.to(This, 1, {
+                                        opacity: Event === CurrentEvent ? 1 : Opacity,
+                                        scale: Event === CurrentEvent ? 1 : 0.9,
+                                        transformOrigin: '50% 50%',
+                                        ease: Power4.easeOut
+                                    });
+                                }
+                            }));
                     Objects.Events.push(EventsObjectArray);
                     EventsOpen.push(false);
                     EventsOpening.push(false);
@@ -218,6 +218,172 @@
                     EventsChanging.push(false);
                 }
                 return Functions;
+            },
+            EventOpenAnimation: function (eventObject) {
+                EventOpened = false;
+                EventOpening = true;
+                EventClosing = false;
+                var Head = eventObject.find('.Head'),
+                    Header = Head.find('span'),
+                    Content = eventObject.find('.Content'),
+                    SmallDescription = Content.find('.SmallDescription'),
+                    DetailedContent = Content.find('.DetailedContent'),
+                    CloseEvent = Head.find('.CloseEvent'),
+                    ContactDetail = eventObject.find('.ContactDetail'),
+                    EventWidth = Width - MenuWidth - 100,
+                    EventHeight = Height - 100;
+                eventObject.css({
+                    cursor: 'initial',
+                    zIndex: 99
+                });
+                t.to(eventObject, 1, {
+                    width: EventWidth,
+                    height: EventHeight,
+                    y: -CategoriesFrameTop,
+                    backgroundColor: '#0c0c0e',
+                    ease: Power4.easeOut
+                });
+                t.to(Head, 1, {
+                    backgroundColor: '#18181b',
+                    paddingTop: 10,
+                    paddingBottom: 15,
+                    y: 20,
+                    ease: Power2.easeOut
+                });
+                t.to(Content, 1, {
+                    y: 10,
+                    ease: Power2.easeOut
+                });
+                SmallDescription.css({
+                    opacity: 0,
+                    display: 'none'
+                });
+                t.to(Header, 1, {
+                    marginLeft: (EventWidth - Header.width()) / 2,
+                    ease: Power2.easeOut
+                });
+                t.fromTo(CloseEvent, 1, {
+                    opacity: 0,
+                    display: 'block',
+                    scale: 0.5,
+                    transformOrigin: '50% 50%'
+                }, {
+                    opacity: 1,
+                    scale: 1,
+                    transformOrigin: '50% 50%',
+                    delay: 0.5,
+                    ease: Power4.easeOut
+                });
+                DetailedContent.css({
+                    display: 'block',
+                    height: EventHeight - 165
+                }).focus();
+                t.fromTo(DetailedContent, 1, {
+                    opacity: 0,
+                    y: -25
+                }, {
+                    opacity: 1,
+                    y: 25,
+                    delay: 0.5,
+                    ease: Power4.easeOut,
+                    onComplete: function () {
+                        EventOpened = true;
+                        EventOpening = true;
+                    }
+                });
+                t.fromTo(ContactDetail, 1, {
+                    display: 'block',
+                    opacity: 0,
+                    y: 50
+                }, {
+                    opacity: 1,
+                    y: 0,
+                    delay: 0.5,
+                    ease: Power4.easeOut
+                });
+            },
+            EventCloseAnimation: function (eventObject) {
+                EventOpened = true;
+                EventOpening = false;
+                EventClosing = true;
+                var Head = eventObject.find('.Head'),
+                    Header = Head.find('span'),
+                    Content = eventObject.find('.Content'),
+                    SmallDescription = Content.find('.SmallDescription'),
+                    DetailedContent = Content.find('.DetailedContent'),
+                    CloseEvent = Head.find('.CloseEvent'),
+                    ContactDetail = eventObject.find('.ContactDetail');
+                t.to(Header, 0.5, {
+                    marginLeft: 0,
+                    ease: Power4.easeOut
+                });
+                t.to(CloseEvent, 0.5, {
+                    opacity: 0,
+                    scale: 0.5,
+                    transformOrigin: '50% 50%',
+                    ease: Power4.easeOut,
+                    onComplete: function () {
+                        this.target.css({
+                            display: 'none'
+                        });
+                    }
+                });
+                t.to(DetailedContent, 0.5, {
+                    opacity: 0,
+                    y: 50,
+                    ease: Power4.easeOut,
+                    onComplete: function () {
+                        DetailedContent.css({
+                            display: 'none'
+                        });
+                        t.to(eventObject, 0.5, {
+                            width: 250,
+                            height: 250,
+                            y: 0,
+                            backgroundColor: '#274f17',
+                            ease: Power4.easeOut,
+                            onComplete: function () {
+                                this.target.css({
+                                    cursor: 'pointer',
+                                    zIndex: 1
+                                });
+                                t.fromTo(SmallDescription, 0.5, {
+                                    opacity: 0,
+                                    display: 'block',
+                                    y: 50
+                                }, {
+                                    opacity: 1,
+                                    y: 0,
+                                    ease: Power4.easeOut,
+                                    onComplete: function () {
+                                        EventOpened = false;
+                                        EventOpening = false;
+                                        EventClosing = false;
+                                    }
+                                });
+                            }
+                        });
+                        t.to(Head, 0.5, {
+                            backgroundColor: '#274f17',
+                            paddingTop: 0,
+                            paddingBottom: 0,
+                            y: 0,
+                            ease: Power4.easeOut
+                        });
+                        t.to(Content, 0.5, {
+                            y: 0,
+                            ease: Power4.easeOut
+                        });
+                    }
+                });
+                t.to(ContactDetail, 0.5, {
+                    opacity: 0,
+                    y: 50,
+                    ease: Power4.easeOut,
+                    onComplete: function () {
+                        this.target.css({display: 'none'});
+                    }
+                });
             },
             EventsEnterAnimation: function (category) {
                 EventsOpen[category] = false;
@@ -299,7 +465,7 @@
                     ease: Power4.easeOut
                 });
             },
-            EventsChangeAnimation: function (category) {
+            EventsChangeAnimation: function (category, callback) {
                 EventsChanging[category] = true;
                 var EventsFrame = Objects.EventsFrames[CurrentCategory],
                     EventsObjectArray = Objects.Events[CurrentCategory],
@@ -327,7 +493,8 @@
                 }
                 t.to(EventsFrame, 1, {
                     left: -EventsObjectArray[CurrentEvent].position().left,
-                    ease: Power4.easeOut
+                    ease: Power4.easeOut,
+                    onComplete: callback
                 });
             },
             EventsLeft: function () {
@@ -462,83 +629,166 @@
                 if (CurrentCategory !== Categories.length) Functions.EventsCloseAnimation(PreviousCategory, Functions.CategoriesChangeAnimation);
                 else CurrentCategory--;
             },
-            MenuEnterAnimation: function () {
-                t.to(Objects.Menu, 1, {
+            Start: function () {
+                Functions.LoadCategories()
+                    .LoadEvents()
+                    .CategoriesEnterAnimation();
+                t.fromTo(Objects.MenuFrame, 1, {
                     opacity: 0,
-                    scale: 0.7,
+                    marginLeft: -100,
+                    scale: 0.8,
+                    rotationY: 22.5,
+                    transformOrigin: '50% 50%'
+                }, {
+                    opacity: 1,
+                    marginLeft: 0,
+                    scale: 1,
+                    rotationY: 0,
                     transformOrigin: '50% 50%',
                     ease: Power4.easeOut
                 });
-                t.to(Objects.CategoryFrame, 1, {
-                    opacity: 0.7,
-                    scale: 0.9,
-                    x: CategoriesFrameLeft / 2,
-                    transformOrigin: '50% 50%',
+                t.staggerFromTo(Objects.MenuFrame.children(), 1, {
+                    opacity: 0,
+                    x: -100
+                }, {
+                    opacity: 1,
+                    x: 0,
+                    ease: Power4.easeOut
+                }, 0.1);
+                Functions.PathAnimation(Objects.LogoPath[0], 4, Power4.easeOut, false, 1, 100);
+                t.to(Objects.LogoBase, 1.5, {
+                    fill: '#8bc34a',
+                    stroke: '#0c0c0e',
+                    delay: 2,
                     ease: Power4.easeOut
                 });
-                if (!ScrolledDownOnce) Objects.ScrollDownHelper.Hide();
+            },
+            /**
+             * @return {number}
+             */
+            GetCategoryIndex: function (categoryName) {
+                switch (categoryName) {
+                    case 'Managerial':
+                        return 0;
+                        break;
+                    case 'Quizzes':
+                        return 1;
+                        break;
+                    case 'FunZone':
+                        return 2;
+                        break;
+                    case 'Online Events':
+                        return 3;
+                        break;
+                    case 'Paper Events':
+                        return 4;
+                        break;
+                    case 'Technopolis':
+                        return 5;
+                        break;
+                    case 'Design':
+                        return 6;
+                        break;
+                    case 'Brain Storming':
+                        return 7;
+                        break;
+                    case 'Future Builder':
+                        return 8;
+                        break;
+                }
+            },
+            GetData: function (callback) {
+                var i = 0,
+                    cL = Categories.length,
+                    SuccessCount = 0;
+                for (; i < cL; i++) {
+                    $.get({
+                        url: 'http://techspardha.org:3000/events/category/' + Categories[i],
+                        success: function (data) {
+                            if (data.length) {
+                                var j = 0,
+                                    l = data.length,
+                                    category = Functions.GetCategoryIndex(data[0].category),
+                                    event;
+                                for (; j < l; j++) {
+                                    event = data[j];
+                                    Events[category][j] = event.nameOfEvent;
+                                    Descriptions[category][j] = event.description.replace(/<(?!br\s*\/?)[^>]+>/g, '');
+                                    Rules[category][j] = event.rules.replace(/<(?!br\s*\/?)[^>]+>/g, '');
+                                    Venue[category][j] = event.venue;
+                                    Coordinator[category][j] = [event.coordinator_1, event.coordinator_2];
+                                    PhoneNumber[category][j] = [event.phoneno_1, event.phoneno_2];
+                                    DateOfEvent[category][j] = event.dateOfEvent;
+                                    TimeOfEvent[category][j] = event.timeOfEvent;
+                                }
+                            }
+                            if ((++SuccessCount === cL) && callback) callback();
+                        },
+                        error: function () {
+                            alert('Oops! Something went terribly wrong. Please press Ctrl + F5 to retry.');
+                        }
+                    });
+                }
             }
         };
     dO.on('ready', function () {
-        w.LoadingDone = true;
-        Objects.CategoryFrame = $('#CategoryFrame', d);
-        Objects.MenuFrame = $('#MenuFrame', d);
-        Objects.Logo = $('#Logo', d).on('load', function () {
-            Objects.LogoBase = $(this.contentDocument.documentElement).find('#Base');
-            Objects.LogoPath = Objects.LogoBase.find('path');
-        });
-        setTimeout(function () {
-            Functions.LoadCategories()
-                .LoadEvents()
-                .CategoriesEnterAnimation();
-            t.fromTo(Objects.MenuFrame, 1, {
-                opacity: 0,
-                marginLeft: -100,
-                scale: 0.8,
-                rotationY: 22.5,
-                transformOrigin: '50% 50%'
-            }, {
-                opacity: 1,
-                marginLeft: 0,
-                scale: 1,
-                rotationY: 0,
+            Objects.CategoryFrame = $('#CategoryFrame', d);
+            Objects.MenuFrame = $('#MenuFrame', d);
+            Objects.Logo = $('#Logo', d).on('load', function () {
+                Objects.LogoBase = $(this.contentDocument.documentElement).find('#Base');
+                Objects.LogoPath = Objects.LogoBase.find('path');
+            });
+            Objects.Register = $('#Register', d).on('click', function () {
+                $('#mod').modal('show');
+            });
+            Functions.GetData(function () {
+                w.LoadingDone = true;
+                w.LoadingCallBack = Functions.Start;
+            });
+        })
+        .on('click', '.CloseEvent', function () {
+            if (EventOpened && !EventClosing) Functions.EventCloseAnimation(Objects.Events[CurrentCategory][CurrentEvent]);
+        })
+        .on('mouseover', '.CloseEvent', function () {
+            t.to(this, 0.5, {
+                scale: 1.3,
+                rotation: 90,
                 transformOrigin: '50% 50%',
                 ease: Power4.easeOut
             });
-            Functions.PathAnimation(Objects.LogoPath[0], 4, Power4.easeOut, false, 1, 100);
-            t.to(Objects.LogoBase, 1.5, {
-                fill: '#8bc34a',
-                stroke: '#0c0c0e',
-                delay: 2,
+        })
+        .on('mouseout', '.CloseEvent', function () {
+            t.to(this, 0.5, {
+                scale: 1,
+                rotation: 0,
+                transformOrigin: '50% 50%',
                 ease: Power4.easeOut
             });
-        }, 2000);
-    });
+        });
     wO.on('keydown', function (e) {
             switch (e.keyCode) {
                 case 13: // Enter
-                    if (!EventsOpen[CurrentCategory] && !EventsOpening[CurrentCategory]) {
+                    if (!EventsOpen[CurrentCategory] && !EventsOpening[CurrentCategory] && !EventOpened && !EventOpening) {
                         Functions.EventsEnterAnimation(CurrentCategory);
-                        Objects.ScrollDownHelper.Hide();
                     }
-                    else if (EventsOpen[CurrentCategory] && !EventsClosing[CurrentCategory]) Functions.EventsCloseAnimation(CurrentCategory);
+                    else if (EventsOpen[CurrentCategory] && !EventsClosing[CurrentCategory] && !EventOpened && !EventOpening) Functions.EventOpenAnimation(Objects.Events[CurrentCategory][CurrentEvent]);
                     break;
                 case 37: // Left
-                    if (CategoriesOpen && EventsOpen[CurrentCategory]) Functions.EventsLeft();
+                    if (CategoriesOpen && EventsOpen[CurrentCategory] && !EventOpened && !EventOpening) Functions.EventsLeft();
                     break;
                 case 38: // Up
-                    if (CategoriesOpen) Functions.CategoryUp();
+                    if (CategoriesOpen && !EventOpened && !EventOpening) Functions.CategoryUp();
                     break;
                 case 39: // Right
-                    if (CategoriesOpen && EventsOpen[CurrentCategory]) Functions.EventsRight();
+                    if (CategoriesOpen && EventsOpen[CurrentCategory] && !EventOpened && !EventOpening) Functions.EventsRight();
                     break;
                 case 40: // Down
-                    if (CategoriesOpen) Functions.CategoryDown();
+                    if (CategoriesOpen && !EventOpened && !EventOpening) Functions.CategoryDown();
                     break;
             }
         })
         .on('mousewheel', function (e) {
-            if (CategoriesOpen && !EventsMouseOver) {
+            if (CategoriesOpen && !EventsMouseOver && !EventOpened && !EventOpening) {
                 if (e.deltaY > 0) Functions.CategoryUp();
                 else if (e.deltaY < 0) Functions.CategoryDown();
             }
