@@ -2498,8 +2498,7 @@
             // Gallery
         };
 
-    $.fn.Link = function (o, f) {
-        if (f === undefined) f = true;
+    $.fn.Link = function (o) {
         var Element = this,
             RootObject,
             Base,
@@ -2624,7 +2623,7 @@
                 RootObject.on(CallBackBind, CallBack);
             }
         };
-        if (f) Functions.Init();
+        if (Element[0].getSVGDocument()) Functions.Init();
         else Element.on('load', Functions.Init);
         return Functions;
     };
@@ -2791,7 +2790,7 @@
                     });
                 }
             };
-        if (Element[0].contentDocument.documentElement !== null) Functions.Init();
+        if (Element[0].getSVGDocument()) Functions.Init();
         else Element.on('load', Functions.Init);
         return Functions;
     };
@@ -2830,7 +2829,7 @@
                     OffsetY: 19,
                     CallBackBind: 'click',
                     CallBack: Functions.TeaserStop
-                }, false)
+                })
                 .Position(Width, Height, HalfWidth, HalfHeight);
             SVGObject = $('#MainSVG', d).on('load', function () {
                 SVGRoot = SVGObject[0].contentDocument.documentElement;
