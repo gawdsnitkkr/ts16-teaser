@@ -17,7 +17,6 @@
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="resources/jquery_mousewheel.js"></script>
-    <script type="text/javascript" src="bower_components/jkit/jquery.jkit.1.1.21.min.js"></script>
     <!-- Resources -->
 </head>
 
@@ -32,18 +31,18 @@
 <div id="MainFrame">
     <div id="MenuFrame">
         <object id="Logo" data="resources/drawable/logo.svg" type="image/svg+xml" width="125px" height="125px"></object>
-        <a id="Register" href="#Register">
+        <a id="RegisterLink" class="MenuLinks" href="#Register">
             <object data="resources/drawable/register.svg" type="image/svg+xml" width="24px" height="24px"></object>
-            Register</a>
-        <a href="#Events">
+            <span>Register</span></a>
+        <a id="EventsLink" class="MenuLinks" href="#Events">
             <object data="resources/drawable/events.svg" type="image/svg+xml" width="24px" height="24px"></object>
-            Events</a>
-        <a href="#Gallery">
+            <span>Events</span></a>
+        <a id="GalleryLink" class="MenuLinks" href="#Gallery">
             <object data="resources/drawable/gallery.svg" type="image/svg+xml" width="24px" height="24px"></object>
-            Gallery</a>
-        <a href="#Sponsors">
+            <span>Gallery</span></a>
+        <a id="SponsorsLink" class="MenuLinks" href="#Sponsors">
             <object data="resources/drawable/sponsor.svg" type="image/svg+xml" width="24px" height="24px"></object>
-            Sponsors</a>
+            <span>Sponsors</span></a>
     </div>
     <div id="CategoryFrame"></div>
 </div>
@@ -62,16 +61,16 @@
                     <div class="content full-width">
                         <div class="login full-width">
                             <button class="flat-button fb-button centering margin-top-bottom-20">
-                                <img class="icon" src="resources/drawable/facebook.svg"/>Sign In with facebook
+                                <img class="icon" src="resources/drawable/facebook_sign_in.svg"/>Sign In with facebook
                             </button>
                             <hr class="centering" style="width:150px;margin:0;">
                             <button class="flat-button google-button centering margin-top-bottom-20">
-                                <img class="icon" src="resources/drawable/google.svg"/>Sign In with Google
+                                <img class="icon" src="resources/drawable/google_sign_in.svg"/>Sign In with Google
                             </button>
                         </div>
                     </div>
                     <div class="footer full-width bg-ghorblack padding-5">
-                            <span class="text-white margin-left-right-7" style="font-size:1.2em;">Name - 9026337563</span>
+                        <span class="text-white margin-left-right-7" style="font-size:1.2em;">Name - 9026337563</span>
                         <span class="text-white margin-left-right-7" style="font-size:1.2em;float:right;">Name - 9026337563</span>
                     </div>
                 </div>

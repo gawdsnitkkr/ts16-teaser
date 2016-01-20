@@ -1,5 +1,5 @@
 (function (w, wO, d, dO, $, t) {
-    var Categories = ['Managerial', 'Quizzes', 'FunZone', 'Online Events', 'Paper Events', 'Technopolis', 'Design', 'Brain Storming', 'Future Builder'],
+    var Categories = ['Managerial', 'Quizzes', 'Fun Zone', 'Online Events', 'Paper Events', 'Technopolis', 'Design', 'Brain Storming', 'Future Builder'],
         Events = [[], [], [], [], [], [], [], [], []],
         Descriptions = [[], [], [], [], [], [], [], [], []],
         Rules = [[], [], [], [], [], [], [], [], []],
@@ -72,6 +72,8 @@
                                     });
                                 } else if (!EventsOpen[Category] && !EventsOpening[Category]) {
                                     Functions.EventsEnterAnimation(Category);
+                                } else if (EventsOpen[Category] && !EventsClosing[Category]) {
+                                    Functions.EventsCloseAnimation(Category);
                                 }
                             }
                         })
@@ -130,7 +132,8 @@
                     EventsFrame,
                     EventsObjectArray,
                     DescriptionsArray,
-                    Category;
+                    Category,
+                    SmallDescription;
                 Objects.Events = [];
                 Objects.EventsFrames = [];
                 for (; i < l; i++) {
@@ -160,15 +163,17 @@
                         });
                     Objects.EventsFrames.push(EventsFrame);
                     EventsObjectArray = [];
-                    for (; j < m; j++)
+                    for (; j < m; j++) {
+                        SmallDescription = DescriptionsArray[j].replace(/<(?:.|\n)*?>/gm, '');
                         EventsObjectArray.push($('<div id="Events-' + Category + '-' + EventsArray[j].replace(' ', '+') + '" class="Event" data-category="' + i + '"  data-event="' + j + '">' +
                             '<table border="0" cellspacing="0" cellpadding="0"><tbody><tr>' +
                             '<td class="Head"><span>' + EventsArray[j] + '</span><a class="CloseEvent" href="#CloseEvent"></a></td></tr><tr>' +
-                            '<td class="Content"><div class="SmallDescription">' + DescriptionsArray[j].substring(0, 200) + '...</div><div class="DetailedContent">' +
-                            '<span class="ContentHeader">Description</span><hr><p>' + DescriptionsArray[j] + '</p>' +
-                            '<span class="ContentHeader">Venue</span><hr><p>' + Venue[i][j] + ', ' + DateOfEvent[i][j] + ' ' + TimeOfEvent[i][j] + '</p>' +
-                            '<span class="ContentHeader">Rules</span><hr><p>' + Rules[j] + '</p>' +
-                            '</div></td></tr><tr><td class="ContactDetail"><span class="Left">' + Coordinator[i][j][0] + ' - ' + PhoneNumber[i][j][0] + '</span><span class="Right">' + Coordinator[i][j][1] + ' - ' + PhoneNumber[i][j][1] + '</span></td></tr></tbody></table></div>')
+                            '<td class="Content"><div class="SmallDescription">' + (SmallDescription.length > 200 ? SmallDescription.substring(0, 200) + '...' : SmallDescription) + '</div><div class="DetailedContent">' +
+                            ((DescriptionsArray[j].length > 0) ? '<span class="ContentHeader">Description</span><hr><p>' + DescriptionsArray[j] + '</p>' : '') +
+                            ((Rules[i][j].length > 0) ? '<span class="ContentHeader">Rules</span><hr><p>' + Rules[i][j] + '</p>' : '') +
+                                //((Venue[i][j].length > 0) ? '<span class="ContentHeader">Venue</span><hr><p>' + Venue[i][j] + ', ' + DateOfEvent[i][j] + ' ' + TimeOfEvent[i][j] + '</p>' : '') +
+                            '<span class="ContentHeader">Venue</span><hr><p>To Be Announced Soon!</p>' +
+                            '</div></td></tr><tr><td class="ContactDetail">' + (Coordinator[i][j][0].length > 0 ? ('<span class="Left">' + Coordinator[i][j][0] + ' - ' + PhoneNumber[i][j][0]) + '</span>' : '') + (Coordinator[i][j][1].length > 0 ? ('<span class="Right">' + Coordinator[i][j][1] + ' - ' + PhoneNumber[i][j][1]) + '</span>' : '') + '</td></tr></tbody></table></div>')
                             .appendTo(EventsFrame)
                             .on('click', function () {
                                 var This = $(this),
@@ -211,6 +216,7 @@
                                     });
                                 }
                             }));
+                    }
                     Objects.Events.push(EventsObjectArray);
                     EventsOpen.push(false);
                     EventsOpening.push(false);
@@ -395,75 +401,83 @@
                     l = EventsObjectArray.length,
                     i = 0,
                     o;
-                t.killTweensOf(EventsFrame);
-                t.killChildTweensOf(EventsFrame);
-                for (; i < l; i++) {
-                    if (i < 4) {
-                        o = 1 - 0.2 * i;
-                        EventsObjectArray[i].attr('data-opacity', o);
-                        t.fromTo(EventsObjectArray[i], 0.5, {
-                            opacity: 0,
-                            x: -150,
-                            y: -50,
-                            rotationX: 22.5,
-                            rotationY: -22.5,
-                            transformOrigin: '0% 50%'
-                        }, {
-                            opacity: o,
-                            x: 0,
-                            y: 0,
-                            rotationX: 0,
-                            rotationY: 0,
-                            transformOrigin: '0% 50%',
-                            delay: i * 0.1,
-                            ease: Power4.easeOut,
-                            onComplete: i === 1 ? function () {
-                                EventsOpening[category] = false;
-                                EventsOpen[category] = true;
-                            } : undefined
-                        });
-                        t.fromTo(EventsObjectArray[i], 0.5, {
-                            scale: 0.7,
-                            transformOrigin: '50% 50%'
-                        }, {
-                            scale: i === 0 ? 1 : 0.9,
-                            transformOrigin: '50% 50%',
-                            delay: i * 0.1,
-                            ease: Power4.easeOut
-                        });
-                    } else {
-                        EventsObjectArray[i].attr('data-opacity', 0);
-                        t.set(EventsObjectArray[i], {
-                            opacity: 0,
-                            x: 0,
-                            y: 0,
-                            rotationX: 0,
-                            rotationY: 0,
-                            transformOrigin: '0% 50%'
-                        });
-                        t.set(EventsObjectArray[i], {
-                            scale: 0.9,
-                            transformOrigin: '50% 50%'
-                        });
+                if (l > 0) {
+                    t.killTweensOf(EventsFrame);
+                    t.killChildTweensOf(EventsFrame);
+                    for (; i < l; i++) {
+                        if (i < 4) {
+                            o = 1 - 0.2 * i;
+                            EventsObjectArray[i].attr('data-opacity', o);
+                            t.fromTo(EventsObjectArray[i], 0.5, {
+                                opacity: 0,
+                                x: -150,
+                                y: -50,
+                                rotationX: 22.5,
+                                rotationY: -22.5,
+                                transformOrigin: '0% 50%'
+                            }, {
+                                opacity: o,
+                                x: 0,
+                                y: 0,
+                                rotationX: 0,
+                                rotationY: 0,
+                                transformOrigin: '0% 50%',
+                                delay: i * 0.1,
+                                ease: Power4.easeOut,
+                                onComplete: i === 1 ? function () {
+                                    EventsOpening[category] = false;
+                                    EventsOpen[category] = true;
+                                } : undefined
+                            });
+                            t.fromTo(EventsObjectArray[i], 0.5, {
+                                scale: 0.7,
+                                transformOrigin: '50% 50%'
+                            }, {
+                                scale: i === 0 ? 1 : 0.9,
+                                transformOrigin: '50% 50%',
+                                delay: i * 0.1,
+                                ease: Power4.easeOut
+                            });
+                        } else {
+                            EventsObjectArray[i].attr('data-opacity', 0);
+                            t.set(EventsObjectArray[i], {
+                                opacity: 0,
+                                x: 0,
+                                y: 0,
+                                rotationX: 0,
+                                rotationY: 0,
+                                transformOrigin: '0% 50%'
+                            });
+                            t.set(EventsObjectArray[i], {
+                                scale: 0.9,
+                                transformOrigin: '50% 50%'
+                            });
+                        }
                     }
+                    t.fromTo(EventsFrame, 0.5, {
+                        height: 0,
+                        marginTop: 0,
+                        opacity: 1,
+                        overflow: 'visible'
+                    }, {
+                        height: 250,
+                        marginTop: 10,
+                        ease: Power4.easeOut
+                    });
+                    t.to(Objects.Categories[category].find('span'), 1, {
+                        x: 0,
+                        y: -10,
+                        scale: 1.2,
+                        transformOrigin: '0% 0%',
+                        ease: Power4.easeOut
+                    });
+                } else {
+                    t.to(Objects.Categories[category].find('span'), 1, {
+                        x: 0,
+                        ease: Power4.easeOut
+                    });
+                    EventsOpening[category] = false;
                 }
-                t.fromTo(EventsFrame, 0.5, {
-                    height: 0,
-                    marginTop: 0,
-                    opacity: 1,
-                    overflow: 'visible'
-                }, {
-                    height: 250,
-                    marginTop: 10,
-                    ease: Power4.easeOut
-                });
-                t.to(Objects.Categories[category].find('span'), 1, {
-                    x: 0,
-                    y: -10,
-                    scale: 1.2,
-                    transformOrigin: '0% 0%',
-                    ease: Power4.easeOut
-                });
             },
             EventsChangeAnimation: function (category, callback) {
                 EventsChanging[category] = true;
@@ -647,12 +661,24 @@
                     transformOrigin: '50% 50%',
                     ease: Power4.easeOut
                 });
-                t.staggerFromTo(Objects.MenuFrame.children(), 1, {
+                t.staggerFromTo(Objects.MenuFrameChildren, 1, {
                     opacity: 0,
                     x: -100
                 }, {
                     opacity: 1,
                     x: 0,
+                    ease: Power4.easeOut
+                }, 0.1);
+                t.staggerFromTo(Objects.MenuLinksSVG, 1, {
+                    x: 50,
+                    rotationX: 45,
+                    rotationY: 45,
+                    transformOrigin: '50% 50% 24px'
+                }, {
+                    x: 0,
+                    rotationX: 0,
+                    rotationY: 0,
+                    transformOrigin: '50% 50% 24px',
                     ease: Power4.easeOut
                 }, 0.1);
                 Functions.PathAnimation(Objects.LogoPath[0], 4, Power4.easeOut, false, 1, 100);
@@ -674,7 +700,7 @@
                     case 'Quizzes':
                         return 1;
                         break;
-                    case 'FunZone':
+                    case 'Fun Zone':
                         return 2;
                         break;
                     case 'Online Events':
@@ -700,10 +726,11 @@
             GetData: function (callback) {
                 var i = 0,
                     cL = Categories.length,
-                    SuccessCount = 0;
+                    SuccessCount = 0,
+                    Error = false;
                 for (; i < cL; i++) {
                     $.get({
-                        url: 'http://techspardha.org:3000/events/category/' + Categories[i],
+                        url: 'http://techspardha.org:8081/events/category/' + Categories[i],
                         success: function (data) {
                             if (data.length) {
                                 var j = 0,
@@ -713,8 +740,8 @@
                                 for (; j < l; j++) {
                                     event = data[j];
                                     Events[category][j] = event.nameOfEvent;
-                                    Descriptions[category][j] = event.description.replace(/<(?!br\s*\/?)[^>]+>/g, '');
-                                    Rules[category][j] = event.rules.replace(/<(?!br\s*\/?)[^>]+>/g, '');
+                                    Descriptions[category][j] = event.description.replace(/<(?!\/?[pa](?=>|\s.*>))\/?.*?>/g, '').replace('&nbsp;', '');
+                                    Rules[category][j] = event.rules.replace(/<(?!\/?[pa](?=>|\s.*>))\/?.*?>/g, '').replace('&nbsp;', '');
                                     Venue[category][j] = event.venue;
                                     Coordinator[category][j] = [event.coordinator_1, event.coordinator_2];
                                     PhoneNumber[category][j] = [event.phoneno_1, event.phoneno_2];
@@ -725,7 +752,10 @@
                             if ((++SuccessCount === cL) && callback) callback();
                         },
                         error: function () {
-                            alert('Oops! Something went terribly wrong. Please press Ctrl + F5 to retry.');
+                            if (!Error) {
+                                Error = true;
+                                alert('Oops! Something went terribly wrong. Please press Ctrl + F5 to retry.');
+                            }
                         }
                     });
                 }
@@ -734,14 +764,33 @@
     dO.on('ready', function () {
             Objects.CategoryFrame = $('#CategoryFrame', d);
             Objects.MenuFrame = $('#MenuFrame', d);
+            Objects.MenuFrameChildren = Objects.MenuFrame.children();
+            Objects.MenuLinks = Objects.MenuFrame.find('.MenuLinks').on('mouseover', function () {
+                var This = $(this);
+                t.to(This.find('span'), 0.5, {
+                    marginLeft: 10,
+                    color: '#9dcc66',
+                    ease: Power4.easeOut
+                });
+            }).on('mouseout', function () {
+                var This = $(this);
+                t.to(This.find('span'), 0.5, {
+                    marginLeft: 0,
+                    color: '#b0b0b0',
+                    ease: Power4.easeOut
+                });
+            });
+            Objects.MenuLinksSVGBase = [];
+            Objects.MenuLinksSVG = Objects.MenuFrame.find('.MenuLinks object');
             Objects.Logo = $('#Logo', d).on('load', function () {
                 Objects.LogoBase = $(this.contentDocument.documentElement).find('#Base');
                 Objects.LogoPath = Objects.LogoBase.find('path');
             });
-            Objects.Register = $('#Register', d).on('click', function () {
+            Objects.RegisterLink = $('#RegisterLink', d).on('click', function () {
                 $('#mod').modal('show');
             });
             Functions.GetData(function () {
+                //console.log(Rules);
                 w.LoadingDone = true;
                 w.LoadingCallBack = Functions.Start;
             });

@@ -1,0 +1,7 @@
+<svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" id="Mouse" width="48" height="48" viewBox="0 0 48 48" version="1.1">
+  <g transform="translate(0,-1004.3622)" fill="#ffffff" id="Base">
+    <rect width="27.207739" height="45.207279" x="10.396131" y="1005.7585" ry="15.434773" rx="13.603869" style="fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2;stroke:#ffffff"/>
+    <rect id="Scroll" width="4.5" height="11.25" x="21" y="1013" ry="1.7549999" style="opacity:0"/>
+    <path id="Click" d="m20.417909 1009.0185 0 10.4776-7.701491 0c0.640339-5.7992 4.292102-10.3881 7.701491-10.4776z" transform="translate(1.5,1.5)"/>
+  </g>
+</svg>

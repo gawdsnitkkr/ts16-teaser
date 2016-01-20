@@ -75,16 +75,6 @@
                     if (w.LoadingCallBack) w.LoadingCallBack();
                 }
             });
-            t.to(LoaderOuter, 1, {
-                rotation: 180,
-                transformOrigin: '50% 50%',
-                ease: Easing
-            });
-            t.to(LoaderInner, 1, {
-                rotation: -180,
-                transformOrigin: '50% 50%',
-                ease: Easing
-            });
         }
     }
 })(window, jQuery, TweenMax);

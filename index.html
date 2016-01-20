@@ -32,9 +32,14 @@
     <title>Techspardha '16</title>
 
     <!-- Resources -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css"/>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" type="text/css"/>
     <link rel="stylesheet" href="resources/style.css" type="text/css"/>
+    <link rel="stylesheet" href="resources/helper.css" type="text/css"/>
     <script type="text/javascript" src="bower_components/gsap/src/minified/TweenMax.min.js"></script>
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="resources/jquery_mousewheel.js"></script>
     <!-- Resources -->
 
     <!-- Google Analytics -->
@@ -66,22 +71,116 @@
 <script type="text/javascript" src="resources/loader.js"></script>
 <!-- Loader -->
 <div id="MainFrame">
-    <audio id="BackgroundMusic" preload="auto">
-        <source src="resources/media/bg.mp3" type="audio/mpeg">
-    </audio>
-    <object data="resources/drawable/main.svg" type="image/svg+xml" id="MainSVG"></object>
-    <object data="resources/drawable/facebook.svg" type="image/svg+xml" class="Link" id="FacebookLink" width="48px"
-            height="48px"></object>
-    <object data="resources/drawable/twitter.svg" type="image/svg+xml" class="Link" id="TwitterLink" width="48px"
-            height="48px"></object>
-    <object data="resources/drawable/youtube.svg" type="image/svg+xml" class="Link" id="YoutubeLink" width="48px"
-            height="48px"></object>
-    <object data="resources/drawable/google_plus.svg" type="image/svg+xml" class="Link" id="GooglePlusLink" width="48px"
-            height="48px"></object>
-    <object data="resources/drawable/gawds.svg" type="image/svg+xml" class="Link" id="GAWDSLink" width="128px"
-            height="64px"></object>
-    <div id="FacebookShareButton" class="fb-share-button" data-href="http://techspardha.org/"
-         data-layout="button_count"></div>
+    <section id="TeaserSection" class="Section">
+        <audio id="BackgroundMusic" preload="auto">
+            <source src="resources/media/bg.mp3" type="audio/mpeg">
+        </audio>
+        <object data="resources/drawable/main.svg" type="image/svg+xml" id="MainSVG"></object>
+        <object data="resources/drawable/facebook.svg" type="image/svg+xml" class="Link" id="FacebookLink" width="48px"
+                height="48px"></object>
+        <object data="resources/drawable/twitter.svg" type="image/svg+xml" class="Link" id="TwitterLink" width="48px"
+                height="48px"></object>
+        <object data="resources/drawable/youtube.svg" type="image/svg+xml" class="Link" id="YoutubeLink" width="48px"
+                height="48px"></object>
+        <object data="resources/drawable/google_plus.svg" type="image/svg+xml" class="Link" id="GooglePlusLink"
+                width="48px"
+                height="48px"></object>
+        <object data="resources/drawable/gawds.svg" type="image/svg+xml" class="Link" id="GAWDSLink" width="128px"
+                height="64px"></object>
+        <object data="resources/drawable/mouse.svg" type="image/svg+xml" class="Prompt" id="MousePrompt" width="48px"
+                height="48px"></object>
+        <div id="FacebookShareButton" class="fb-share-button" data-href="http://techspardha.org/"
+             data-layout="button_count"></div>
+        <object data="resources/drawable/arrow.svg" type="image/svg+xml" class="Helper" id="ScrollDownHelper"
+                width="96px"
+                height="64px"></object>
+    </section>
+    <section id="SiteSection" class="Section">
+        <div id="MenuFrame">
+            <object id="Logo" data="resources/drawable/logo.svg" type="image/svg+xml" width="125px"
+                    height="125px"></object>
+            <a id="RegisterLink" class="MenuLinks" href="#">
+                <object data="resources/drawable/register.svg" type="image/svg+xml" width="24px" height="24px"></object>
+                <span>Register</span>
+            </a>
+            <a id="EventsLink" class="MenuLinks" href="#">
+                <object data="resources/drawable/events.svg" type="image/svg+xml" width="24px" height="24px"></object>
+                <span>Events</span>
+            </a>
+            <a id="GalleryLink" class="MenuLinks" href="#">
+                <object data="resources/drawable/gallery.svg" type="image/svg+xml" width="24px" height="24px"></object>
+                <span>Gallery</span>
+            </a>
+            <a id="SponsorsLink" class="MenuLinks" href="#">
+                <object data="resources/drawable/sponsor.svg" type="image/svg+xml" width="24px" height="24px"></object>
+                <span>Sponsors</span>
+            </a>
+        </div>
+        <div id="CategoryFrame"></div>
+        <div id="SponsorsFrame">
+            <h1>Coming Soon!</h1>
+        </div>
+        <div id="GalleryFrame">
+            <div id="image_frame">
+                <div id="_image_window"></div>
+                <div id="_image_viewbox"></div>
+                <span id="_image_caption"></span>
+                <div style="position: absolute; top: 86.5%; left: 50%; transform: translate(-50%)">
+                    <svg width="602" height="60" viewBox="0 0 602 60" id="buttonSVG">
+                        <g id="layer1" cursor="pointer"
+                           style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                           transform="translate(0,-1004.3621)">
+                            <path id="right" class="hover_button" transform="translate(0,6)"
+                                  d="m 600,1028.3579 -36.20586,0 m 18.16333,-14.387 18.04253,14.38 -18.10293,14.4024"/>
+                            <path id="left" transform="translate(0,6)" class="hover_button"
+                                  d="m 1.0142425,1028.3663 36.2059205,0 m -18.163334,14.3869 -18.0425865,-14.3799 18.1029895,-14.4024"/>
+                            <g id="handle" transform="translate(2.7734985,5)">
+                                <path d="m 274.86585,1019.9622 0,-14.6341 14.63415,0 m -14.63415,31.534 0,14.6341 14.63415,0"
+                                      id="_left_handle"/>
+                                <path d="m 320.13415,1019.9283 0,-14.6341 -14.63415,0 m 14.63458,31.5509 0,14.6341 -14.63415,0"
+                                      id="_right_handle"/>
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <object data="resources/drawable/mouse.svg" type="image/svg+xml" class="Prompt" id="MousePrompt" width="48px"
+                height="48px"></object>
+    </section>
+</div>
+<div id="mod" class="modal fade flat-edge">
+    <div class="modal-dialog">
+        <div class="modal-body">
+            <div class="modal-content bg-black">
+                <div style="padding:0;" class="modal-body">
+                    <div name="Heading"
+                         class="full-width margin-top-bottom-10 bg-ghorblack text-center text-white padding-5">
+                        <span class="title margin-top-bottom-10 segoe size-2">Register</span>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <img class="icon" src="resources/drawable/cross2.svg"/>
+                        </button>
+                    </div>
+                    <div class="content full-width">
+                        <div class="login full-width">
+                            <h2 style="text-align: center;margin-bottom:20px;font-weight:300">Coming Soon!</h2>
+                            <!--<button class="flat-button fb-button centering margin-top-bottom-20">-->
+                            <!--<img class="icon" src="resources/drawable/facebook_sign_in.svg"/>Sign In with facebook-->
+                            <!--</button>-->
+                            <!--<hr class="centering" style="width:150px;margin:0;">-->
+                            <!--<button class="flat-button google-button centering margin-top-bottom-20">-->
+                            <!--<img class="icon" src="resources/drawable/google_sign_in.svg"/>Sign In with Google-->
+                            <!--</button>-->
+                        </div>
+                    </div>
+                    <div class="footer full-width bg-ghorblack padding-5">
+                        <!--<span class="text-white margin-left-right-7" style="font-size:1.2em;">Name - 9026337563</span>-->
+                        <!--<span class="text-white margin-left-right-7" style="font-size:1.2em;float:right;">Name - 9026337563</span>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 <script type="text/javascript" src="resources/main.js"></script>
