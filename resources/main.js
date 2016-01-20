@@ -2108,7 +2108,7 @@
                     Error = false;
                 for (; i < cL; i++) {
                     $.get({
-                        url: 'http://techspardha.org:8081/events/category/' + Categories[i],
+                        url: 'http://manage.techspardha.org/events/category/' + Categories[i],
                         success: function (data) {
                             if (data.length) {
                                 var j = 0,
