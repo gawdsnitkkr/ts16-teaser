@@ -2095,6 +2095,19 @@
                     Objects.LogoBase = $(Objects.Logo[0].getSVGDocument()).find('#Base');
                     Objects.LogoPath = Objects.LogoBase.find('path');
                 }
+                Objects.LogoBase.css({cursor: 'pointer'}).on('click', function () {
+                    w.location.reload();
+                }).on('mouseover', function () {
+                    t.to(Objects.LogoBase, 1, {
+                        fill: '#9dcc66',
+                        ease: Power4EaseOut
+                    });
+                }).on('mouseout', function () {
+                    t.to(Objects.LogoBase, 1, {
+                        fill: '#8bc34a',
+                        ease: Power4EaseOut
+                    });
+                });
                 Functions.PathAnimation(Objects.LogoPath[0], 4, Power4EaseOut, false, 1, 100);
                 t.to(Objects.LogoBase, 1.5, {
                     fill: '#8bc34a',
@@ -3155,32 +3168,31 @@
                 Functions.SectionTransition();
             }
         });
-    -
-        (function () {
-            var StateKey,
-                EventKey,
-                Keys = {
-                    hidden: 'visibilitychange',
-                    webkitHidden: 'webkitvisibilitychange',
-                    mozHidden: 'mozvisibilitychange',
-                    msHidden: 'msvisibilitychange'
-                };
-            for (StateKey in Keys) {
-                if (StateKey in d) {
-                    EventKey = Keys[StateKey];
-                    break;
+    (function () {
+        var StateKey,
+            EventKey,
+            Keys = {
+                hidden: 'visibilitychange',
+                webkitHidden: 'webkitvisibilitychange',
+                mozHidden: 'mozvisibilitychange',
+                msHidden: 'msvisibilitychange'
+            };
+        for (StateKey in Keys) {
+            if (StateKey in d) {
+                EventKey = Keys[StateKey];
+                break;
+            }
+        }
+        dO.on(EventKey, function () {
+            if (!LinksActive) {
+                if (!Paused) {
+                    Paused = true;
+                    BackgroundMusic.pause();
+                } else {
+                    Paused = false;
+                    BackgroundMusic.play();
                 }
             }
-            dO.on(EventKey, function () {
-                if (!LinksActive) {
-                    if (!Paused) {
-                        Paused = true;
-                        BackgroundMusic.pause();
-                    } else {
-                        Paused = false;
-                        BackgroundMusic.play();
-                    }
-                }
-            });
-        })();
+        });
+    })();
 })(window, document, jQuery(window), jQuery(document), jQuery, TweenMax);
