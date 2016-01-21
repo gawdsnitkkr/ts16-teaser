@@ -3131,33 +3131,27 @@
                             if (CategoriesOpen && !EventOpened && !EventOpening) Functions.CategoryDown();
                             break;
                     }
-                } else if (GalleryOpened) {
-                    // Gallery
-                    var key = e.keyCode;
-                    if (key == 37) {
-                        current--;
-                        if (current < 1)   current = 1;
-                        else {
-                            Functions.browse(image_array, current, left_button);
-                        }
-                    } else if (key == 39) {
-                        current++;
-                        if (current > number_of_images)   current = number_of_images;
-                        else {
-                            Functions.browse(image_array, current, right_button);
-                        }
-                    } else if (key == 27) {
-                        Functions.show_image(_image_viewbox, current);
-                        Functions.exit_gallery(image_frame);
-                    }
-                    // Gallery
                 }
             }
         })
         .on('keyup', function (e) {
-            if (GalleryOpened && image_frame.css('opacity') == 1 && (e.keyCode == 37 || e.keyCode == 39)) {
-                if (current >= 1 && current <= number_of_images)
-                    Functions.show_image(_image_viewbox, current);
+            if (GalleryOpened) {
+                var key = e.keyCode;
+                if (key == 37) {
+                    current--;
+                    if (current < 1)   current = 1;
+                    else {
+                        Functions.browse(image_array, current, left_button);
+                        Functions.show_image(_image_viewbox, current);
+                    }
+                } else if (key == 39) {
+                    current++;
+                    if (current > number_of_images)   current = number_of_images;
+                    else {
+                        Functions.browse(image_array, current, right_button);
+                        Functions.show_image(_image_viewbox, current);
+                    }
+                }
             }
         })
         .on('mousewheel', function (e) {
