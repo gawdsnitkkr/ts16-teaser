@@ -474,7 +474,7 @@ body {
 
 #_image_viewbox {
     position: absolute;
-    background: url('drawable/gallery/1.jpg') no-repeat center;
+    background: no-repeat center;
     background-size: cover;
     border: solid #fdfdda 10px;
     perspective: 200px
@@ -653,7 +653,7 @@ body {
 }
 
 .left-shadow {
-    box-shadow: -1px 0px 5px #bdbdbd;
+    box-shadow: -1px 0 5px #bdbdbd;
 }
 
 .spacing-1 {
@@ -796,4 +796,5 @@ md-tab-item span {
     border-top: 1px solid #fff;
     border-bottom: 1px solid #fff;
 }
+
 /*Helper*/

@@ -16,7 +16,8 @@
         SiteSectionStarted = false,
         Paused = false,
         IsFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1,
-        Categories = ['Managerial', 'Quizzes', 'Fun Zone', 'Online Events', 'Paper Events', 'Technopolis', 'Design', 'Brain Storming', 'Future Builder'],
+        Categories = ['Managerial', 'Quizzes', 'Fun Zone', 'Online Events', 'Paper Events', 'Technopolis',
+            'Design', 'Brain Storming', 'Future Builder'],
         Events = [[], [], [], [], [], [], [], [], []],
         Descriptions = [[], [], [], [], [], [], [], [], []],
         Rules = [[], [], [], [], [], [], [], [], []],
@@ -3154,31 +3155,32 @@
                 Functions.SectionTransition();
             }
         });
-    (function () {
-        var StateKey,
-            EventKey,
-            Keys = {
-                hidden: 'visibilitychange',
-                webkitHidden: 'webkitvisibilitychange',
-                mozHidden: 'mozvisibilitychange',
-                msHidden: 'msvisibilitychange'
-            };
-        for (StateKey in Keys) {
-            if (StateKey in d) {
-                EventKey = Keys[StateKey];
-                break;
-            }
-        }
-        dO.on(EventKey, function () {
-            if (!LinksActive) {
-                if (!Paused) {
-                    Paused = true;
-                    BackgroundMusic.pause();
-                } else {
-                    Paused = false;
-                    BackgroundMusic.play();
+    -
+        (function () {
+            var StateKey,
+                EventKey,
+                Keys = {
+                    hidden: 'visibilitychange',
+                    webkitHidden: 'webkitvisibilitychange',
+                    mozHidden: 'mozvisibilitychange',
+                    msHidden: 'msvisibilitychange'
+                };
+            for (StateKey in Keys) {
+                if (StateKey in d) {
+                    EventKey = Keys[StateKey];
+                    break;
                 }
             }
-        });
-    })();
+            dO.on(EventKey, function () {
+                if (!LinksActive) {
+                    if (!Paused) {
+                        Paused = true;
+                        BackgroundMusic.pause();
+                    } else {
+                        Paused = false;
+                        BackgroundMusic.play();
+                    }
+                }
+            });
+        })();
 })(window, document, jQuery(window), jQuery(document), jQuery, TweenMax);
