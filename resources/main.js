@@ -2351,7 +2351,7 @@
                     ease: Power4EaseIn,
                     onComplete: function () {
                         element.css({
-                            backgroundImage: 'url(resources/drawable/gallery/' + current + '.JPG)',
+                            backgroundImage: 'url(resources/drawable/gallery/' + current + '.jpg)',
                             //opacity: 1,
                             onComplete: function () {
                                 t.fromTo(element, 0.5, {
@@ -2853,6 +2853,109 @@
                     CallBack: Functions.TeaserStop
                 })
                 .Position(Width, Height, HalfWidth, HalfHeight);
+            Objects.CategoryFrame = $('#CategoryFrame', d);
+            Objects.MenuFrame = $('#MenuFrame', d);
+            Objects.MenuFrameChildren = Objects.MenuFrame.children();
+            Objects.MenuLinks = Objects.MenuFrame.find('.MenuLinks').on('mouseover', function () {
+                var This = $(this);
+                t.to(This.find('span'), 0.5, {
+                    marginLeft: 10,
+                    color: '#9dcc66',
+                    ease: Power4.easeOut
+                });
+            }).on('mouseout', function () {
+                var This = $(this);
+                t.to(This.find('span'), 0.5, {
+                    marginLeft: 0,
+                    color: '#b0b0b0',
+                    ease: Power4.easeOut
+                });
+            });
+            Objects.MenuLinksSVGBase = [];
+            Objects.MenuLinksSVG = Objects.MenuFrame.find('.MenuLinks object');
+            Objects.Logo = $('#Logo', d).on('load', function () {
+                Objects.LogoBase = $(this.contentDocument.documentElement).find('#Base');
+                Objects.LogoPath = Objects.LogoBase.find('path');
+            });
+            Objects.RegisterLink = $('#RegisterLink', d).on('click', function () {
+                $('#mod').modal('show');
+            });
+            Objects.SponsorsLink = $('#SponsorsLink', d).on('click', function () {
+                Functions.SponsorsFrameOpen();
+                Functions.GalleryFrameClose();
+            });
+            Objects.GalleryLink = $('#GalleryLink', d).on('click', function () {
+                Functions.GalleryFrameOpen();
+                Functions.SponsorsFrameClose();
+            });
+            Objects.EventsLink = $('#EventsLink', d).on('click', function () {
+                Functions.GalleryFrameClose();
+                Functions.SponsorsFrameClose();
+            });
+            Objects.SponsorsFrame = $('#SponsorsFrame', d).css({
+                width: Width - MenuWidth,
+                height: Height,
+                left: MenuWidth
+            });
+            Objects.GalleryFrame = $('#GalleryFrame', d).css({
+                width: Width - MenuWidth,
+                height: Height,
+                left: MenuWidth
+            });
+            Functions.PerformResize();
+            // Gallery
+            image_frame = $('#image_frame', d);
+            image_window = $('#_image_window', d);
+            image_info_display = $('#image_info_display', d);
+            button_SVG = $('#buttonSVG', d);
+            gallery_button = $('#_gallery_button', d);
+            hover_button = $('.hover_button', d);
+            image_caption = $('#_image_caption', d);
+            left_handle = $('#_left_handle', d);
+            right_handle = $('#_right_handle', d);
+            left_button = $('#left', d);
+            right_button = $('#right', d);
+            _image_viewbox = $('#_image_viewbox', d).css({
+                height: '' + Width * 0.5 * (3 / 4) + 'px',
+                width: '' + Width * 0.5 + 'px'
+            });
+            Functions.InitImage_Array(image_window);
+            hover_button.on('mouseenter', function () {
+                Functions.button_hover(this);
+            });
+            hover_button.on('mouseleave', function () {
+                t.to(hover_button, 0.4, {
+                    fill: '#0e0e0e',
+                    stroke: '#ffffff',
+                    ease: Power4EaseOut
+                });
+            });
+            gallery_button.on('click', function () {
+                Functions.enter_gallery(image_frame);
+            });
+            left_button.on('click', function () {
+                current--;
+                if (current < 1)   current = 1;
+                else {
+                    Functions.browse(image_array, current, left_button);
+                    Functions.show_image(_image_viewbox, current);
+                }
+            });
+            right_button.on('click', function () {
+                current++;
+                if (current > number_of_images)   current = number_of_images;
+                else {
+                    Functions.browse(image_array, current, right_button);
+                    Functions.show_image(_image_viewbox, current);
+                }
+            });
+            $('._image_box', d).on('click', function () {
+                current = 1 + image_array.index(this);
+                Functions.browse(image_array, current, left_button);
+                Functions.show_image(_image_viewbox, current);
+            });
+            Functions.enter_gallery(image_frame);
+            // Gallery
             SVGObject = $('#MainSVG', d).on('load', function () {
                 SVGRoot = SVGObject[0].contentDocument.documentElement;
                 SVGRootObject = $(SVGRoot).on('click', function () {
@@ -2963,109 +3066,6 @@
                         });
                 }, false);
             });
-            Objects.CategoryFrame = $('#CategoryFrame', d);
-            Objects.MenuFrame = $('#MenuFrame', d);
-            Objects.MenuFrameChildren = Objects.MenuFrame.children();
-            Objects.MenuLinks = Objects.MenuFrame.find('.MenuLinks').on('mouseover', function () {
-                var This = $(this);
-                t.to(This.find('span'), 0.5, {
-                    marginLeft: 10,
-                    color: '#9dcc66',
-                    ease: Power4.easeOut
-                });
-            }).on('mouseout', function () {
-                var This = $(this);
-                t.to(This.find('span'), 0.5, {
-                    marginLeft: 0,
-                    color: '#b0b0b0',
-                    ease: Power4.easeOut
-                });
-            });
-            Objects.MenuLinksSVGBase = [];
-            Objects.MenuLinksSVG = Objects.MenuFrame.find('.MenuLinks object');
-            Objects.Logo = $('#Logo', d).on('load', function () {
-                Objects.LogoBase = $(this.contentDocument.documentElement).find('#Base');
-                Objects.LogoPath = Objects.LogoBase.find('path');
-            });
-            Objects.RegisterLink = $('#RegisterLink', d).on('click', function () {
-                $('#mod').modal('show');
-            });
-            Objects.SponsorsLink = $('#SponsorsLink', d).on('click', function () {
-                Functions.SponsorsFrameOpen();
-                Functions.GalleryFrameClose();
-            });
-            Objects.GalleryLink = $('#GalleryLink', d).on('click', function () {
-                Functions.GalleryFrameOpen();
-                Functions.SponsorsFrameClose();
-            });
-            Objects.EventsLink = $('#EventsLink', d).on('click', function () {
-                Functions.GalleryFrameClose();
-                Functions.SponsorsFrameClose();
-            });
-            Objects.SponsorsFrame = $('#SponsorsFrame', d).css({
-                width: Width - MenuWidth,
-                height: Height,
-                left: MenuWidth
-            });
-            Objects.GalleryFrame = $('#GalleryFrame', d).css({
-                width: Width - MenuWidth,
-                height: Height,
-                left: MenuWidth
-            });
-            Functions.PerformResize();
-            // Gallery
-            image_frame = $('#image_frame', d);
-            image_window = $('#_image_window', d);
-            image_info_display = $('#image_info_display', d);
-            button_SVG = $('#buttonSVG', d);
-            gallery_button = $('#_gallery_button', d);
-            hover_button = $('.hover_button', d);
-            image_caption = $('#_image_caption', d);
-            left_handle = $('#_left_handle', d);
-            right_handle = $('#_right_handle', d);
-            left_button = $('#left', d);
-            right_button = $('#right', d);
-            _image_viewbox = $('#_image_viewbox', d).css({
-                height: '' + Width * 0.5 * (3 / 4) + 'px',
-                width: '' + Width * 0.5 + 'px'
-            });
-            Functions.InitImage_Array(image_window);
-            hover_button.on('mouseenter', function () {
-                Functions.button_hover(this);
-            });
-            hover_button.on('mouseleave', function () {
-                t.to(hover_button, 0.4, {
-                    fill: '#0e0e0e',
-                    stroke: '#ffffff',
-                    ease: Power4EaseOut
-                });
-            });
-            gallery_button.on('click', function () {
-                Functions.enter_gallery(image_frame);
-            });
-            left_button.on('click', function () {
-                current--;
-                if (current < 1)   current = 1;
-                else {
-                    Functions.browse(image_array, current, left_button);
-                    Functions.show_image(_image_viewbox, current);
-                }
-            });
-            right_button.on('click', function () {
-                current++;
-                if (current > number_of_images)   current = number_of_images;
-                else {
-                    Functions.browse(image_array, current, right_button);
-                    Functions.show_image(_image_viewbox, current);
-                }
-            });
-            $('._image_box', d).on('click', function () {
-                current = 1 + image_array.index(this);
-                Functions.browse(image_array, current, left_button);
-                Functions.show_image(_image_viewbox, current);
-            });
-            Functions.enter_gallery(image_frame);
-            // Gallery
         })
         .on('click', '.CloseEvent', function () {
             if (EventOpened && !EventClosing) Functions.EventCloseAnimation(Objects.Events[CurrentCategory][CurrentEvent]);
