@@ -42,6 +42,7 @@
         EventClosing = false,
         GalleryOpened = false,
         SponsorsOpened = false,
+        GetDataSuccess = false,
         CategoriesFrameLeft = 275,
         CategoriesFrameTop = HalfHeight - 180,
         MenuWidth = 230,
@@ -2156,7 +2157,10 @@
                                     TimeOfEvent[category][j] = event.timeOfEvent;
                                 }
                             }
-                            if ((++SuccessCount === cL) && callback) callback();
+                            if (!GetDataSuccess && (++SuccessCount === cL) && callback) {
+                                GetDataSuccess = true;
+                                callback();
+                            }
                         },
                         error: function () {
                             if (!Error) {
@@ -2947,7 +2951,7 @@
                 SVGElements.IndiaTextSix = $('#IndiaTextSix', SVGRootObject).css({opacity: 0, display: 'block'});
                 BackgroundMusic.load();
                 BackgroundMusic.addEventListener('canplaythrough', function () {
-                    if (!TeaserStarted)
+                    if (!TeaserStarted && !GetDataSuccess)
                         Functions.GetData(function () {
                             Functions.LoadCategories().LoadEvents();
                             w.LoadingDone = true;
