@@ -42,6 +42,7 @@
         EventClosing = false,
         GalleryOpened = false,
         SponsorsOpened = false,
+        GetDataSuccess = false,
         CategoriesFrameLeft = 275,
         CategoriesFrameTop = HalfHeight - 180,
         MenuWidth = 230,
@@ -70,7 +71,7 @@
         image_text = [
             "Exhibition Inauguration Techspardha'15", "'I got the moves' - manav", "And some more",
             "In our eyes a radiant dream", "Boundless desires we cast to the sky", "RoboWars", "Terminator ?",
-            "JunkyardWars", "Exhibition TS'15", "Brahmos Display", "Exhibition TS'15", "Chief Guest", "Guest Lecture", "Team Accelerons",
+            "JunkyardWars", "Exhibition TS'15", "Brahmos Display", "Exhibition TS'15", "Chief Guest", "Speaker", "Team Ibrido",
             "Mini rover", "Enchanting melody", "When words aren't enough", "Its a fest after all, chill",
             "Let there be light", "Coke Studio", "Guitar frenzy", "Setting the mood", "Soaring finale",
             "Techsparhda'16 'Wait for it...'"],
@@ -539,13 +540,7 @@
             },
             TechspardhaEnterAnimation: function () {
                 TechspardhaStarted = true;
-                t.to(Objects.EnterPromptBase, 0.5, {
-                    fill: '#9dcc66',
-                    scale: 1,
-                    transformOrigin: '50% 50%',
-                    ease: Power4EaseOut,
-                    onComplete: Objects.EnterPrompt.Hide()
-                });
+                Objects.EnterPrompt.Hide();
                 t.fromTo(SVGElements.Techspardha, 4, {
                     opacity: 0,
                     scale: 0.7,
@@ -1423,6 +1418,12 @@
                     }, 0, function () {
                         Functions.TechspardhaEnterAnimation();
                     });
+                    t.to(Objects.EnterPromptBase, 0.5, {
+                        fill: '#9dcc66',
+                        scale: 1,
+                        transformOrigin: '50% 50%',
+                        ease: Power4EaseOut
+                    });
                 }
             },
             SectionTransition: function () {
@@ -1454,82 +1455,82 @@
                 setTimeout(Functions.SiteSectionStart, 500);
             },
             LoadCategories: function () {
-                if (Objects.CategoryFrame.children().length === 0) {
-                    var l = Categories.length,
-                        i = 0,
-                        CategoryFrame = Objects.CategoryFrame;
-                    t.set(CategoryFrame, {
-                        top: CategoriesFrameTop,
-                        left: CategoriesFrameLeft
-                    });
-                    Objects.Categories = [];
-                    for (; i < l; i++) {
-                        Objects.Categories.push($('<div id="' + Categories[i] + '" class="Category" data-category="' + i + '"><span>' + Categories[i] + '</span></div>')
-                            .appendTo(CategoryFrame)
-                            .on('click', function () {
-                                if (CategoriesOpen) {
-                                    var Category = parseInt($(this).attr('data-category'), 10);
-                                    if (Category != CurrentCategory) {
-                                        PreviousCategory = CurrentCategory;
-                                        CurrentCategory = Category;
-                                        Functions.EventsCloseAnimation(PreviousCategory, function () {
-                                            Functions.CategoriesChangeAnimation();
-                                            Functions.EventsEnterAnimation(Category);
-                                        });
-                                    } else if (!EventsOpen[Category] && !EventsOpening[Category]) {
+                // Generate Categories Array By Server...
+                var l = Categories.length,
+                    i = 0,
+                    CategoryFrame = Objects.CategoryFrame;
+                t.set(CategoryFrame, {
+                    top: CategoriesFrameTop,
+                    left: CategoriesFrameLeft
+                });
+                Objects.Categories = [];
+                for (; i < l; i++) {
+                    Objects.Categories.push($('<div id="' + Categories[i] + '" class="Category" data-category="' + i + '"><span>' + Categories[i] + '</span></div>')
+                        .appendTo(CategoryFrame)
+                        .on('click', function () {
+                            if (CategoriesOpen) {
+                                var Category = parseInt($(this).attr('data-category'), 10);
+                                if (Category != CurrentCategory) {
+                                    PreviousCategory = CurrentCategory;
+                                    CurrentCategory = Category;
+                                    Functions.EventsCloseAnimation(PreviousCategory, function () {
+                                        Functions.CategoriesChangeAnimation();
                                         Functions.EventsEnterAnimation(Category);
-                                    } else if (EventsOpen[Category] && !EventsClosing[Category]) {
-                                        Functions.EventsCloseAnimation(Category);
-                                    }
+                                    });
+                                } else if (!EventsOpen[Category] && !EventsOpening[Category]) {
+                                    Functions.EventsEnterAnimation(Category);
+                                } else if (EventsOpen[Category] && !EventsClosing[Category]) {
+                                    Functions.EventsCloseAnimation(Category);
                                 }
-                            })
-                            .on('mouseover', function () {
-                                if (CategoriesOpen) {
-                                    var This = $(this),
-                                        Opacity = parseFloat(This.attr('data-opacity')),
-                                        Category = parseInt(This.attr('data-category'), 10);
-                                    if (Category !== CurrentCategory && Opacity > 0) {
-                                        t.to(This, 1, {
-                                            opacity: 1,
-                                            ease: Power4EaseOut
-                                        });
-                                    }
-                                    if (!EventsOpen[Category] && !EventsOpening[Category]) {
-                                        t.to(This.find('span'), 1, {
-                                            x: 25,
-                                            ease: Power4EaseOut
-                                        });
-                                    } else {
-                                        t.to(This.find('span'), 1, {
-                                            x: 0,
-                                            ease: Power4EaseOut
-                                        });
-                                    }
+                            }
+                        })
+                        .on('mouseover', function () {
+                            if (CategoriesOpen) {
+                                var This = $(this),
+                                    Opacity = parseFloat(This.attr('data-opacity')),
+                                    Category = parseInt(This.attr('data-category'), 10);
+                                if (Category !== CurrentCategory && Opacity > 0) {
+                                    t.to(This, 1, {
+                                        opacity: 1,
+                                        ease: Power4EaseOut
+                                    });
                                 }
-                            })
-                            .on('mouseout', function () {
-                                if (CategoriesOpen) {
-                                    var This = $(this),
-                                        Opacity = parseFloat(This.attr('data-opacity')),
-                                        Category = parseInt(This.attr('data-category'), 10);
-                                    if (Category !== CurrentCategory && Opacity > 0) {
-                                        t.to(This, 1, {
-                                            opacity: Opacity,
-                                            ease: Power4EaseOut
-                                        });
-                                    }
+                                if (!EventsOpen[Category] && !EventsOpening[Category]) {
+                                    t.to(This.find('span'), 1, {
+                                        x: 25,
+                                        ease: Power4EaseOut
+                                    });
+                                } else {
                                     t.to(This.find('span'), 1, {
                                         x: 0,
                                         ease: Power4EaseOut
                                     });
                                 }
-                            }));
-                        CategoriesTop.push(Objects.Categories[i].position().top);
-                    }
+                            }
+                        })
+                        .on('mouseout', function () {
+                            if (CategoriesOpen) {
+                                var This = $(this),
+                                    Opacity = parseFloat(This.attr('data-opacity')),
+                                    Category = parseInt(This.attr('data-category'), 10);
+                                if (Category !== CurrentCategory && Opacity > 0) {
+                                    t.to(This, 1, {
+                                        opacity: Opacity,
+                                        ease: Power4EaseOut
+                                    });
+                                }
+                                t.to(This.find('span'), 1, {
+                                    x: 0,
+                                    ease: Power4EaseOut
+                                });
+                            }
+                        }));
+                    CategoriesTop.push(Objects.Categories[i].position().top);
                 }
                 return Functions;
             },
             LoadEvents: function () {
+                // Generate Events Array By Server...
                 var l = Categories.length,
                     i = 0,
                     m,
@@ -1548,90 +1549,88 @@
                     DescriptionsArray = Descriptions[i];
                     m = EventsArray.length;
                     j = 0;
-                    if ($('#Events-' + Category).length === 0) {
-                        EventsFrame = $('<div id="Events-' + Category + '" class="EventsFrame"></div>').insertAfter(Objects.Categories[i])
-                            .css({
-                                width: 260 * m + Width,
-                                height: 0,
-                                opacity: 0,
-                                marginTop: 0
+                    EventsFrame = $('<div id="Events-' + Category + '" class="EventsFrame"></div>').insertAfter(Objects.Categories[i])
+                        .css({
+                            width: 260 * m + Width,
+                            height: 0,
+                            opacity: 0,
+                            marginTop: 0
+                        })
+                        .on('mouseover', function () {
+                            EventsMouseOver = true;
+                        })
+                        .on('mouseout', function () {
+                            EventsMouseOver = false;
+                        })
+                        .on('mousewheel', function (e) {
+                            if (EventsOpen[CurrentCategory] && !EventOpened && !EventOpening) {
+                                if (e.deltaY > 0) Functions.EventsLeft();
+                                else if (e.deltaY < 0) Functions.EventsRight();
+                            }
+                        });
+                    Objects.EventsFrames.push(EventsFrame);
+                    EventsObjectArray = [];
+                    for (; j < m; j++) {
+                        SmallDescription = DescriptionsArray[j].replace(/<(?:.|\n)*?>/gm, '');
+                        var DescriptionLength = EventsArray[j].length > 15 ? EventsArray[j].length > 24 ? 150 : 200 : 230;
+                        SmallDescription = (SmallDescription.length > DescriptionLength ? SmallDescription.substring(0, DescriptionLength) + '...' : SmallDescription);
+                        EventsObjectArray.push($('<div id="Events-' + Category + '-' + EventsArray[j].replace(' ', '+') + '" class="Event" data-category="' + i + '"  data-event="' + j + '">' +
+                            '<table border="0" cellspacing="0" cellpadding="0"><tbody><tr>' +
+                            '<td class="Head"><span>' + EventsArray[j] + '</span><a class="CloseEvent" href="#CloseEvent"></a></td></tr><tr>' +
+                            '<td class="Content"><div class="SmallDescription">' + SmallDescription + '</div><div class="DetailedContent">' +
+                            ((DescriptionsArray[j].length > 0) ? '<span class="ContentHeader">Description</span><hr><p>' + DescriptionsArray[j] + '</p>' : '') +
+                            ((Rules[i][j].length > 0) ? '<span class="ContentHeader">Rules</span><hr><p>' + Rules[i][j] + '</p>' : '') +
+                                //((Venue[i][j].length > 0) ? '<span class="ContentHeader">Venue</span><hr><p>' + Venue[i][j] + ', ' + DateOfEvent[i][j] + ' ' + TimeOfEvent[i][j] + '</p>' : '') +
+                            '<span class="ContentHeader">Venue</span><hr><p>To Be Announced Soon!</p>' +
+                            '</div></td></tr><tr><td class="ContactDetail">' + (Coordinator[i][j][0].length > 0 ? ('<span class="Left">' + Coordinator[i][j][0] + ' - ' + PhoneNumber[i][j][0]) + '</span>' : '') + (Coordinator[i][j][1].length > 0 ? ('<span class="Right">' + Coordinator[i][j][1] + ' - ' + PhoneNumber[i][j][1]) + '</span>' : '') + '</td></tr></tbody></table></div>')
+                            .appendTo(EventsFrame)
+                            .on('click', function () {
+                                var This = $(this),
+                                    Opacity = parseFloat(This.attr('data-opacity')),
+                                    Category = parseInt(This.attr('data-category'), 10),
+                                    Event = parseInt(This.attr('data-event'), 10);
+                                if (EventsOpen[Category] && !EventOpened && !EventOpening && Opacity > 0) {
+                                    if (Event !== CurrentEvent) {
+                                        CurrentEvent = Event;
+                                        Functions.EventsChangeAnimation(Category, function () {
+                                            Functions.EventOpenAnimation(This)
+                                        });
+                                    } else Functions.EventOpenAnimation(This);
+                                }
                             })
                             .on('mouseover', function () {
-                                EventsMouseOver = true;
+                                var This = $(this),
+                                    Opacity = parseFloat(This.attr('data-opacity')),
+                                    Category = parseInt(This.attr('data-category'), 10);
+                                if (EventsOpen[Category] && !EventOpened && !EventOpening && Opacity > 0) {
+                                    t.to(This, 1, {
+                                        opacity: 1,
+                                        scale: 1,
+                                        transformOrigin: '50% 50%',
+                                        ease: Power4EaseOut
+                                    });
+                                }
                             })
                             .on('mouseout', function () {
-                                EventsMouseOver = false;
-                            })
-                            .on('mousewheel', function (e) {
-                                if (EventsOpen[CurrentCategory] && !EventOpened && !EventOpening) {
-                                    if (e.deltaY > 0) Functions.EventsLeft();
-                                    else if (e.deltaY < 0) Functions.EventsRight();
+                                var This = $(this),
+                                    Opacity = parseFloat(This.attr('data-opacity')),
+                                    Category = parseInt(This.attr('data-category'), 10),
+                                    Event = parseInt(This.attr('data-event'), 10);
+                                if (EventsOpen[Category] && !EventOpened && !EventOpening && Opacity > 0) {
+                                    t.to(This, 1, {
+                                        opacity: Event === CurrentEvent ? 1 : Opacity,
+                                        scale: Event === CurrentEvent ? 1 : 0.9,
+                                        transformOrigin: '50% 50%',
+                                        ease: Power4EaseOut
+                                    });
                                 }
-                            });
-                        Objects.EventsFrames.push(EventsFrame);
-                        EventsObjectArray = [];
-                        for (; j < m; j++) {
-                            SmallDescription = DescriptionsArray[j].replace(/<(?:.|\n)*?>/gm, '');
-                            var DescriptionLength = EventsArray[j].length > 15 ? EventsArray[j].length > 24 ? 150 : 200 : 230;
-                            SmallDescription = (SmallDescription.length > DescriptionLength ? SmallDescription.substring(0, DescriptionLength) + '...' : SmallDescription);
-                            EventsObjectArray.push($('<div id="Events-' + Category + '-' + EventsArray[j].replace(' ', '+') + '" class="Event" data-category="' + i + '"  data-event="' + j + '">' +
-                                '<table border="0" cellspacing="0" cellpadding="0"><tbody><tr>' +
-                                '<td class="Head"><span>' + EventsArray[j] + '</span><a class="CloseEvent" href="#CloseEvent"></a></td></tr><tr>' +
-                                '<td class="Content"><div class="SmallDescription">' + SmallDescription + '</div><div class="DetailedContent">' +
-                                ((DescriptionsArray[j].length > 0) ? '<span class="ContentHeader">Description</span><hr><p>' + DescriptionsArray[j] + '</p>' : '') +
-                                ((Rules[i][j].length > 0) ? '<span class="ContentHeader">Rules</span><hr><p>' + Rules[i][j] + '</p>' : '') +
-                                    //((Venue[i][j].length > 0) ? '<span class="ContentHeader">Venue</span><hr><p>' + Venue[i][j] + ', ' + DateOfEvent[i][j] + ' ' + TimeOfEvent[i][j] + '</p>' : '') +
-                                '<span class="ContentHeader">Venue</span><hr><p>To Be Announced Soon!</p>' +
-                                '</div></td></tr><tr><td class="ContactDetail">' + (Coordinator[i][j][0].length > 0 ? ('<span class="Left">' + Coordinator[i][j][0] + ' - ' + PhoneNumber[i][j][0]) + '</span>' : '') + (Coordinator[i][j][1].length > 0 ? ('<span class="Right">' + Coordinator[i][j][1] + ' - ' + PhoneNumber[i][j][1]) + '</span>' : '') + '</td></tr></tbody></table></div>')
-                                .appendTo(EventsFrame)
-                                .on('click', function () {
-                                    var This = $(this),
-                                        Opacity = parseFloat(This.attr('data-opacity')),
-                                        Category = parseInt(This.attr('data-category'), 10),
-                                        Event = parseInt(This.attr('data-event'), 10);
-                                    if (EventsOpen[Category] && !EventOpened && !EventOpening && Opacity > 0) {
-                                        if (Event !== CurrentEvent) {
-                                            CurrentEvent = Event;
-                                            Functions.EventsChangeAnimation(Category, function () {
-                                                Functions.EventOpenAnimation(This)
-                                            });
-                                        } else Functions.EventOpenAnimation(This);
-                                    }
-                                })
-                                .on('mouseover', function () {
-                                    var This = $(this),
-                                        Opacity = parseFloat(This.attr('data-opacity')),
-                                        Category = parseInt(This.attr('data-category'), 10);
-                                    if (EventsOpen[Category] && !EventOpened && !EventOpening && Opacity > 0) {
-                                        t.to(This, 1, {
-                                            opacity: 1,
-                                            scale: 1,
-                                            transformOrigin: '50% 50%',
-                                            ease: Power4EaseOut
-                                        });
-                                    }
-                                })
-                                .on('mouseout', function () {
-                                    var This = $(this),
-                                        Opacity = parseFloat(This.attr('data-opacity')),
-                                        Category = parseInt(This.attr('data-category'), 10),
-                                        Event = parseInt(This.attr('data-event'), 10);
-                                    if (EventsOpen[Category] && !EventOpened && !EventOpening && Opacity > 0) {
-                                        t.to(This, 1, {
-                                            opacity: Event === CurrentEvent ? 1 : Opacity,
-                                            scale: Event === CurrentEvent ? 1 : 0.9,
-                                            transformOrigin: '50% 50%',
-                                            ease: Power4EaseOut
-                                        });
-                                    }
-                                }));
-                        }
-                        Objects.Events.push(EventsObjectArray);
-                        EventsOpen.push(false);
-                        EventsOpening.push(false);
-                        EventsClosing.push(false);
-                        EventsChanging.push(false);
+                            }));
                     }
+                    Objects.Events.push(EventsObjectArray);
+                    EventsOpen.push(false);
+                    EventsOpening.push(false);
+                    EventsClosing.push(false);
+                    EventsChanging.push(false);
                 }
                 return Functions;
             },
@@ -2090,10 +2089,6 @@
                     transformOrigin: '50% 50% 24px',
                     ease: Power4EaseOut
                 }, 0.1);
-                if (Objects.LogoPath === undefined) {
-                    Objects.LogoBase = $(Objects.Logo[0].getSVGDocument()).find('#Base');
-                    Objects.LogoPath = Objects.LogoBase.find('path');
-                }
                 Functions.PathAnimation(Objects.LogoPath[0], 4, Power4EaseOut, false, 1, 100);
                 t.to(Objects.LogoBase, 1.5, {
                     fill: '#8bc34a',
@@ -2136,11 +2131,11 @@
                         break;
                 }
             },
-            GetData: function () {
+            GetData: function (callback) {
                 var i = 0,
                     cL = Categories.length,
                     SuccessCount = 0,
-                    ErrorFlag = false;
+                    Error = false;
                 for (; i < cL; i++) {
                     $.get({
                         url: 'http://manage.techspardha.org/events/category/' + Categories[i],
@@ -2162,19 +2157,14 @@
                                     TimeOfEvent[category][j] = event.timeOfEvent;
                                 }
                             }
-                            if (++SuccessCount === cL) {
-                                Functions.LoadCategories().LoadEvents();
-                                w.LoadingDone = true;
-                                w.LoadingCallBack = function () {
-                                    BackgroundMusic.play();
-                                    SVGObject.css({opacity: 1});
-                                    setTimeout(Functions.TeaserStart, 1075);
-                                };
+                            if (!GetDataSuccess && (++SuccessCount === cL) && callback) {
+                                GetDataSuccess = true;
+                                callback();
                             }
                         },
                         error: function () {
-                            if (!ErrorFlag) {
-                                ErrorFlag = true;
+                            if (!Error) {
+                                Error = true;
                                 alert('Oops! Something went terribly wrong. Please press Ctrl + F5 to retry.');
                             }
                         }
@@ -2357,10 +2347,12 @@
                     scale: 0.5,
                     rotationX: '-150deg',
                     transformOrigin: '50% 50% -50%',
+                    //opacity: 0,
                     ease: Power4EaseIn,
                     onComplete: function () {
                         element.css({
-                            backgroundImage: 'url(https://s3-ap-southeast-1.amazonaws.com/techspardha/gallery+/' + current + '.jpg)',
+                            backgroundImage: 'url(resources/drawable/gallery/' + current + '.jpg)',
+                            //opacity: 1,
                             onComplete: function () {
                                 t.fromTo(element, 0.5, {
                                     //opacity: 0,
@@ -2623,6 +2615,7 @@
                 return Functions;
             },
             Hide: function () {
+                t.killTweensOf(Base);
                 t.to(Element, Duration, {
                     opacity: 0,
                     scale: 0.5,
@@ -2860,6 +2853,109 @@
                     CallBack: Functions.TeaserStop
                 })
                 .Position(Width, Height, HalfWidth, HalfHeight);
+            Objects.CategoryFrame = $('#CategoryFrame', d);
+            Objects.MenuFrame = $('#MenuFrame', d);
+            Objects.MenuFrameChildren = Objects.MenuFrame.children();
+            Objects.MenuLinks = Objects.MenuFrame.find('.MenuLinks').on('mouseover', function () {
+                var This = $(this);
+                t.to(This.find('span'), 0.5, {
+                    marginLeft: 10,
+                    color: '#9dcc66',
+                    ease: Power4.easeOut
+                });
+            }).on('mouseout', function () {
+                var This = $(this);
+                t.to(This.find('span'), 0.5, {
+                    marginLeft: 0,
+                    color: '#b0b0b0',
+                    ease: Power4.easeOut
+                });
+            });
+            Objects.MenuLinksSVGBase = [];
+            Objects.MenuLinksSVG = Objects.MenuFrame.find('.MenuLinks object');
+            Objects.Logo = $('#Logo', d).on('load', function () {
+                Objects.LogoBase = $(this.contentDocument.documentElement).find('#Base');
+                Objects.LogoPath = Objects.LogoBase.find('path');
+            });
+            Objects.RegisterLink = $('#RegisterLink', d).on('click', function () {
+                $('#mod').modal('show');
+            });
+            Objects.SponsorsLink = $('#SponsorsLink', d).on('click', function () {
+                Functions.SponsorsFrameOpen();
+                Functions.GalleryFrameClose();
+            });
+            Objects.GalleryLink = $('#GalleryLink', d).on('click', function () {
+                Functions.GalleryFrameOpen();
+                Functions.SponsorsFrameClose();
+            });
+            Objects.EventsLink = $('#EventsLink', d).on('click', function () {
+                Functions.GalleryFrameClose();
+                Functions.SponsorsFrameClose();
+            });
+            Objects.SponsorsFrame = $('#SponsorsFrame', d).css({
+                width: Width - MenuWidth,
+                height: Height,
+                left: MenuWidth
+            });
+            Objects.GalleryFrame = $('#GalleryFrame', d).css({
+                width: Width - MenuWidth,
+                height: Height,
+                left: MenuWidth
+            });
+            Functions.PerformResize();
+            // Gallery
+            image_frame = $('#image_frame', d);
+            image_window = $('#_image_window', d);
+            image_info_display = $('#image_info_display', d);
+            button_SVG = $('#buttonSVG', d);
+            gallery_button = $('#_gallery_button', d);
+            hover_button = $('.hover_button', d);
+            image_caption = $('#_image_caption', d);
+            left_handle = $('#_left_handle', d);
+            right_handle = $('#_right_handle', d);
+            left_button = $('#left', d);
+            right_button = $('#right', d);
+            _image_viewbox = $('#_image_viewbox', d).css({
+                height: '' + Width * 0.5 * (3 / 4) + 'px',
+                width: '' + Width * 0.5 + 'px'
+            });
+            Functions.InitImage_Array(image_window);
+            hover_button.on('mouseenter', function () {
+                Functions.button_hover(this);
+            });
+            hover_button.on('mouseleave', function () {
+                t.to(hover_button, 0.4, {
+                    fill: '#0e0e0e',
+                    stroke: '#ffffff',
+                    ease: Power4EaseOut
+                });
+            });
+            gallery_button.on('click', function () {
+                Functions.enter_gallery(image_frame);
+            });
+            left_button.on('click', function () {
+                current--;
+                if (current < 1)   current = 1;
+                else {
+                    Functions.browse(image_array, current, left_button);
+                    Functions.show_image(_image_viewbox, current);
+                }
+            });
+            right_button.on('click', function () {
+                current++;
+                if (current > number_of_images)   current = number_of_images;
+                else {
+                    Functions.browse(image_array, current, right_button);
+                    Functions.show_image(_image_viewbox, current);
+                }
+            });
+            $('._image_box', d).on('click', function () {
+                current = 1 + image_array.index(this);
+                Functions.browse(image_array, current, left_button);
+                Functions.show_image(_image_viewbox, current);
+            });
+            Functions.enter_gallery(image_frame);
+            // Gallery
             SVGObject = $('#MainSVG', d).on('load', function () {
                 SVGRoot = SVGObject[0].contentDocument.documentElement;
                 SVGRootObject = $(SVGRoot).on('click', function () {
@@ -2958,114 +3054,18 @@
                 SVGElements.IndiaTextSix = $('#IndiaTextSix', SVGRootObject).css({opacity: 0, display: 'block'});
                 BackgroundMusic.load();
                 BackgroundMusic.addEventListener('canplaythrough', function () {
-                    if (!TeaserStarted) Functions.GetData();
+                    if (!TeaserStarted && !GetDataSuccess)
+                        Functions.GetData(function () {
+                            Functions.LoadCategories().LoadEvents();
+                            w.LoadingDone = true;
+                            w.LoadingCallBack = function () {
+                                BackgroundMusic.play();
+                                SVGObject.css({opacity: 1});
+                                setTimeout(Functions.TeaserStart, 1075);
+                            };
+                        });
                 }, false);
-            }).on('click', function () {
-                wO.focus();
             });
-            Objects.CategoryFrame = $('#CategoryFrame', d);
-            Objects.MenuFrame = $('#MenuFrame', d);
-            Objects.MenuFrameChildren = Objects.MenuFrame.children();
-            Objects.MenuLinks = Objects.MenuFrame.find('.MenuLinks').on('mouseover', function () {
-                var This = $(this);
-                t.to(This.find('span'), 0.5, {
-                    marginLeft: 10,
-                    color: '#9dcc66',
-                    ease: Power4.easeOut
-                });
-            }).on('mouseout', function () {
-                var This = $(this);
-                t.to(This.find('span'), 0.5, {
-                    marginLeft: 0,
-                    color: '#b0b0b0',
-                    ease: Power4.easeOut
-                });
-            });
-            Objects.MenuLinksSVGBase = [];
-            Objects.MenuLinksSVG = Objects.MenuFrame.find('.MenuLinks object');
-            Objects.Logo = $('#Logo', d).on('load', function () {
-                Objects.LogoBase = $(this.contentDocument.documentElement).find('#Base');
-                Objects.LogoPath = Objects.LogoBase.find('path');
-            });
-            Objects.RegisterLink = $('#RegisterLink', d).on('click', function () {
-                $('#mod').modal('show');
-            });
-            Objects.SponsorsLink = $('#SponsorsLink', d).on('click', function () {
-                Functions.SponsorsFrameOpen();
-                Functions.GalleryFrameClose();
-            });
-            Objects.GalleryLink = $('#GalleryLink', d).on('click', function () {
-                Functions.GalleryFrameOpen();
-                Functions.SponsorsFrameClose();
-            });
-            Objects.EventsLink = $('#EventsLink', d).on('click', function () {
-                Functions.GalleryFrameClose();
-                Functions.SponsorsFrameClose();
-            });
-            Objects.SponsorsFrame = $('#SponsorsFrame', d).css({
-                width: Width - MenuWidth,
-                height: Height,
-                left: MenuWidth
-            });
-            Objects.GalleryFrame = $('#GalleryFrame', d).css({
-                width: Width - MenuWidth,
-                height: Height,
-                left: MenuWidth
-            });
-            // Gallery
-            image_frame = $('#image_frame', d);
-            image_window = $('#_image_window', d);
-            image_info_display = $('#image_info_display', d);
-            button_SVG = $('#buttonSVG', d);
-            gallery_button = $('#_gallery_button', d);
-            hover_button = $('.hover_button', d);
-            image_caption = $('#_image_caption', d);
-            left_handle = $('#_left_handle', d);
-            right_handle = $('#_right_handle', d);
-            left_button = $('#left', d);
-            right_button = $('#right', d);
-            _image_viewbox = $('#_image_viewbox', d).css({
-                height: '' + Width * 0.5 * (3 / 4) + 'px',
-                width: '' + Width * 0.5 + 'px'
-            });
-            Functions.InitImage_Array(image_window);
-            hover_button.on('mouseenter', function () {
-                Functions.button_hover(this);
-            });
-            hover_button.on('mouseleave', function () {
-                t.to(hover_button, 0.4, {
-                    fill: '#0e0e0e',
-                    stroke: '#ffffff',
-                    ease: Power4EaseOut
-                });
-            });
-            gallery_button.on('click', function () {
-                Functions.enter_gallery(image_frame);
-            });
-            left_button.on('click', function () {
-                current--;
-                if (current < 1)   current = 1;
-                else {
-                    Functions.browse(image_array, current, left_button);
-                    Functions.show_image(_image_viewbox, current);
-                }
-            });
-            right_button.on('click', function () {
-                current++;
-                if (current > number_of_images)   current = number_of_images;
-                else {
-                    Functions.browse(image_array, current, right_button);
-                    Functions.show_image(_image_viewbox, current);
-                }
-            });
-            $('._image_box', d).on('click', function () {
-                current = 1 + image_array.index(this);
-                Functions.browse(image_array, current, left_button);
-                Functions.show_image(_image_viewbox, current);
-            });
-            Functions.enter_gallery(image_frame);
-            // Gallery
-            Functions.PerformResize();
         })
         .on('click', '.CloseEvent', function () {
             if (EventOpened && !EventClosing) Functions.EventCloseAnimation(Objects.Events[CurrentCategory][CurrentEvent]);
