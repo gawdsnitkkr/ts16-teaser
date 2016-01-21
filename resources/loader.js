@@ -11,6 +11,7 @@
         LoaderSVG = $('#Loader'),
         LoaderOuter = LoaderSVG.find('#Outer'),
         LoaderInner = LoaderSVG.find('#Inner'),
+        IsFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1,
         Easing = Power4.easeOut;
     if (AspectRatio > DefaultAspectRatio) {
         SVGWidth = Width;
@@ -19,16 +20,21 @@
         SVGHeight = Math.ceil(SVGWidth / DefaultAspectRatio);
     }
     SVGMarginTop = (Height - SVGHeight) / 2;
+    if (IsFirefox) t.set(LoaderSVG.find('text'), {
+        x: '+=10'
+    });
     t.fromTo(LoaderSVG, 0.5, {
         width: SVGWidth,
         height: SVGHeight,
         marginTop: SVGMarginTop + 100,
         marginLeft: SVGMarginLeft,
-        opacity: 0
+        opacity: 0,
+        transformOrigin: '50% 50%'
     }, {
         marginTop: SVGMarginTop,
         marginLeft: SVGMarginLeft,
         opacity: 1,
+        transformOrigin: '50% 50%',
         ease: Power4.easeOut,
         onComplete: Loading
     });
@@ -66,8 +72,8 @@
             });
         } else {
             t.to(LoaderSVG, 1, {
-                scale: 0.5,
                 opacity: 0,
+                y: -50,
                 transformOrigin: '50% 50%',
                 ease: Easing,
                 onComplete: function () {

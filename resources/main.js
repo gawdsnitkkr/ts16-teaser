@@ -43,7 +43,7 @@
         GalleryOpened = false,
         SponsorsOpened = false,
         CategoriesFrameLeft = 275,
-        CategoriesFrameTop = HalfHeight - 150,
+        CategoriesFrameTop = HalfHeight - 180,
         MenuWidth = 230,
         ElasticEasingIn = Elastic.easeIn.config(2, 1),
         ElasticEasingOut = Elastic.easeOut.config(2, 1),
@@ -68,18 +68,18 @@
         right_handle,
         left_button,
         image_text = [
-            "A world of living", "To the precipice of death", "Gasping for air", "Dearth of breath",
-            "A world of living", "To the precipice of death", "Gasping for air", "Dearth of breath",
-            "A world of living", "To the precipice of death", "Gasping for air", "Dearth of breath",
-            "A world of living", "To the precipice of death", "Gasping for air", "Dearth of breath",
-            "A world of living", "To the precipice of death", "Gasping for air", "Dearth of breath",
-            "A world of living", "To the precipice of death", "Gasping for air", "Dearth of breath"
-        ],
+            "Exhibition Inauguration Techspardha'15", "'I got the moves' - manav", "And some more",
+            "In our eyes a radiant dream", "Boundless desires we cast to the sky", "RoboWars", "Terminator ?",
+            "JunkyardWars", "Exhibition TS'15", "Brahmos Display", "Exhibition TS'15", "Chief Guest", "Speaker", "Team Ibrido",
+            "Mini rover", "Enchanting melody", "When words aren't enough", "Its a fest after all, chill",
+            "Let there be light", "Coke Studio", "Guitar frenzy", "Setting the mood", "Soaring finale",
+            "Techsparhda'16 'Wait for it...'"],
         right_button,
         image_array,
         image_window,
         image_frame,
         image_info_display,
+        _image_viewbox,
     // Gallery
         Functions = {
             DequeAnimation: function (i, callback) {
@@ -510,11 +510,36 @@
                     opacity: 1,
                     ease: Power4EaseOut
                 });
+                Objects.MousePrompt = $('#MousePrompt', d).Link({
+                        Width: 36,
+                        Height: 36,
+                        X: 'right',
+                        Y: 'top',
+                        OffsetX: -80,
+                        OffsetY: 18
+                    })
+                    .Position(Width, Height, HalfWidth, HalfHeight).Show();
+                Objects.MousePromptBase = Objects.MousePrompt.GetRoot().find('#Base');
+                Objects.MousePromptScroll = Objects.MousePrompt.GetRoot().find('#Scroll');
+                Functions.MousePromptAnimation();
+                Objects.KeysPrompt = $('#KeysPrompt', d).Link({
+                        Width: 54,
+                        Height: 36,
+                        X: 'right',
+                        Y: 'top',
+                        OffsetX: -15,
+                        OffsetY: 15
+                    })
+                    .Position(Width, Height, HalfWidth, HalfHeight).Show();
+                Objects.KeysPromptBase = Objects.KeysPrompt.GetRoot().find('#Base');
+                Objects.KeysPromptKeys = Objects.KeysPromptBase.find('path');
+                Functions.KeysPromptAnimation();
                 LinksActive = true;
+                wO.focus();
             },
             TechspardhaEnterAnimation: function () {
                 TechspardhaStarted = true;
-                Functions.MousePromptTransitToScroll();
+                Objects.EnterPrompt.Hide();
                 t.fromTo(SVGElements.Techspardha, 4, {
                     opacity: 0,
                     scale: 0.7,
@@ -1358,12 +1383,10 @@
                 TeaserStarted = true;
                 BackgroundMusic.play();
                 SVGObject.css({opacity: 1});
+                Objects.EnterPrompt.Show();
+                Objects.EnterPromptBase = Objects.EnterPrompt.GetRoot().find('#Base');
+                Functions.EnterPromptAnimation();
                 Functions.QueueEnterAnimation();
-                Objects.MousePrompt.Show();
-                Objects.MousePromptBase = Objects.MousePrompt.GetRoot().find('#Base');
-                Objects.MousePromptClick = Objects.MousePrompt.GetRoot().find('#Click');
-                Objects.MousePromptScroll = Objects.MousePrompt.GetRoot().find('#Scroll');
-                Functions.MousePromptClickAnimation();
             },
             TeaserStop: function () {
                 if (!TechspardhaStarted) {
@@ -1393,6 +1416,12 @@
                         }
                     }, 0, function () {
                         Functions.TechspardhaEnterAnimation();
+                    });
+                    t.to(Objects.EnterPromptBase, 0.5, {
+                        fill: '#9dcc66',
+                        scale: 1,
+                        transformOrigin: '50% 50%',
+                        ease: Power4EaseOut
                     });
                 }
             },
@@ -2177,52 +2206,47 @@
                     Objects.ScrollDownHelper.Position(Width, Height, HalfWidth, HalfHeight);
                 }
             },
-            MousePromptClickAnimation: function () {
-                t.to(Objects.MousePromptBase, 1, {
-                    scale: 1,
-                    transformOrigin: '50% 50%',
-                    ease: Power4EaseOut,
-                    onComplete: function () {
-                        t.to(Objects.MousePromptBase, 1, {
-                            scale: 0.75,
-                            transformOrigin: '50% 50%',
-                            ease: Power4EaseOut
-                        });
-                    }
-                });
-                t.to(Objects.MousePromptClick, 1, {
+            MousePromptAnimation: function () {
+                t.to(Objects.MousePromptScroll, 1, {
+                    y: '+=3',
                     fill: '#9dcc66',
                     ease: Power4EaseOut,
                     onComplete: function () {
-                        t.to(Objects.MousePromptClick, 1, {
+                        t.to(Objects.MousePromptScroll, 1, {
+                            y: '-=3',
                             fill: '#ffffff',
                             ease: Power4EaseOut,
-                            onComplete: !TechspardhaStarted ? Functions.MousePromptClickAnimation : undefined
+                            onComplete: Functions.MousePromptAnimation
                         });
                     }
                 });
             },
-            MousePromptTransitToScroll: function () {
-                t.to(Objects.MousePromptClick, 1, {
-                    opacity: 0,
-                    scale: 0.75,
+            EnterPromptAnimation: function () {
+                t.to(Objects.EnterPromptBase, 1, {
+                    fill: '#9dcc66',
+                    scale: 1,
                     transformOrigin: '50% 50%',
                     ease: Power4EaseOut,
                     onComplete: function () {
-                        t.fromTo(Objects.MousePromptScroll, 1, {
-                            opacity: 0,
+                        t.to(Objects.EnterPromptBase, 1, {
+                            fill: '#ffffff',
                             scale: 0.75,
-                            transformOrigin: '50% 50%'
-                        }, {
-                            opacity: 1,
-                            scale: 1,
                             transformOrigin: '50% 50%',
                             ease: Power4EaseOut,
-                            onComplete: function () {
-                                Objects.MousePrompt.SetCallBack(Functions.SectionTransition);
-                            }
+                            onComplete: !TechspardhaStarted ? Functions.EnterPromptAnimation : undefined
                         });
                     }
+                });
+            },
+            KeysPromptAnimation: function () {
+                t.staggerTo(Objects.KeysPromptKeys, 1, {
+                    fill: '#9dcc66',
+                    ease: Power4EaseOut
+                }, 0.1, function () {
+                    t.staggerTo(Objects.KeysPromptKeys, 1, {
+                        fill: '#ffffff',
+                        ease: Power4EaseOut
+                    }, 0.1, Functions.KeysPromptAnimation);
                 });
             },
             GalleryFrameOpen: function () {
@@ -2230,6 +2254,7 @@
                     GalleryOpened = true;
                     t.fromTo(Objects.GalleryFrame, 1, {
                         display: 'block',
+                        zIndex: 2,
                         opacity: 1,
                         y: HalfHeight,
                         scale: 0.7,
@@ -2248,7 +2273,9 @@
             GalleryFrameClose: function () {
                 if (GalleryOpened) {
                     GalleryOpened = false;
-                    t.to(Objects.GalleryFrame, 1, {
+                    t.fromTo(Objects.GalleryFrame, 1, {
+                        zIndex: 1
+                    }, {
                         opacity: 0,
                         y: HalfHeight,
                         scale: 0.7,
@@ -2256,7 +2283,9 @@
                         transformOrigin: '50% 50%',
                         ease: Power4EaseOut,
                         onComplete: function () {
-                            this.target.css('display', 'none');
+                            this.target.css({
+                                display: 'none'
+                            });
                         }
                     });
                 }
@@ -2266,6 +2295,7 @@
                     SponsorsOpened = true;
                     t.fromTo(Objects.SponsorsFrame, 1, {
                         display: 'block',
+                        zIndex: 2,
                         opacity: 1,
                         y: HalfHeight,
                         scale: 0.7,
@@ -2284,7 +2314,9 @@
             SponsorsFrameClose: function () {
                 if (SponsorsOpened) {
                     SponsorsOpened = false;
-                    t.to(Objects.SponsorsFrame, 1, {
+                    t.fromTo(Objects.SponsorsFrame, 1, {
+                        zIndex: 1
+                    }, {
                         opacity: 0,
                         y: HalfHeight,
                         scale: 0.7,
@@ -2292,47 +2324,43 @@
                         transformOrigin: '50% 50%',
                         ease: Power4EaseOut,
                         onComplete: function () {
-                            this.target.css('display', 'none');
+                            this.target.css({display: 'none'});
                         }
                     });
                 }
             },
             // Gallery
             button_hover: function (element) {
-                t.fromTo(element, 0.4, {
-                    scale: 0.9
-                }, {
-                    scale: 1,
-                    color: '#00a0a9',
+                t.to(element, 0.4, {
+                    fill: '#00a0a9',
                     stroke: '#00a0a9',
                     opacity: 1,
-                    ease: Power4.easeInOut
+                    ease: Power4EaseOut
                 });
             },
             show_image: function (element, current) {
-                t.to(element, 1, {
+                t.to(element, 0.5, {
                     scale: 0.5,
-                    transformOrigin3: '50% 50% -50%',
                     rotationX: '-150deg',
-                    opacity: 0,
-                    ease: Back.easeOut,
+                    transformOrigin: '50% 50% -50%',
+                    //opacity: 0,
+                    ease: Power4EaseIn,
                     onComplete: function () {
                         element.css({
-                            backgroundImage: 'url(resources/drawable/gallery/' + current + '.jpg)',
-                            opacity: 1,
+                            backgroundImage: 'url(resources/drawable/gallery/' + current + '.JPG)',
+                            //opacity: 1,
                             onComplete: function () {
-                                t.fromTo(element, 1, {
-                                    opacity: 0,
+                                t.fromTo(element, 0.5, {
+                                    //opacity: 0,
                                     scale: 0.5,
                                     rotationX: '150deg'
                                 }, {
                                     opacity: 1,
                                     scale: 1,
                                     rotationX: '0deg',
-                                    ease: Back.easeIn,
+                                    ease: Power4EaseOut,
                                     onComplete: function () {
-                                        image_caption.html('');
-                                        image_caption.append(image_text[current - 1]);
+                                        image_caption.html(image_text[current - 1]);
                                         t.to(left_handle, 0.8, {
                                             x: '-150',
                                             ease: Back.easeInOut
@@ -2359,13 +2387,15 @@
             },
             browse: function (element, current, arrow) {
                 t.fromTo(arrow, 0.5, {
-                    scale: 0.9,
+                    scale: 0.75,
                     stroke: '#00a0a9',
+                    fill: '#00a0a9',
                     transformOrigin: '50% 50%'
                 }, {
                     scale: 1,
                     stroke: '#ffffff',
-                    ease: Power4.easeInOut
+                    fill: '#0e0e0e',
+                    ease: Power4EaseInOut
                 });
                 t.fromTo(left_handle, 0.5, {
                     x: 0
@@ -2373,7 +2403,7 @@
                     transformOrigin: '150% 50%',
                     x: 0,
                     scale: 0.8,
-                    ease: Power4.easeInOut,
+                    ease: Power4EaseInOut,
                     onComplete: function () {
                         t.fromTo(left_handle, 0.5, {
                             scale: 0.8,
@@ -2390,7 +2420,7 @@
                     x: 0,
                     transformOrigin: '-50% 50%',
                     scale: 0.8,
-                    ease: Power4.easeInOut,
+                    ease: Power4EaseInOut,
                     onComplete: function () {
                         t.fromTo(right_handle, 0.53, {
                             scale: 0.8,
@@ -2418,7 +2448,7 @@
                     else if (index == current) {
                         opacity = 1;
                         scale = 1;
-                        shadow = '0 0 10px #fff';
+                        shadow = '0 0 10px #9dcc66';
                     }
                     else if (index > current && dif <= 0.9) {
                         opacity = 1 - dif;
@@ -2460,39 +2490,19 @@
                 });
                 image_caption.html('');
                 image_caption.append(image_text[current - 1]);
-                t.set($('#_image_viewbox'), {
+                t.set(_image_viewbox, {
                     left: '50%',
                     top: '50%',
                     x: '-50%',
-                    y: '-50%'
-                });
-                t.set(left_handle, {
-                    x: '-150'
-                });
-                t.set(right_handle, {
-                    x: '+150'
+                    y: '-60%',
+                    height: Height - 200,
+                    width: 1.431 * (Height - 200)
                 });
                 t.set(image_caption, {
                     opacity: 1,
                     x: '-50%',
                     transformOrigin: '50% 50%',
                     scale: 1
-                });
-            },
-            exit_gallery: function (element) {
-                t.staggerTo(image_array, 0.5, {
-                    onComplete: function () {
-                        t.to(image_frame, 0.8, {
-                            opacity: 0,
-                            ease: Back.easeInOut,
-                            onComplete: function () {
-                                element.css('display', 'none');
-                                t.to(gallery_button, 0.3, {
-                                    scale: 1
-                                });
-                            }
-                        });
-                    }
                 });
             }
             // Gallery
@@ -2523,39 +2533,46 @@
             OffsetX = Options.OffsetX,
             OffsetY = Options.OffsetY,
             Duration = Options.Duration,
-            HalfDuration = Duration / 2,
             Easing = Options.Easing,
             CallBackBind = Options.CallBackBind,
             CallBack = Options.CallBack,
             zIndex = 2;
         var Functions = {
             Init: function () {
-                RootObject = $(Element[0].contentDocument.documentElement)
-                    .on(CallBackBind, CallBack)
-                    .on('mouseover', function () {
-                        t.to(Base, Duration, {
-                            scale: 1,
-                            transformOrigin: '50% 50%',
-                            fill: '#8bc34a',
-                            ease: Easing
+                if (CallBackBind !== undefined) {
+                    RootObject = $(Element[0].contentDocument.documentElement)
+                        .on(CallBackBind, CallBack)
+                        .on('mouseover', function () {
+                            t.to(Base, Duration, {
+                                scale: 1,
+                                transformOrigin: '50% 50%',
+                                fill: '#8bc34a',
+                                ease: Easing
+                            });
+                        })
+                        .on('mouseout', function () {
+                            t.to(Base, Duration, {
+                                scale: 0.75,
+                                transformOrigin: '50% 50%',
+                                fill: '#ffffff',
+                                ease: Easing
+                            });
+                        })
+                        .css({
+                            cursor: 'pointer'
                         });
-                    })
-                    .on('mouseout', function () {
-                        t.to(Base, Duration, {
-                            scale: 0.75,
-                            transformOrigin: '50% 50%',
-                            fill: '#ffffff',
-                            ease: Easing
-                        });
-                    })
-                    .css({
-                        cursor: 'pointer'
+                    Base = $('#Base', RootObject);
+                    t.set(Base, {
+                        scale: 0.75,
+                        transformOrigin: '50% 50%'
                     });
-                Base = $('#Base', RootObject);
-                t.set(Base, {
-                    scale: 0.75,
-                    transformOrigin: '50% 50%'
-                });
+                } else {
+                    RootObject = $(Element[0].contentDocument.documentElement)
+                        .css({
+                            cursor: 'pointer'
+                        });
+                    Base = $('#Base', RootObject);
+                }
                 t.set(Element, {
                     opacity: 0,
                     scale: 0.5,
@@ -2594,7 +2611,8 @@
                 return Functions;
             },
             Hide: function () {
-                t.to(Element, HalfDuration, {
+                t.killTweensOf(Base);
+                t.to(Element, Duration, {
                     opacity: 0,
                     scale: 0.5,
                     transformOrigin: '50% 50%',
@@ -2779,7 +2797,7 @@
                     Front = RootObject.find('#Front');
                     Back = RootObject.find('#Back');
                     RootObject.css({
-                        cursor: 'hand'
+                        cursor: 'pointer'
                     });
                     t.set(Element, {
                         rotation: (RotateVertically ? RotateClockwise ? 90 : -90 : 0),
@@ -2820,20 +2838,22 @@
             Objects.MainFrame = $('#MainFrame', d);
             Objects.TeaserSection = $('#TeaserSection', d);
             Objects.SiteSection = $('#SiteSection', d);
-            Objects.MousePrompt = $('#MousePrompt', d).Link({
-                    Width: 48,
-                    Height: 48,
+            Objects.EnterPrompt = $('#EnterPrompt', d).Link({
+                    Width: 36,
+                    Height: 36,
                     X: 'right',
                     Y: 'top',
-                    OffsetX: -15,
-                    OffsetY: 19,
+                    OffsetX: -16,
+                    OffsetY: 15,
                     CallBackBind: 'click',
                     CallBack: Functions.TeaserStop
                 })
                 .Position(Width, Height, HalfWidth, HalfHeight);
             SVGObject = $('#MainSVG', d).on('load', function () {
                 SVGRoot = SVGObject[0].contentDocument.documentElement;
-                SVGRootObject = $(SVGRoot).on('click', Functions.TeaserStop);
+                SVGRootObject = $(SVGRoot).on('click', function () {
+                    wO.focus();
+                });
                 SVGElements.TabletBody = $('#TabletBody', SVGRootObject).css({opacity: 0, display: 'block'});
                 SVGElements.TabletHand = $('#TabletHand', SVGRootObject).css({opacity: 0});
                 SVGElements.PeopleGroup = $('#PeopleGroup', SVGRootObject).css({opacity: 0, display: 'block'});
@@ -2990,18 +3010,18 @@
             });
             Functions.PerformResize();
             // Gallery
-            image_frame = $('#image_frame');
-            image_window = $('#_image_window');
-            image_info_display = $('#image_info_display');
-            button_SVG = $('#buttonSVG');
-            gallery_button = $('#_gallery_button');
-            hover_button = $('.hover_button');
-            image_caption = $('#_image_caption');
-            left_handle = $('#_left_handle');
-            right_handle = $('#_right_handle');
-            left_button = $('#left');
-            right_button = $('#right');
-            $('#_image_viewbox').css({
+            image_frame = $('#image_frame', d);
+            image_window = $('#_image_window', d);
+            image_info_display = $('#image_info_display', d);
+            button_SVG = $('#buttonSVG', d);
+            gallery_button = $('#_gallery_button', d);
+            hover_button = $('.hover_button', d);
+            image_caption = $('#_image_caption', d);
+            left_handle = $('#_left_handle', d);
+            right_handle = $('#_right_handle', d);
+            left_button = $('#left', d);
+            right_button = $('#right', d);
+            _image_viewbox = $('#_image_viewbox', d).css({
                 height: '' + Width * 0.5 * (3 / 4) + 'px',
                 width: '' + Width * 0.5 + 'px'
             });
@@ -3011,9 +3031,9 @@
             });
             hover_button.on('mouseleave', function () {
                 t.to(hover_button, 0.4, {
-                    color: '#ffffff',
+                    fill: '#0e0e0e',
                     stroke: '#ffffff',
-                    opacity: 0.8
+                    ease: Power4EaseOut
                 });
             });
             gallery_button.on('click', function () {
@@ -3024,7 +3044,7 @@
                 if (current < 1)   current = 1;
                 else {
                     Functions.browse(image_array, current, left_button);
-                    Functions.show_image($('#_image_viewbox'), current);
+                    Functions.show_image(_image_viewbox, current);
                 }
             });
             right_button.on('click', function () {
@@ -3032,13 +3052,13 @@
                 if (current > number_of_images)   current = number_of_images;
                 else {
                     Functions.browse(image_array, current, right_button);
-                    Functions.show_image($('#_image_viewbox'), current);
+                    Functions.show_image(_image_viewbox, current);
                 }
             });
-            $('._image_box').on('click', function () {
+            $('._image_box', d).on('click', function () {
                 current = 1 + image_array.index(this);
                 Functions.browse(image_array, current, left_button);
-                Functions.show_image($('#_image_viewbox'), current);
+                Functions.show_image(_image_viewbox, current);
             });
             Functions.enter_gallery(image_frame);
             // Gallery
@@ -3064,31 +3084,38 @@
         });
     wO.on('resize', Functions.PerformResize)
         .on('keydown', function (e) {
-            if (!GalleryOpened) {
-                switch (e.keyCode) {
-                    case 13: // Enter
-                        if (!EventsOpen[CurrentCategory] && !EventsOpening[CurrentCategory] && !EventOpened && !EventOpening) {
-                            Functions.EventsEnterAnimation(CurrentCategory);
-                        }
-                        else if (EventsOpen[CurrentCategory] && !EventsClosing[CurrentCategory] && !EventOpened && !EventOpening) Functions.EventOpenAnimation(Objects.Events[CurrentCategory][CurrentEvent]);
-                        break;
-                    case 37: // Left
-                        if (CategoriesOpen && EventsOpen[CurrentCategory] && !EventOpened && !EventOpening) Functions.EventsLeft();
-                        break;
-                    case 38: // Up
-                        if (CategoriesOpen && !EventOpened && !EventOpening) Functions.CategoryUp();
-                        break;
-                    case 39: // Right
-                        if (CategoriesOpen && EventsOpen[CurrentCategory] && !EventOpened && !EventOpening) Functions.EventsRight();
-                        break;
-                    case 40: // Down
-                        if (CategoriesOpen && !EventOpened && !EventOpening) Functions.CategoryDown();
-                        break;
-                }
-            } else {
-                // Gallery
-                var key = e.keyCode;
-                if (image_frame.css("opacity") == 1) {
+            if (w.LoadingDone) {
+                if (!TechspardhaStarted) {
+                    if (e.keyCode === 13) Functions.TeaserStop();
+                } else if (TechspardhaStarted && !SiteSectionStarted) {
+                    if (!Scrolling && e.keyCode === 40) Functions.SectionTransition();
+                } else if (!GalleryOpened && !SponsorsOpened && SiteSectionStarted) {
+                    switch (e.keyCode) {
+                        case 13: // Enter
+                            if (!EventsOpen[CurrentCategory] && !EventsOpening[CurrentCategory] && !EventOpened && !EventOpening) {
+                                Functions.EventsEnterAnimation(CurrentCategory);
+                            }
+                            else if (EventsOpen[CurrentCategory] && !EventsClosing[CurrentCategory] && !EventOpened && !EventOpening) Functions.EventOpenAnimation(Objects.Events[CurrentCategory][CurrentEvent]);
+                            break;
+                        case 27: // Escape
+                            if (EventOpened && !EventClosing) Functions.EventCloseAnimation(Objects.Events[CurrentCategory][CurrentEvent]);
+                            break;
+                        case 37: // Left
+                            if (CategoriesOpen && EventsOpen[CurrentCategory] && !EventOpened && !EventOpening) Functions.EventsLeft();
+                            break;
+                        case 38: // Up
+                            if (CategoriesOpen && !EventOpened && !EventOpening) Functions.CategoryUp();
+                            break;
+                        case 39: // Right
+                            if (CategoriesOpen && EventsOpen[CurrentCategory] && !EventOpened && !EventOpening) Functions.EventsRight();
+                            break;
+                        case 40: // Down
+                            if (CategoriesOpen && !EventOpened && !EventOpening) Functions.CategoryDown();
+                            break;
+                    }
+                } else if (GalleryOpened) {
+                    // Gallery
+                    var key = e.keyCode;
                     if (key == 37) {
                         current--;
                         if (current < 1)   current = 1;
@@ -3102,24 +3129,21 @@
                             Functions.browse(image_array, current, right_button);
                         }
                     } else if (key == 27) {
-                        Functions.show_image($('#_image_viewbox'), current);
+                        Functions.show_image(_image_viewbox, current);
                         Functions.exit_gallery(image_frame);
                     }
+                    // Gallery
                 }
-                if (key == 13) {
-                    Functions.enter_gallery(image_frame);
-                }
-                // Gallery
             }
         })
         .on('keyup', function (e) {
-            if (image_frame.css('opacity') == 1 && (e.keyCode == 37 || e.keyCode == 39)) {
+            if (GalleryOpened && image_frame.css('opacity') == 1 && (e.keyCode == 37 || e.keyCode == 39)) {
                 if (current >= 1 && current <= number_of_images)
-                    Functions.show_image($('#_image_viewbox'), current);
+                    Functions.show_image(_image_viewbox, current);
             }
         })
         .on('mousewheel', function (e) {
-            if (SiteSectionStarted && CategoriesOpen && !EventsMouseOver && !EventOpened && !EventOpening) {
+            if (!GalleryOpened && !SponsorsOpened && SiteSectionStarted && CategoriesOpen && !EventsMouseOver && !EventOpened && !EventOpening) {
                 if (e.deltaY > 0) Functions.CategoryUp();
                 else if (e.deltaY < 0) Functions.CategoryDown();
             } else if (LinksActive && !Scrolling && e.deltaY < 0) {

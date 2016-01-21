@@ -32,6 +32,7 @@
     <title>Techspardha '16</title>
 
     <!-- Resources -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css"/>
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" type="text/css"/>
     <link rel="stylesheet" href="resources/style.css" type="text/css"/>
@@ -67,6 +68,10 @@
 <svg id="Loader" width="100%" height="100%" viewBox="0 0 854 480">
     <rect id="Outer" x="403" y="216" width="48px" height="48px" fill="#262626"/>
     <rect id="Inner" x="415" y="228" width="24px" height="24px" fill="#8bc34a"/>
+    <text x="369" y="296"
+          style="fill:#999999;font-family: sans-serif-light,sans-serif;font-size:10px;letter-spacing: 1px">
+        <tspan>Press ENTER To Skip</tspan>
+    </text>
 </svg>
 <script type="text/javascript" src="resources/loader.js"></script>
 <!-- Loader -->
@@ -87,8 +92,6 @@
                 height="48px"></object>
         <object data="resources/drawable/gawds.svg" type="image/svg+xml" class="Link" id="GAWDSLink" width="128px"
                 height="64px"></object>
-        <object data="resources/drawable/mouse.svg" type="image/svg+xml" class="Prompt" id="MousePrompt" width="48px"
-                height="48px"></object>
         <div id="FacebookShareButton" class="fb-share-button" data-href="http://techspardha.org/"
              data-layout="button_count"></div>
         <object data="resources/drawable/arrow.svg" type="image/svg+xml" class="Helper" id="ScrollDownHelper"
@@ -118,37 +121,40 @@
         </div>
         <div id="CategoryFrame"></div>
         <div id="SponsorsFrame">
-            <h1>Coming Soon!</h1>
+            <h1>"Wait For It..." #Barney</h1>
         </div>
         <div id="GalleryFrame">
             <div id="image_frame">
                 <div id="_image_window"></div>
                 <div id="_image_viewbox"></div>
-                <span id="_image_caption"></span>
-                <div style="position: absolute; top: 86.5%; left: 50%; transform: translate(-50%)">
+                <div id="_image_caption"></div>
+                <div id="_image_control_frame">
                     <svg width="602" height="60" viewBox="0 0 602 60" id="buttonSVG">
-                        <g id="layer1" cursor="pointer"
-                           style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-                           transform="translate(0,-1004.3621)">
-                            <path id="right" class="hover_button" transform="translate(0,6)"
-                                  d="m 600,1028.3579 -36.20586,0 m 18.16333,-14.387 18.04253,14.38 -18.10293,14.4024"/>
-                            <path id="left" transform="translate(0,6)" class="hover_button"
-                                  d="m 1.0142425,1028.3663 36.2059205,0 m -18.163334,14.3869 -18.0425865,-14.3799 18.1029895,-14.4024"/>
-                            <g id="handle" transform="translate(2.7734985,5)">
+                        <g id="layer1" cursor="pointer" transform="translate(0,-1004.3621)">
+                            <path id="right" style="fill:#0e0e0e;stroke:#ffffff;stroke-width:2" class="hover_button" transform="translate(0,6)"
+                                  d="m 600,1028.3621 -25.980761,15 0,-30 z"/>
+                            <path id="left" style="fill:#0e0e0e;stroke:#ffffff;stroke-width:2" transform="translate(0,6)" class="hover_button"
+                                  d="m 0,1028.3621 25.980761,15 0,-30 z"/>
+                            <g id="handle" transform="translate(2.7734985,5)"
+                               style="fill:none;stroke:#ffffff;stroke-width:2">
                                 <path d="m 274.86585,1019.9622 0,-14.6341 14.63415,0 m -14.63415,31.534 0,14.6341 14.63415,0"
-                                      id="_left_handle"/>
+                                      id="_left_handle" transform="translate(-150,0)"/>
                                 <path d="m 320.13415,1019.9283 0,-14.6341 -14.63415,0 m 14.63458,31.5509 0,14.6341 -14.63415,0"
-                                      id="_right_handle"/>
+                                      id="_right_handle" transform="translate(150,0)"/>
                             </g>
                         </g>
                     </svg>
                 </div>
             </div>
         </div>
-        <object data="resources/drawable/mouse.svg" type="image/svg+xml" class="Prompt" id="MousePrompt" width="48px"
-                height="48px"></object>
     </section>
 </div>
+<object data="resources/drawable/mouse.svg" type="image/svg+xml" class="Prompt" id="MousePrompt" width="36px"
+        height="36px"></object>
+<object data="resources/drawable/enter_key.svg" type="image/svg+xml" class="Prompt" id="EnterPrompt" width="36px"
+        height="36px"></object>
+<object data="resources/drawable/keys.svg" type="image/svg+xml" class="Prompt" id="KeysPrompt" width="54px"
+        height="36px"></object>
 <div id="mod" class="modal fade flat-edge">
     <div class="modal-dialog">
         <div class="modal-body">
@@ -163,7 +169,8 @@
                     </div>
                     <div class="content full-width">
                         <div class="login full-width">
-                            <h2 style="text-align: center;margin-bottom:20px;font-weight:300">Coming Soon!</h2>
+                            <h2 style="text-align: center;margin-bottom:20px;font-weight:300">"Wait For It..."
+                                #Barney</h2>
                             <!--<button class="flat-button fb-button centering margin-top-bottom-20">-->
                             <!--<img class="icon" src="resources/drawable/facebook_sign_in.svg"/>Sign In with facebook-->
                             <!--</button>-->
