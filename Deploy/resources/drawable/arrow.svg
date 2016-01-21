@@ -1,8 +1,0 @@
-<svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" width="96" height="64" viewBox="0 0 96 64.000001" version="1.1">
-  <g transform="translate(-3.683092,-996.3597)" id="Back">
-    <path d="m46.570808 1005.7881-28.307782 22.4552 28.307782 22.6928" style="fill:none;stroke-width:3;stroke:#ccc"/>
-  </g>
-  <g transform="translate(-3.683092,-996.3597)" id="Front">
-    <path d="m46.570808 1005.7881-28.307782 22.4552 28.307782 22.6928" style="fill:none;stroke-width:3;stroke:#fff"/>
-  </g>
-</svg>
