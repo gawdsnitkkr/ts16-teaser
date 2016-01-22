@@ -11,6 +11,7 @@
         LoaderSVG = $('#Loader'),
         LoaderOuter = LoaderSVG.find('#Outer'),
         LoaderInner = LoaderSVG.find('#Inner'),
+        LoaderText = LoaderSVG.find('text'),
         IsFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1,
         Easing = Power4.easeOut;
     if (AspectRatio > DefaultAspectRatio) {
@@ -20,8 +21,8 @@
         SVGHeight = Math.ceil(SVGWidth / DefaultAspectRatio);
     }
     SVGMarginTop = (Height - SVGHeight) / 2;
-    if (IsFirefox) t.set(LoaderSVG.find('text'), {
-        x: '+=10'
+    if (IsFirefox) t.set(LoaderText, {
+        x: '+=15'
     });
     t.fromTo(LoaderSVG, 0.5, {
         width: SVGWidth,
@@ -80,6 +81,12 @@
                     LoaderSVG.remove();
                     if (w.LoadingCallBack) w.LoadingCallBack();
                 }
+            });
+            t.to(LoaderText, 1, {
+                attr: {
+                    y: '-=50'
+                },
+                ease: Easing
             });
         }
     }

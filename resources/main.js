@@ -15,6 +15,7 @@
         Scrolling = false,
         SiteSectionStarted = false,
         Paused = false,
+        TimeOutArray = [],
         IsFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1,
         Categories = ['Managerial', 'Quizzes', 'Fun Zone', 'Online Events', 'Paper Events', 'Technopolis',
             'Design', 'Brain Storming', 'Future Builder'],
@@ -149,6 +150,9 @@
                         Functions.DequeAnimation(1, Functions.TabletEnterAnimation);
                     });
                 });
+                setTimeout(function () {
+                    TeaserStarted = true;
+                }, 500);
             },
             QueueExitAnimation: function (callback) {
                 t.staggerTo(SVGElements.PeopleArray, 0.5, {
@@ -540,13 +544,7 @@
             },
             TechspardhaEnterAnimation: function () {
                 TechspardhaStarted = true;
-                t.to(Objects.EnterPromptBase, 0.5, {
-                    fill: '#9dcc66',
-                    scale: 1,
-                    transformOrigin: '50% 50%',
-                    ease: Power4EaseOut,
-                    onComplete: Objects.EnterPrompt.Hide()
-                });
+                Objects.EnterPrompt.Hide();
                 t.fromTo(SVGElements.Techspardha, 4, {
                     opacity: 0,
                     scale: 0.7,
@@ -693,7 +691,7 @@
                     opacity: 0,
                     ease: Power3EaseOut
                 });
-                setTimeout(Functions.IndiaExitAnimation, 3000);
+                TimeOutArray.push(setTimeout(Functions.IndiaExitAnimation, 3000));
             },
             IndiaHomeMarkerEnterAnimation: function () {
                 t.to(SVGElements.IndiaTextTwo, 1, {
@@ -746,7 +744,7 @@
                 SVGElements.Ways.each(function () {
                     Functions.PathAnimation(this, 3, Power3EaseOut, false, 1);
                 });
-                setTimeout(function () {
+                TimeOutArray.push(setTimeout(function () {
                     SVGElements.WaysOverlay.each(function () {
                         Functions.PathAnimation(this, 3, Power3EaseOut, false, 10);
                         t.to(this, 0.5, {
@@ -766,7 +764,7 @@
                         });
                         setTimeout(Functions.IndiaHomeMarkerEnterAnimation, 1000);
                     }, 1000);
-                }, 2000);
+                }, 2000));
             },
             IndiaEnterAnimation: function () {
                 t.fromTo(SVGElements.IndiaTextOne, 1, {
@@ -810,16 +808,6 @@
                     opacity: 0,
                     ease: Power3EaseOut
                 });
-                //t.to(SVGElements.PowerLineWholeGroup, 1, {
-                //    y: 400,
-                //    ease: ElasticEasingIn
-                //});
-                //t.to(SVGElements.Sky, 1, {
-                //    y: 485,
-                //    delay: 0.25,
-                //    ease: ElasticEasingIn
-                //});
-                //setTimeout(Functions.IndiaEnterAnimation, 1000);
             },
             CloudsAnimation: function () {
                 var i = 0,
@@ -914,7 +902,7 @@
                     transformOrigin: '39.83% 56.3%',
                     ease: Linear.easeNone
                 }, 0.1);
-                setTimeout(Functions.WindmillExitAnimation, 8000);
+                TimeOutArray.push(setTimeout(Functions.WindmillExitAnimation, 8000));
             },
             PathAnimation: function (path, time, ease, inverse, divisor, pathLength, delay, callback) {
                 divisor = divisor || 1;
@@ -951,7 +939,7 @@
                     ease: ElasticEasingOut,
                     delay: 0.75
                 }, 0.1);
-                setTimeout(function () {
+                TimeOutArray.push(setTimeout(function () {
                     t.fromTo(SVGElements.PowerLine, 1, {
                         y: 200,
                         opacity: 1
@@ -1031,7 +1019,7 @@
                         Functions.PathAnimation(SVGElements.PowerLineWire[0], 7, Linear.easeNone, false, 1);
                         setTimeout(Functions.WindmillEnterAnimation, 2500);
                     });
-                }, 1000);
+                }, 1000));
             },
             StudentExitAnimation: function (i, j, x, d, callback) {
                 t.to(SVGElements.StudentTopGroupArray[i], 0.25, {
@@ -1382,13 +1370,11 @@
                     ease: Power4EaseOut,
                     delay: 0.25
                 }, 0);
-                setTimeout(function () {
+                TimeOutArray.push(setTimeout(function () {
                     Functions.ClassRoomAnimation(2, Functions.ClassRoomExitAnimation);
-                }, 1000);
+                }, 1000));
             },
             TeaserStart: function () {
-                TeaserStarted = true;
-                BackgroundMusic.play();
                 SVGObject.css({opacity: 1});
                 Objects.EnterPrompt.Show();
                 Objects.EnterPromptBase = Objects.EnterPrompt.GetRoot().find('#Base');
@@ -1399,6 +1385,9 @@
                 if (!TechspardhaStarted) {
                     TechspardhaStarted = true;
                     t.killAll();
+                    var i = 0,
+                        l = TimeOutArray.length;
+                    for (; i < l; i++) clearTimeout(TimeOutArray[i]);
                     t.to(BackgroundMusic, 1, {
                         volume: 0,
                         ease: Power4.easeOut,
@@ -1452,7 +1441,7 @@
                     y: -Height,
                     ease: Power4EaseOut
                 });
-                setTimeout(Functions.SiteSectionStart, 500);
+                TimeOutArray.push(setTimeout(Functions.SiteSectionStart, 500));
             },
             LoadCategories: function () {
                 if (Objects.CategoryFrame.children().length === 0) {
@@ -2222,9 +2211,6 @@
                 HalfWidth = Width / 2;
                 HalfHeight = Height / 2;
                 Functions.PerformResizeFillByWidth();
-                Objects.SiteSection.css({
-                    top: Height
-                });
                 if (LinksActive) {
                     Objects.FacebookLink.Position(Width, Height, HalfWidth, HalfHeight);
                     Objects.GooglePlusLink.Position(Width, Height, HalfWidth, HalfHeight);
@@ -2232,7 +2218,10 @@
                     Objects.TwitterLink.Position(Width, Height, HalfWidth, HalfHeight);
                     Objects.GAWDSLink.Position(Width, Height, HalfWidth, HalfHeight);
                     Objects.ScrollDownHelper.Position(Width, Height, HalfWidth, HalfHeight);
+                    Objects.MousePrompt.Position(Width, Height, HalfWidth, HalfHeight);
+                    Objects.KeysPrompt.Position(Width, Height, HalfWidth, HalfHeight);
                 }
+                if (!TechspardhaStarted) Objects.EnterPrompt.Position(Width, Height, HalfWidth, HalfHeight);
             },
             MousePromptAnimation: function () {
                 t.to(Objects.MousePromptScroll, 1, {
@@ -2261,7 +2250,7 @@
                             scale: 0.75,
                             transformOrigin: '50% 50%',
                             ease: Power4EaseOut,
-                            onComplete: !TechspardhaStarted ? Functions.EnterPromptAnimation : undefined
+                            onComplete: Functions.EnterPromptAnimation
                         });
                     }
                 });
@@ -2270,11 +2259,11 @@
                 t.staggerTo(Objects.KeysPromptKeys, 1, {
                     fill: '#9dcc66',
                     ease: Power4EaseOut
-                }, 0.1, function () {
+                }, 0.5, function () {
                     t.staggerTo(Objects.KeysPromptKeys, 1, {
                         fill: '#ffffff',
                         ease: Power4EaseOut
-                    }, 0.1, Functions.KeysPromptAnimation);
+                    }, 0.5, Functions.KeysPromptAnimation);
                 });
             },
             GalleryFrameOpen: function () {
@@ -2862,7 +2851,9 @@
             BackgroundMusic = $('#BackgroundMusic', d)[0];
             Objects.MainFrame = $('#MainFrame', d);
             Objects.TeaserSection = $('#TeaserSection', d);
-            Objects.SiteSection = $('#SiteSection', d);
+            Objects.SiteSection = $('#SiteSection', d).css({
+                top: Height
+            });
             Objects.EnterPrompt = $('#EnterPrompt', d).Link({
                     Width: 36,
                     Height: 36,
@@ -3103,7 +3094,7 @@
     wO.on('resize', Functions.PerformResize)
         .on('keydown', function (e) {
             if (w.LoadingDone) {
-                if (!TechspardhaStarted) {
+                if (!TechspardhaStarted && TeaserStarted) {
                     if (e.keyCode === 13) Functions.TeaserStop();
                 } else if (TechspardhaStarted && !SiteSectionStarted) {
                     if (!Scrolling && e.keyCode === 40) Functions.SectionTransition();
