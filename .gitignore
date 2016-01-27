@@ -37,7 +37,7 @@ Temporary Items
 .apdisk
 
 # WebStorm Temp Fils
-.idea
+.idea/
 
 #bower
 bower_components/
