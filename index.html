@@ -65,8 +65,9 @@
 <body>
 <!-- Loader -->
 <svg id="Loader" width="100%" height="100%" viewBox="0 0 854 480">
-    <rect id="Outer" x="403" y="216" width="48px" height="48px" fill="#262626"/>
-    <rect id="Inner" x="415" y="228" width="24px" height="24px" fill="#8bc34a"/>
+    <rect id="Blip" x="403" y="216" width="48px" height="48px" rx="24" ry="24" fill="#8bc34a" style="opacity:0"/>
+    <rect id="Outer" x="403" y="216" width="48px" height="48px" rx="0" ry="0" fill="#262626"/>
+    <rect id="Inner" x="415" y="228" width="24px" height="24px" rx="0" ry="0" fill="#8bc34a"/>
     <text x="343" y="400"
           style="fill:#999999;font-family: sans-serif-light,sans-serif;font-size:10px;letter-spacing: 1px">
         <tspan>Press ENTER To Skip The Intro</tspan>
@@ -101,28 +102,40 @@
         <div id="MenuFrame">
             <object id="Logo" data="resources/drawable/logo.svg" type="image/svg+xml" width="125px"
                     height="125px"></object>
+            <div id="TechspardhaDate">26 - 29 FEB '16</div>
             <a id="RegisterLink" class="MenuLinks" href="#">
                 <object data="resources/drawable/register.svg" type="image/svg+xml" width="24px" height="24px"></object>
-                <span>Register</span>
+                <span data-link-opened="false">Register</span>
             </a>
             <a id="EventsLink" class="MenuLinks" href="#">
                 <object data="resources/drawable/events.svg" type="image/svg+xml" width="24px" height="24px"></object>
-                <span>Events</span>
+                <span data-link-opened="false">Events</span>
             </a>
             <a id="GalleryLink" class="MenuLinks" href="#">
                 <object data="resources/drawable/gallery.svg" type="image/svg+xml" width="24px" height="24px"></object>
-                <span>Gallery</span>
+                <span data-link-opened="false">Gallery</span>
             </a>
             <a id="SponsorsLink" class="MenuLinks" href="#">
                 <object data="resources/drawable/sponsor.svg" type="image/svg+xml" width="24px" height="24px"></object>
-                <span>Sponsors</span>
+                <span data-link-opened="false">Sponsors</span>
+            </a>
+            <a id="ExhibitionsLink" class="MenuLinks" href="#">
+                <object data="resources/drawable/exhibition.svg" type="image/svg+xml" width="24px" height="24px"></object>
+                <span data-link-opened="false">Exhibitions</span>
+            </a>
+            <a id="LecturesLink" class="MenuLinks" href="#">
+                <object data="resources/drawable/lectures.svg" type="image/svg+xml" width="24px" height="24px"></object>
+                <span data-link-opened="false">Lectures</span>
             </a>
         </div>
         <div id="CategoryFrame"></div>
-        <div id="SponsorsFrame">
-            <h1>"Wait For It..." #Barney</h1>
-        </div>
-        <div id="GalleryFrame">
+        <object data="resources/drawable/arrow.svg" type="image/svg+xml" class="Helper" id="EventsScrollLeftHelper"
+                width="48px"
+                height="32px"></object>
+        <object data="resources/drawable/arrow.svg" type="image/svg+xml" class="Helper" id="EventsScrollRightHelper"
+                width="48px"
+                height="32px"></object>
+        <div id="GalleryFrame" class="ContentFrame">
             <div id="image_frame">
                 <div id="_image_window"></div>
                 <div id="_image_viewbox"></div>
@@ -148,13 +161,22 @@
                 </div>
             </div>
         </div>
+        <div id="SponsorsFrame" class="ContentFrame">
+            <h1>"Wait For It..." #Barney</h1>
+        </div>
+        <div id="ExhibitionsFrame" class="ContentFrame">
+            <h1>"Wait For It..." #Barney</h1>
+        </div>
+        <div id="LecturesFrame" class="ContentFrame">
+            <h1>"Wait For It..." #Barney</h1>
+        </div>
     </section>
 </div>
-<object data="resources/drawable/mouse.svg" type="image/svg+xml" class="Prompt" id="MousePrompt" width="36px"
+<object data="resources/drawable/mouse.svg" title="Use Mouse Scroll To Navigate" type="image/svg+xml" class="Prompt" id="MousePrompt" width="36px"
         height="36px"></object>
-<object data="resources/drawable/enter_key.svg" type="image/svg+xml" class="Prompt" id="EnterPrompt" width="36px"
+<object data="resources/drawable/enter_key.svg" title="Press ENTER To Skip The Intro" type="image/svg+xml" class="Prompt" id="EnterPrompt" width="36px"
         height="36px"></object>
-<object data="resources/drawable/keys.svg" type="image/svg+xml" class="Prompt" id="KeysPrompt" width="54px"
+<object data="resources/drawable/keys.svg" title="Use Arrow Keys To Navigate" type="image/svg+xml" class="Prompt" id="KeysPrompt" width="54px"
         height="36px"></object>
 <div id="mod" class="modal fade flat-edge">
     <div class="modal-dialog">

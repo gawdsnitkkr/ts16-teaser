@@ -37,6 +37,14 @@ body {
     perspective: 1000px;
 }
 
+#TeaserSection {
+    z-index: 2;
+}
+
+#SiteSection {
+    z-index: 1;
+}
+
 #Loader {
     z-index: 3;
     opacity: 0;
@@ -58,8 +66,6 @@ body {
 
 .Helper {
     position: fixed;
-    width: 96px;
-    height: 64px;
     z-index: 2;
     opacity: 0;
 }
@@ -90,6 +96,19 @@ body {
     z-index: 2;
     text-align: center;
     opacity: 0;
+}
+
+#TechspardhaDate {
+    position: absolute;
+    display: block;
+    font-size: 1.1em;
+    font-family: 'Segoe UI', 'Open Sans', sans-serif-light, sans-serif;
+    letter-spacing: 0.1em;
+    top: 185px;
+    left: 0;
+    color: #cecece;
+    width: 230px;
+    text-align: center;
 }
 
 #Logo {
@@ -123,7 +142,7 @@ body {
 }
 
 #RegisterLink {
-    margin-bottom: -2px !important;
+    margin: 50px 0 -2px 50px !important;
 }
 
 #RegisterLink object {
@@ -288,14 +307,18 @@ body {
     float: left;
 }
 
-#SponsorsFrame {
+.ContentFrame {
     position: absolute;
     opacity: 0;
     display: none;
     top: 0;
-    background-color: #111111;
     z-index: 1;
     color: #cecece;
+    background-color: #111111;
+}
+
+#GalleryFrame {
+    background-color: #070707 !important;
 }
 
 #SponsorsFrame h1 {
@@ -305,16 +328,6 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-
-#GalleryFrame {
-    position: absolute;
-    opacity: 0;
-    display: none;
-    top: 0;
-    background-color: #070707;
-    z-index: 1;
-    color: #cecece;
 }
 
 ::-webkit-scrollbar {
@@ -465,12 +478,13 @@ body {
 
 #_image_caption {
     position: absolute;
-    top: 84%;
+    top: 84.1%;
     left: 50%;
     color: #eeeeee;
     font-size: 1.3em;
     font-family: 'Segoe UI', 'Open Sans', sans-serif-light, sans-serif;
     font-weight: 300;
+    letter-spacing: 0.5px;
 }
 
 #_image_viewbox {

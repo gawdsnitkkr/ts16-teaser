@@ -12,7 +12,8 @@
         TeaserStarted = false,
         TechspardhaStarted = false,
         LinksActive = false,
-        Scrolling = false,
+        Transiting = false,
+        SiteSectionActive = false,
         SiteSectionStarted = false,
         Paused = false,
         TimeOutArray = [],
@@ -44,6 +45,8 @@
         EventClosing = false,
         GalleryOpened = false,
         SponsorsOpened = false,
+        ExhibitionsOpened = false,
+        LecturesOpened = false,
         CategoriesFrameLeft = 275,
         CategoriesFrameTop = HalfHeight - 180,
         MenuWidth = 230,
@@ -70,9 +73,9 @@
         right_handle,
         left_button,
         image_text = [
-            "Exhibition Inauguration Techspardha'15", "'I got the moves' - manav", "And some more",
+            "Exhibitions Inauguration Techspardha'15", "'I got the moves' - manav", "And some more",
             "In our eyes a radiant dream", "Boundless desires we cast to the sky", "RoboWars", "Terminator ?",
-            "JunkyardWars", "Exhibition TS'15", "Brahmos Display", "Exhibition TS'15", "Chief Guest", "Guest Lecture", "Team Accelerons",
+            "JunkyardWars", "Exhibitions TS'15", "Brahmos Display", "Exhibitions TS'15", "Chief Guest", "Guest Lecture", "Team Accelerons",
             "Mini rover", "Enchanting melody", "When words aren't enough", "Its a fest after all, chill",
             "Let there be light", "Coke Studio", "Guitar frenzy", "Setting the mood", "Soaring finale",
             "Techsparhda'16 'Wait for it...'"],
@@ -521,7 +524,8 @@
                         X: 'right',
                         Y: 'top',
                         OffsetX: -80,
-                        OffsetY: 18
+                        OffsetY: 18,
+                        Cursor: 'initial'
                     })
                     .Position(Width, Height, HalfWidth, HalfHeight).Show();
                 Objects.MousePromptBase = Objects.MousePrompt.GetRoot().find('#Base');
@@ -533,7 +537,8 @@
                         X: 'right',
                         Y: 'top',
                         OffsetX: -15,
-                        OffsetY: 15
+                        OffsetY: 15,
+                        Cursor: 'initial'
                     })
                     .Position(Width, Height, HalfWidth, HalfHeight).Show();
                 Objects.KeysPromptBase = Objects.KeysPrompt.GetRoot().find('#Base');
@@ -1415,33 +1420,63 @@
                     });
                 }
             },
+            TechspardhaTransition: function () {
+                Transiting = true;
+                SiteSectionActive = false;
+                t.fromTo(Objects.TeaserSection, 2, {
+                    zIndex: 2
+                }, {
+                    y: 0,
+                    scale: 1,
+                    rotationX: 0,
+                    transformOrigin: '50% 50%',
+                    ease: Power4EaseOut,
+                    onComplete: function () {
+                        Transiting = false;
+                        wO.focus();
+                    }
+                });
+                t.fromTo(Objects.SiteSection, 2, {
+                    zIndex: 1
+                }, {
+                    y: Height,
+                    scale: 0.5,
+                    rotationX: 45,
+                    transformOrigin: '50% 50%',
+                    ease: Power4EaseOut
+                });
+            },
             SectionTransition: function () {
-                Scrolling = true;
-                t.to(Objects.TeaserSection, 2, {
-                    opacity: 0,
+                Transiting = true;
+                t.fromTo(Objects.TeaserSection, 2, {
+                    zIndex: 1
+                }, {
+                    y: -Height,
                     scale: 0.5,
                     rotationX: -45,
                     transformOrigin: '50% 50%',
                     ease: Power4EaseOut
                 });
                 t.fromTo(Objects.SiteSection, 2, {
+                    zIndex: 2,
+                    y: Height,
                     scale: 0.5,
                     rotationX: 45,
                     transformOrigin: '50% 50%'
                 }, {
+                    y: 0,
                     scale: 1,
                     rotationX: 0,
                     transformOrigin: '50% 50%',
                     ease: Power4EaseOut,
                     onComplete: function () {
+                        SiteSectionActive = true;
                         SiteSectionStarted = true;
+                        Transiting = false;
+                        wO.focus();
                     }
                 });
-                t.to(Objects.MainFrame, 1, {
-                    y: -Height,
-                    ease: Power4EaseOut
-                });
-                TimeOutArray.push(setTimeout(Functions.SiteSectionStart, 500));
+                setTimeout(Functions.SiteSectionStart, 500);
             },
             LoadCategories: function () {
                 if (Objects.CategoryFrame.children().length === 0) {
@@ -1625,6 +1660,12 @@
                 }
                 return Functions;
             },
+            ShowEventScrollHelpers: function () {
+                if (CurrentEvent > 0) Objects.EventsScrollLeftHelper.Show();
+                else Objects.EventsScrollLeftHelper.Hide();
+                if (CurrentEvent < (Events[CurrentCategory].length - 1)) Objects.EventsScrollRightHelper.Show();
+                else Objects.EventsScrollRightHelper.Hide();
+            },
             EventOpenAnimation: function (eventObject) {
                 EventOpened = false;
                 EventOpening = true;
@@ -1707,6 +1748,8 @@
                     delay: 0.5,
                     ease: Power4EaseOut
                 });
+                Objects.EventsScrollLeftHelper.Hide();
+                Objects.EventsScrollRightHelper.Hide();
             },
             EventCloseAnimation: function (eventObject) {
                 EventOpened = true;
@@ -1767,6 +1810,7 @@
                                         EventClosing = false;
                                     }
                                 });
+                                Functions.ShowEventScrollHelpers();
                             }
                         });
                         t.to(Head, 0.5, {
@@ -1871,6 +1915,7 @@
                         transformOrigin: '0% 0%',
                         ease: Power4EaseOut
                     });
+                    Functions.ShowEventScrollHelpers();
                 } else {
                     t.to(Objects.Categories[category].find('span'), 1, {
                         x: 0,
@@ -1910,6 +1955,7 @@
                     ease: Power4EaseOut,
                     onComplete: callback
                 });
+                Functions.ShowEventScrollHelpers();
             },
             EventsLeft: function () {
                 CurrentEvent--;
@@ -1965,6 +2011,8 @@
                     transformOrigin: '0% 0%',
                     ease: Power4EaseOut
                 });
+                Objects.EventsScrollLeftHelper.Hide();
+                Objects.EventsScrollRightHelper.Hide();
                 if (callback) callback();
             },
             CategoriesEnterAnimation: function (callback) {
@@ -2007,11 +2055,13 @@
                 var CategoriesObjectArray = Objects.Categories,
                     l = CategoriesObjectArray.length,
                     i = 0,
-                    o;
+                    o,
+                    d;
                 for (; i < l; i++) {
                     o = i - CurrentCategory;
-                    if (o > 0) o *= -1;
-                    o = 1 + o * 0.15;
+                    if (o > 0) d = -0.15;
+                    else d = 0.3;
+                    o = 1 + o * d;
                     if (o < 0) o = 0;
                     CategoriesObjectArray[i].attr('data-opacity', o);
                     t.to(CategoriesObjectArray[i], 1, {
@@ -2044,66 +2094,112 @@
                 else CurrentCategory--;
             },
             SiteSectionStart: function () {
-                wO.focus();
-                Functions.CategoriesEnterAnimation();
-                t.fromTo(Objects.MenuFrame, 1, {
-                    opacity: 0,
-                    marginLeft: -100,
-                    scale: 0.8,
-                    rotationY: 22.5,
-                    transformOrigin: '50% 50%'
-                }, {
-                    opacity: 1,
-                    marginLeft: 0,
-                    scale: 1,
-                    rotationY: 0,
-                    transformOrigin: '50% 50%',
-                    ease: Power4EaseOut
-                });
-                t.staggerFromTo(Objects.MenuFrameChildren, 1, {
-                    opacity: 0,
-                    x: -100
-                }, {
-                    opacity: 1,
-                    x: 0,
-                    ease: Power4EaseOut
-                }, 0.1);
-                t.staggerFromTo(Objects.MenuLinksSVG, 1, {
-                    x: 50,
-                    rotationX: 45,
-                    rotationY: 45,
-                    transformOrigin: '50% 50% 24px'
-                }, {
-                    x: 0,
-                    rotationX: 0,
-                    rotationY: 0,
-                    transformOrigin: '50% 50% 24px',
-                    ease: Power4EaseOut
-                }, 0.1);
-                if (Objects.LogoPath === undefined) {
-                    Objects.LogoBase = $(Objects.Logo[0].getSVGDocument()).find('#Base');
-                    Objects.LogoPath = Objects.LogoBase.find('path');
-                }
-                Objects.LogoBase.css({cursor: 'pointer'}).on('click', function () {
-                    w.location.reload();
-                }).on('mouseover', function () {
-                    t.to(Objects.LogoBase, 1, {
-                        fill: '#9dcc66',
+                if (!SiteSectionStarted) {
+                    Functions.CategoriesEnterAnimation();
+                    t.fromTo(Objects.MenuFrame, 1, {
+                        opacity: 0,
+                        marginLeft: -100,
+                        scale: 0.8,
+                        rotationY: 22.5,
+                        transformOrigin: '50% 50%'
+                    }, {
+                        opacity: 1,
+                        marginLeft: 0,
+                        scale: 1,
+                        rotationY: 0,
+                        transformOrigin: '50% 50%',
                         ease: Power4EaseOut
                     });
-                }).on('mouseout', function () {
-                    t.to(Objects.LogoBase, 1, {
+                    t.staggerFromTo(Objects.MenuFrameChildren, 1, {
+                        opacity: 0,
+                        x: -100
+                    }, {
+                        opacity: 1,
+                        x: 0,
+                        ease: Power4EaseOut
+                    }, 0.1);
+                    t.staggerFromTo(Objects.MenuLinksSVG, 1, {
+                        x: 50,
+                        rotationX: 45,
+                        rotationY: 45,
+                        transformOrigin: '50% 50% 24px'
+                    }, {
+                        x: 0,
+                        rotationX: 0,
+                        rotationY: 0,
+                        transformOrigin: '50% 50% 24px',
+                        ease: Power4EaseOut
+                    }, 0.1);
+                    if (Objects.LogoPath === undefined) {
+                        Objects.LogoBase = $(Objects.Logo[0].getSVGDocument()).find('#Base');
+                        Objects.LogoPath = Objects.LogoBase.find('path');
+                    }
+                    Objects.LogoBase.css({cursor: 'pointer'})
+                        .on('click', Functions.TechspardhaTransition)
+                        .on('mouseover', function () {
+                            t.to(Objects.LogoBase, 1, {
+                                fill: '#daecc6',
+                                ease: Power4EaseOut
+                            });
+                        })
+                        .on('mouseout', function () {
+                            t.to(Objects.LogoBase, 1, {
+                                fill: '#8bc34a',
+                                ease: Power4EaseOut
+                            });
+                        });
+                    Functions.PathAnimation(Objects.LogoPath[0], 4, Power4EaseOut, false, 1, 100);
+                    t.to(Objects.LogoBase, 1.5, {
                         fill: '#8bc34a',
+                        stroke: '#0c0c0e',
+                        delay: 2,
                         ease: Power4EaseOut
                     });
-                });
-                Functions.PathAnimation(Objects.LogoPath[0], 4, Power4EaseOut, false, 1, 100);
-                t.to(Objects.LogoBase, 1.5, {
-                    fill: '#8bc34a',
-                    stroke: '#0c0c0e',
-                    delay: 2,
-                    ease: Power4EaseOut
-                });
+                    Objects.EventsScrollLeftHelper = $('#EventsScrollLeftHelper', d).Helper({
+                            Width: 48,
+                            Height: 32,
+                            X: 'left',
+                            Y: 'middle',
+                            OffsetX: MenuWidth + 10,
+                            OffsetY: -2,
+                            RotateVertically: false,
+                            RotateClockwise: false
+                        })
+                        .Position(Width, Height, HalfWidth, HalfHeight);
+                    Objects.EventsScrollRightHelper = $('#EventsScrollRightHelper', d).Helper({
+                            Width: 48,
+                            Height: 32,
+                            X: 'right',
+                            Y: 'middle',
+                            OffsetX: -20,
+                            OffsetY: -2,
+                            RotateHorizontally: true,
+                            RotateClockwise: false
+                        })
+                        .Position(Width, Height, HalfWidth, HalfHeight);
+                    //Objects.CategoryScrollUpHelper = $('#CategoryScrollUpHelper', d).Helper({
+                    //        Width: 24,
+                    //        Height: 16,
+                    //        X: 'left',
+                    //        Y: 'top',
+                    //        OffsetX: MenuWidth + 85,
+                    //        OffsetY: 15,
+                    //        RotateVertically: true,
+                    //        RotateClockwise: true
+                    //    })
+                    //    .Position(Width, Height, HalfWidth, HalfHeight);
+                    //Objects.CategoryScrollDownHelper = $('#CategoryScrollDownHelper', d).Helper({
+                    //        Width: 24,
+                    //        Height: 16,
+                    //        X: 'left',
+                    //        Y: 'top',
+                    //        OffsetX: MenuWidth + 85,
+                    //        OffsetY: 500,
+                    //        RotateVertically: true,
+                    //        RotateClockwise: false
+                    //    })
+                    //    .Position(Width, Height, HalfWidth, HalfHeight);
+                }
             },
             /**
              * @return {number}
@@ -2140,50 +2236,91 @@
                 }
             },
             GetData: function () {
-                var i = 0,
-                    cL = Categories.length,
-                    SuccessCount = 0,
-                    ErrorFlag = false;
-                for (; i < cL; i++) {
-                    $.get({
-                        url: 'http://manage.techspardha.org/events/category/' + Categories[i],
-                        success: function (data) {
-                            if (data.length) {
-                                var j = 0,
-                                    l = data.length,
-                                    category = Functions.GetCategoryIndex(data[0].category),
-                                    event;
-                                for (; j < l; j++) {
-                                    event = data[j];
-                                    Events[category][j] = event.nameOfEvent;
-                                    Descriptions[category][j] = event.description.replace(/<(?!\/?[pa](?=>|\s.*>))\/?.*?>/g, '').replace('&nbsp;', '');
-                                    Rules[category][j] = event.rules.replace(/<(?!\/?[pa](?=>|\s.*>))\/?.*?>/g, '').replace('&nbsp;', '');
-                                    Venue[category][j] = event.venue;
-                                    Coordinator[category][j] = [event.coordinator_1, event.coordinator_2];
-                                    PhoneNumber[category][j] = [event.phoneno_1, event.phoneno_2];
-                                    DateOfEvent[category][j] = event.dateOfEvent;
-                                    TimeOfEvent[category][j] = event.timeOfEvent;
-                                }
+                $.get({
+                    url: 'http://manage.techspardha.org/events/',
+                    success: function (data) {
+                        if (data.length) {
+                            var i = 0,
+                                l = data.length,
+                                category,
+                                event;
+                            for (; i < l; i++) {
+                                event = data[i];
+                                category = Functions.GetCategoryIndex(event.category);
+                                Events[category].push(event.nameOfEvent);
+                                Descriptions[category].push(event.description.replace(/<(?!\/?[pa](?=>|\s.*>))\/?.*?>/g, '').replace('&nbsp;', ''));
+                                Rules[category].push(event.rules.replace(/<(?!\/?[pa](?=>|\s.*>))\/?.*?>/g, '').replace('&nbsp;', ''));
+                                Venue[category].push(event.venue);
+                                Coordinator[category].push([event.coordinator_1, event.coordinator_2]);
+                                PhoneNumber[category].push([event.phoneno_1, event.phoneno_2]);
+                                DateOfEvent[category].push(event.dateOfEvent);
+                                TimeOfEvent[category].push(event.timeOfEvent);
                             }
-                            if (++SuccessCount === cL) {
-                                Functions.LoadCategories().LoadEvents();
-                                w.LoadingDone = true;
-                                w.LoadingCallBack = function () {
-                                    BackgroundMusic.play();
-                                    SVGObject.css({opacity: 1});
-                                    setTimeout(Functions.TeaserStart, 1075);
-                                };
-                            }
-                        },
-                        error: function () {
-                            if (!ErrorFlag) {
-                                ErrorFlag = true;
-                                alert('Oops! Something went terribly wrong. Please press Ctrl + F5 to retry.');
-                            }
+                            Functions.LoadCategories().LoadEvents();
+                            w.LoadingDone = true;
+                            w.LoadingCallBack = function () {
+                                BackgroundMusic.play();
+                                SVGObject.css({opacity: 1});
+                                setTimeout(Functions.TeaserStart, 1075);
+                            };
                         }
-                    });
-                }
+                    },
+                    error: function () {
+                        //Functions.LoadCategories().LoadEvents();
+                        //w.LoadingDone = true;
+                        //w.LoadingCallBack = function () {
+                        //    BackgroundMusic.play();
+                        //    SVGObject.css({opacity: 1});
+                        //    setTimeout(Functions.TeaserStart, 1075);
+                        //};
+                    }
+                });
             },
+            //GetData: function () {
+            //    var i = 0,
+            //        cL = Categories.length,
+            //        SuccessCount = 0,
+            //        ErrorFlag = false;
+            //    for (; i < cL; i++) {
+            //        $.get({
+            //            url: 'http://manage.techspardha.org/events/category/' + Categories[i],
+            //            success: function (data) {
+            //                if (data.length) {
+            //                    var j = 0,
+            //                        l = data.length,
+            //                        category = Functions.GetCategoryIndex(data[0].category),
+            //                        event;
+            //                    for (; j < l; j++) {
+            //                        event = data[j];
+            //                        Events[category][j] = event.nameOfEvent;
+            //                        Descriptions[category][j] = event.description.replace(/<(?!\/?[pa](?=>|\s.*>))\/?.*?>/g, '').replace('&nbsp;', '');
+            //                        Rules[category][j] = event.rules.replace(/<(?!\/?[pa](?=>|\s.*>))\/?.*?>/g, '').replace('&nbsp;', '');
+            //                        Venue[category][j] = event.venue;
+            //                        Coordinator[category][j] = [event.coordinator_1, event.coordinator_2];
+            //                        PhoneNumber[category][j] = [event.phoneno_1, event.phoneno_2];
+            //                        DateOfEvent[category][j] = event.dateOfEvent;
+            //                        TimeOfEvent[category][j] = event.timeOfEvent;
+            //                    }
+            //                }
+            //                if (++SuccessCount === cL) {
+            //                    Functions.LoadCategories().LoadEvents();
+            //                    w.LoadingDone = true;
+            //                    w.LoadingCallBack = function () {
+            //                        BackgroundMusic.play();
+            //                        SVGObject.css({opacity: 1});
+            //                        setTimeout(Functions.TeaserStart, 1075);
+            //                    };
+            //                }
+            //            },
+            //            error: function () {
+            //                if (!ErrorFlag) {
+            //                    ErrorFlag = true;
+            //                    alert('Oops! Something went terribly wrong. Please press Ctrl + F5 to retry.');
+            //                }
+            //            }
+            //        });
+            //    }
+            //},
             PerformResizeFillByWidth: function () {
                 var SVGWidth = Width,
                     SVGHeight = Height,
@@ -2266,84 +2403,100 @@
                     }, 0.5, Functions.KeysPromptAnimation);
                 });
             },
+            FrameOpen: function (FrameObject, FrameLinkObject) {
+                var Span = FrameLinkObject.find('span').attr('data-link-opened', 'true');
+                t.to(Span, 0.5, {
+                    marginLeft: 5,
+                    color: '#9dcc66',
+                    ease: Power4EaseOut
+                });
+                t.fromTo(FrameObject, 1, {
+                    display: 'block',
+                    zIndex: 2,
+                    opacity: 1,
+                    y: HalfHeight,
+                    scale: 0.7,
+                    rotationX: 45,
+                    transformOrigin: '50% 50%'
+                }, {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    rotationX: 0,
+                    transformOrigin: '50% 50%',
+                    ease: Power4EaseOut
+                });
+            },
+            FrameClose: function (FrameObject, FrameLinkObject, Direction) {
+                if (Direction === undefined) Direction = -1;
+                var Span = FrameLinkObject.find('span').attr('data-link-opened', 'false');
+                t.to(Span, 0.5, {
+                    marginLeft: 0,
+                    color: '#b0b0b0',
+                    ease: Power4EaseOut
+                });
+                t.fromTo(FrameObject, 1, {
+                    zIndex: 1
+                }, {
+                    opacity: 0,
+                    y: Direction * HalfHeight,
+                    scale: 0.7,
+                    rotationX: Direction * 45,
+                    transformOrigin: '50% 50%',
+                    ease: Power4EaseOut,
+                    onComplete: function () {
+                        this.target.css({
+                            display: 'none'
+                        });
+                    }
+                });
+            },
             GalleryFrameOpen: function () {
                 if (!GalleryOpened) {
                     GalleryOpened = true;
-                    t.fromTo(Objects.GalleryFrame, 1, {
-                        display: 'block',
-                        zIndex: 2,
-                        opacity: 1,
-                        y: HalfHeight,
-                        scale: 0.7,
-                        rotationX: 45,
-                        transformOrigin: '50% 50%'
-                    }, {
-                        opacity: 1,
-                        y: 0,
-                        scale: 1,
-                        rotationX: 0,
-                        transformOrigin: '50% 50%',
-                        ease: Power4EaseOut
-                    });
+                    Functions.FrameOpen(Objects.GalleryFrame, Objects.GalleryLink);
                 }
             },
-            GalleryFrameClose: function () {
+            GalleryFrameClose: function (Direction) {
                 if (GalleryOpened) {
                     GalleryOpened = false;
-                    t.fromTo(Objects.GalleryFrame, 1, {
-                        zIndex: 1
-                    }, {
-                        opacity: 0,
-                        y: HalfHeight,
-                        scale: 0.7,
-                        rotationX: 45,
-                        transformOrigin: '50% 50%',
-                        ease: Power4EaseOut,
-                        onComplete: function () {
-                            this.target.css({
-                                display: 'none'
-                            });
-                        }
-                    });
+                    Functions.FrameClose(Objects.GalleryFrame, Objects.GalleryLink, Direction);
                 }
             },
             SponsorsFrameOpen: function () {
                 if (!SponsorsOpened) {
                     SponsorsOpened = true;
-                    t.fromTo(Objects.SponsorsFrame, 1, {
-                        display: 'block',
-                        zIndex: 2,
-                        opacity: 1,
-                        y: HalfHeight,
-                        scale: 0.7,
-                        rotationX: 45,
-                        transformOrigin: '50% 50%'
-                    }, {
-                        opacity: 1,
-                        y: 0,
-                        scale: 1,
-                        rotationX: 0,
-                        transformOrigin: '50% 50%',
-                        ease: Power4EaseOut
-                    });
+                    Functions.FrameOpen(Objects.SponsorsFrame, Objects.SponsorsLink);
                 }
             },
-            SponsorsFrameClose: function () {
+            SponsorsFrameClose: function (Direction) {
                 if (SponsorsOpened) {
                     SponsorsOpened = false;
-                    t.fromTo(Objects.SponsorsFrame, 1, {
-                        zIndex: 1
-                    }, {
-                        opacity: 0,
-                        y: HalfHeight,
-                        scale: 0.7,
-                        rotationX: 45,
-                        transformOrigin: '50% 50%',
-                        ease: Power4EaseOut,
-                        onComplete: function () {
-                            this.target.css({display: 'none'});
-                        }
-                    });
+                    Functions.FrameClose(Objects.SponsorsFrame, Objects.SponsorsLink, Direction);
+                }
+            },
+            ExhibitionsFrameOpen: function () {
+                if (!ExhibitionsOpened) {
+                    ExhibitionsOpened = true;
+                    Functions.FrameOpen(Objects.ExhibitionsFrame, Objects.ExhibitionsLink);
+                }
+            },
+            ExhibitionsFrameClose: function (Direction) {
+                if (ExhibitionsOpened) {
+                    ExhibitionsOpened = false;
+                    Functions.FrameClose(Objects.ExhibitionsFrame, Objects.ExhibitionsLink, Direction);
+                }
+            },
+            LecturesFrameOpen: function () {
+                if (!LecturesOpened) {
+                    LecturesOpened = true;
+                    Functions.FrameOpen(Objects.LecturesFrame, Objects.LecturesLink);
+                }
+            },
+            LecturesFrameClose: function (Direction) {
+                if (LecturesOpened) {
+                    LecturesOpened = false;
+                    Functions.FrameClose(Objects.LecturesFrame, Objects.LecturesLink, Direction);
                 }
             },
             // Gallery
@@ -2537,7 +2690,8 @@
                 Duration: 0.5,
                 Easing: Power4EaseOut,
                 CallBackBind: undefined,
-                CallBack: undefined
+                CallBack: undefined,
+                Cursor: 'hand'
             }, o),
             Width = Options.Width,
             Height = Options.Height,
@@ -2551,6 +2705,7 @@
             Easing = Options.Easing,
             CallBackBind = Options.CallBackBind,
             CallBack = Options.CallBack,
+            Cursor = Options.Cursor,
             zIndex = 2;
         var Functions = {
             Init: function () {
@@ -2574,7 +2729,7 @@
                             });
                         })
                         .css({
-                            cursor: 'pointer'
+                            cursor: Cursor
                         });
                     Base = $('#Base', RootObject);
                     t.set(Base, {
@@ -2584,7 +2739,7 @@
                 } else {
                     RootObject = $(Element[0].contentDocument.documentElement)
                         .css({
-                            cursor: 'pointer'
+                            cursor: Cursor
                         });
                     Base = $('#Base', RootObject);
                 }
@@ -2673,6 +2828,7 @@
                 OffsetX: 0,
                 OffsetY: 0,
                 RotateVertically: false,
+                RotateHorizontally: false,
                 RotateClockwise: false,
                 Duration: 1,
                 Easing: Power4EaseOut,
@@ -2688,11 +2844,13 @@
             OffsetX = Options.OffsetX,
             OffsetY = Options.OffsetY,
             RotateVertically = Options.RotateVertically,
+            RotateHorizontally = Options.RotateHorizontally,
             RotateClockwise = Options.RotateClockwise,
             Duration = Options.Duration,
             HalfDuration = Duration / 2,
             Easing = Options.Easing,
             PauseFlag = true,
+            Visible = false,
             CallBackBind = Options.CallBackBind,
             CallBack = Options.CallBack,
             zIndex = 2,
@@ -2764,9 +2922,10 @@
                     PauseFlag = true;
                 },
                 Hide: function () {
+                    Visible = false;
                     t.to(Element, HalfDuration, {
                         opacity: 0,
-                        marginLeft: RotateVertically ? 0 : HalfWidth,
+                        marginLeft: RotateVertically ? 0 : RotateHorizontally ? HalfWidth : -HalfWidth,
                         marginTop: RotateVertically ? (RotateClockwise ? 1 : -1) * HalfHeight : 0,
                         ease: Easing,
                         onComplete: function () {
@@ -2778,22 +2937,27 @@
                     });
                 },
                 Show: function () {
-                    Element.css('z-index', zIndex);
-                    t.to(Element, Duration, {
-                        opacity: 1,
-                        marginLeft: 0,
-                        marginTop: 0,
-                        ease: Easing,
-                        onComplete: function () {
-                            if (PauseFlag) {
-                                Functions.Play();
+                    if (!Visible) {
+                        Visible = true;
+                        Element.css('z-index', zIndex);
+                        t.fromTo(Element, Duration, {
+                            marginLeft: RotateVertically ? 0 : RotateHorizontally ? -HalfWidth : HalfWidth,
+                            marginTop: RotateVertically ? (RotateClockwise ? 1 : -1) * HalfHeight : 0
+                        }, {
+                            opacity: 1,
+                            marginLeft: 0,
+                            marginTop: 0,
+                            ease: Easing,
+                            onComplete: function () {
+                                if (PauseFlag) {
+                                    Functions.Play();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 },
                 Init: function () {
                     RootObject = $(Element[0].contentDocument.documentElement)
-                        .on(CallBackBind, CallBack)
                         .on('mouseover', function () {
                             t.to(Element, Duration, {
                                 scale: 1.125,
@@ -2808,13 +2972,14 @@
                                 ease: Easing
                             });
                         });
+                    if (CallBackBind !== undefined && CallBack !== undefined) RootObject.on(CallBackBind, CallBack);
                     Front = RootObject.find('#Front');
                     Back = RootObject.find('#Back');
                     RootObject.css({
                         cursor: 'pointer'
                     });
                     t.set(Element, {
-                        rotation: (RotateVertically ? RotateClockwise ? 90 : -90 : 0),
+                        rotation: (RotateVertically ? RotateClockwise ? 90 : -90 : RotateHorizontally ? RotateClockwise ? 180 : -180 : 0),
                         transformOrigin: '50% 50%',
                         opacity: 0,
                         marginLeft: RotateVertically ? 0 : HalfWidth,
@@ -2851,9 +3016,7 @@
             BackgroundMusic = $('#BackgroundMusic', d)[0];
             Objects.MainFrame = $('#MainFrame', d);
             Objects.TeaserSection = $('#TeaserSection', d);
-            Objects.SiteSection = $('#SiteSection', d).css({
-                top: Height
-            });
+            Objects.SiteSection = $('#SiteSection', d);
             Objects.EnterPrompt = $('#EnterPrompt', d).Link({
                     Width: 36,
                     Height: 36,
@@ -2972,19 +3135,21 @@
             Objects.MenuFrame = $('#MenuFrame', d);
             Objects.MenuFrameChildren = Objects.MenuFrame.children();
             Objects.MenuLinks = Objects.MenuFrame.find('.MenuLinks').on('mouseover', function () {
-                var This = $(this);
-                t.to(This.find('span'), 0.5, {
-                    marginLeft: 10,
-                    color: '#9dcc66',
-                    ease: Power4.easeOut
-                });
+                var Span = $(this).find('span');
+                if (Span.attr('data-link-opened') === 'false')
+                    t.to(Span, 0.5, {
+                        marginLeft: 10,
+                        color: '#9dcc66',
+                        ease: Power4.easeOut
+                    });
             }).on('mouseout', function () {
-                var This = $(this);
-                t.to(This.find('span'), 0.5, {
-                    marginLeft: 0,
-                    color: '#b0b0b0',
-                    ease: Power4.easeOut
-                });
+                var Span = $(this).find('span');
+                if (Span.attr('data-link-opened') === 'false')
+                    t.to(Span, 0.5, {
+                        marginLeft: 0,
+                        color: '#b0b0b0',
+                        ease: Power4.easeOut
+                    });
             });
             Objects.MenuLinksSVGBase = [];
             Objects.MenuLinksSVG = Objects.MenuFrame.find('.MenuLinks object');
@@ -2998,12 +3163,30 @@
             Objects.SponsorsLink = $('#SponsorsLink', d).on('click', function () {
                 Functions.SponsorsFrameOpen();
                 Functions.GalleryFrameClose();
+                Functions.ExhibitionsFrameClose();
+                Functions.LecturesFrameClose();
             });
             Objects.GalleryLink = $('#GalleryLink', d).on('click', function () {
                 Functions.GalleryFrameOpen();
                 Functions.SponsorsFrameClose();
+                Functions.ExhibitionsFrameClose();
+                Functions.LecturesFrameClose();
             });
             Objects.EventsLink = $('#EventsLink', d).on('click', function () {
+                Functions.GalleryFrameClose(1);
+                Functions.SponsorsFrameClose(1);
+                Functions.ExhibitionsFrameClose(1);
+                Functions.LecturesFrameClose(1);
+            });
+            Objects.ExhibitionsLink = $('#ExhibitionsLink', d).on('click', function () {
+                Functions.ExhibitionsFrameOpen();
+                Functions.GalleryFrameClose();
+                Functions.SponsorsFrameClose();
+                Functions.LecturesFrameClose();
+            });
+            Objects.LecturesLink = $('#LecturesLink', d).on('click', function () {
+                Functions.LecturesFrameOpen();
+                Functions.ExhibitionsFrameClose();
                 Functions.GalleryFrameClose();
                 Functions.SponsorsFrameClose();
             });
@@ -3013,6 +3196,16 @@
                 left: MenuWidth
             });
             Objects.GalleryFrame = $('#GalleryFrame', d).css({
+                width: Width - MenuWidth,
+                height: Height,
+                left: MenuWidth
+            });
+            Objects.ExhibitionsFrame = $('#ExhibitionsFrame', d).css({
+                width: Width - MenuWidth,
+                height: Height,
+                left: MenuWidth
+            });
+            Objects.LecturesFrame = $('#LecturesFrame', d).css({
                 width: Width - MenuWidth,
                 height: Height,
                 left: MenuWidth
@@ -3096,8 +3289,8 @@
             if (w.LoadingDone) {
                 if (!TechspardhaStarted && TeaserStarted) {
                     if (e.keyCode === 13) Functions.TeaserStop();
-                } else if (TechspardhaStarted && !SiteSectionStarted) {
-                    if (!Scrolling && e.keyCode === 40) Functions.SectionTransition();
+                } else if (LinksActive && !SiteSectionActive) {
+                    if (!Transiting && e.keyCode === 40) Functions.SectionTransition();
                 } else if (!GalleryOpened && !SponsorsOpened && SiteSectionStarted) {
                     switch (e.keyCode) {
                         case 13: // Enter
@@ -3149,7 +3342,7 @@
             if (!GalleryOpened && !SponsorsOpened && SiteSectionStarted && CategoriesOpen && !EventsMouseOver && !EventOpened && !EventOpening) {
                 if (e.deltaY > 0) Functions.CategoryUp();
                 else if (e.deltaY < 0) Functions.CategoryDown();
-            } else if (LinksActive && !Scrolling && e.deltaY < 0) {
+            } else if (LinksActive && !Transiting && e.deltaY < 0) {
                 Functions.SectionTransition();
             }
         });
