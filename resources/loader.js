@@ -8,7 +8,7 @@
         SVGMarginLeft = 0,
         AspectRatio = Width / Height,
         DefaultAspectRatio = 1.78,
-        LoaderSVG = $('#Loader'),
+        LoaderSVG = $('#Loader', document),
         LoaderBlip = LoaderSVG.find('#Blip'),
         LoaderOuter = LoaderSVG.find('#Outer'),
         LoaderInner = LoaderSVG.find('#Inner'),
@@ -117,7 +117,7 @@
             t.fromTo(LoaderBlip, 1, {
                 scale: 2,
                 transformOrigin: '50% 50%'
-            },{
+            }, {
                 opacity: 0.25,
                 scale: 3,
                 transformOrigin: '50% 50%',
@@ -132,21 +132,41 @@
                 }
             });
         } else {
-            t.to(LoaderSVG, 1, {
+            t.staggerTo([LoaderOuter, LoaderInner], 1, {
                 opacity: 0,
-                y: -50,
+                scale: 0,
+                rotation: '+=360',
                 transformOrigin: '50% 50%',
-                ease: Power4EaseOut,
-                onComplete: function () {
-                    LoaderSVG.remove();
-                    if (w.LoadingCallBack) w.LoadingCallBack();
-                }
-            });
+                ease: Back.easeIn
+            }, 0.15);
+            t.staggerTo([LoaderOuter, LoaderInner], 1, {
+                attr: {
+                    rx: 24,
+                    ry: 24
+                },
+                ease: Power4.easeIn
+            }, 0.15);
             t.to(LoaderText, 1, {
                 attr: {
-                    y: '-=50'
+                    y: '-=25'
                 },
-                ease: Power4EaseOut
+                opacity: 1,
+                delay: 1,
+                ease: Power4EaseOut,
+                onComplete: function () {
+                    t.to(LoaderText, 1, {
+                        attr: {
+                            y: '-=25'
+                        },
+                        opacity: 0,
+                        delay: 1.5,
+                        ease: Power4EaseOut,
+                        onComplete: function () {
+                            LoaderSVG.remove();
+                            if (w.LoadingCallBack) w.LoadingCallBack();
+                        }
+                    });
+                }
             });
         }
     }

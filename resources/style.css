@@ -11,14 +11,11 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    min-width: 600px;
 }
 
 #MainFrame {
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 100%;
     position: fixed;
     text-align: center;
     z-index: 1;
@@ -145,13 +142,13 @@ body {
     margin: 50px 0 -2px 50px !important;
 }
 
-#RegisterLink object {
-    margin: -1px 17px 0 3px !important;
-}
+/*#RegisterLink object {*/
+    /*margin: -1px 17px 0 3px !important;*/
+/*}*/
 
-#SponsorsLink {
-    margin-top: 27px !important;
-}
+/*#SponsorsLink {*/
+    /*margin-top: 27px !important;*/
+/*}*/
 
 #CategoryFrame {
     display: block;
@@ -315,6 +312,66 @@ body {
     z-index: 1;
     color: #cecece;
     background-color: #111111;
+    overflow: auto;
+}
+
+.ContentFrame h1 {
+    font-weight: 200;
+    font-size: 4em;
+    margin-bottom: 0.5em;
+}
+
+.ContentFrame h3 {
+    font-weight: 200;
+    font-size: 1.75em;
+    text-align: left;
+    margin-left: 1.1em;
+}
+
+.ContentFrame h4 {
+    font-weight: 400;
+    font-size: 1.6em;
+    text-align: left;
+    margin-left: 1.2em;
+    margin-bottom: 2px;
+}
+
+.ContentFrame p {
+    text-align: justify;
+    font-size: 1em;
+    font-weight: 200;
+    letter-spacing: 0.1em;
+    padding: 0 2em 1em 2em;
+    margin: 0;
+}
+
+.ContentFrame b {
+    font-weight: 400;
+    font-size: 1.1em;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.ContentFrame p span {
+    display: inline-block;
+    margin-top: 5px;
+}
+
+.ContentFrame p span * {
+    font-size: 1em !important;
+}
+
+.ContentFrame a {
+    text-decoration: none;
+    font-weight: 600;
+    outline: none;
+    perspective: 24px;
+    color: #9dcc66;
+}
+
+.ContentFrame a:hover {
+    color: #8bc34a;
+    text-decoration: underline;
 }
 
 #GalleryFrame {
@@ -322,8 +379,6 @@ body {
 }
 
 #SponsorsFrame h1 {
-    font-weight: 200;
-    font-size: 4em;
     position: relative;
     top: 50%;
     left: 50%;
@@ -478,13 +533,18 @@ body {
 
 #_image_caption {
     position: absolute;
-    top: 84.1%;
+    top: 84.5%;
     left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
     color: #eeeeee;
-    font-size: 1.3em;
+    font-size: 1.2em;
     font-family: 'Segoe UI', 'Open Sans', sans-serif-light, sans-serif;
     font-weight: 300;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
 }
 
 #_image_viewbox {

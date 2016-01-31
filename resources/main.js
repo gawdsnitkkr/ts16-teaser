@@ -3,6 +3,9 @@
         Height = w.innerHeight,
         HalfWidth = Width / 2,
         HalfHeight = Height / 2,
+        MinHeight = 643,
+        MinWidth = 679,
+        DefaultAspectRatio = 1.78,
         SVGObject,
         SVGRoot,
         SVGRootObject,
@@ -47,6 +50,7 @@
         SponsorsOpened = false,
         ExhibitionsOpened = false,
         LecturesOpened = false,
+        TechExpoOpened = false,
         CategoriesFrameLeft = 275,
         CategoriesFrameTop = HalfHeight - 180,
         MenuWidth = 230,
@@ -87,6 +91,22 @@
         _image_viewbox,
     // Gallery
         Functions = {
+            PathAnimation: function (path, time, ease, inverse, divisor, pathLength, delay, callback, forceOpacity) {
+                divisor = divisor || 1;
+                if (forceOpacity === undefined) forceOpacity = true;
+                var PathLength = pathLength || path.getTotalLength(),
+                    DividePathLength = PathLength / divisor;
+                if (forceOpacity) path.style.opacity = 1;
+                t.fromTo(path, time, {
+                    strokeDasharray: DividePathLength + ' ' + PathLength,
+                    strokeDashoffset: (inverse ? -1 : 1) * PathLength
+                }, {
+                    strokeDashoffset: 0,
+                    ease: ease,
+                    delay: delay,
+                    onComplete: callback
+                });
+            },
             DequeAnimation: function (i, callback) {
                 t.to(SVGElements.PeopleArray[i], 0.5, {
                     opacity: 0,
@@ -545,6 +565,16 @@
                 Objects.KeysPromptKeys = Objects.KeysPromptBase.find('path');
                 Functions.KeysPromptAnimation();
                 LinksActive = true;
+                t.killTweensOf(SVGElements.BackGround);
+                t.killTweensOf(SVGElements.ForeGround);
+                t.to(SVGElements.BackGround, 1, {
+                    opacity: 0,
+                    ease: Power4EaseOut,
+                    onComplete: function () {
+                        $(SVGElements.BackGround).insertAfter($(SVGElements.ForeGround));
+                        //Functions.TechspardhaAfterAnimation();
+                    }
+                });
                 wO.focus();
             },
             TechspardhaEnterAnimation: function () {
@@ -908,21 +938,6 @@
                     ease: Linear.easeNone
                 }, 0.1);
                 TimeOutArray.push(setTimeout(Functions.WindmillExitAnimation, 8000));
-            },
-            PathAnimation: function (path, time, ease, inverse, divisor, pathLength, delay, callback) {
-                divisor = divisor || 1;
-                var PathLength = pathLength || path.getTotalLength(),
-                    DividePathLength = PathLength / divisor;
-                t.fromTo(path, time, {
-                    strokeDasharray: DividePathLength + ' ' + PathLength,
-                    strokeDashoffset: (inverse ? -1 : 1) * PathLength,
-                    opacity: 1
-                }, {
-                    strokeDashoffset: 0,
-                    ease: ease,
-                    delay: delay,
-                    onComplete: callback
-                });
             },
             SkyEnter: function () {
                 t.to(SVGElements.ClassRoom, 1, {
@@ -1420,11 +1435,28 @@
                     });
                 }
             },
+            //TechspardhaAfterAnimation: function () {
+            //    if (!SiteSectionActive) {
+            //        t.to(SVGElements.BackGround, 1, {
+            //            opacity: 1,
+            //            ease: Power4EaseOut
+            //        });
+            //        Functions.PathAnimation(SVGElements.BackGround, 5, Linear.easeNone, false, 30, 500, 2, function () {
+            //            if (!SiteSectionActive) Functions.TechspardhaAfterAnimation();
+            //        }, false);
+            //        t.to(SVGElements.BackGround, 1, {
+            //            opacity: 0,
+            //            delay: 4,
+            //            ease: Power4EaseOut
+            //        });
+            //    }
+            //},
             TechspardhaTransition: function () {
                 Transiting = true;
                 SiteSectionActive = false;
                 t.fromTo(Objects.TeaserSection, 2, {
-                    zIndex: 2
+                    zIndex: 2,
+                    opacity: 1
                 }, {
                     y: 0,
                     scale: 1,
@@ -1445,6 +1477,7 @@
                     transformOrigin: '50% 50%',
                     ease: Power4EaseOut
                 });
+                //Functions.TechspardhaAfterAnimation();
             },
             SectionTransition: function () {
                 Transiting = true;
@@ -1455,7 +1488,10 @@
                     scale: 0.5,
                     rotationX: -45,
                     transformOrigin: '50% 50%',
-                    ease: Power4EaseOut
+                    ease: Power4EaseOut,
+                    onComplete: function () {
+                        this.target.css('opacity', 0);
+                    }
                 });
                 t.fromTo(Objects.SiteSection, 2, {
                     zIndex: 2,
@@ -1493,18 +1529,22 @@
                             .appendTo(CategoryFrame)
                             .on('click', function () {
                                 if (CategoriesOpen) {
-                                    var Category = parseInt($(this).attr('data-category'), 10);
-                                    if (Category != CurrentCategory) {
-                                        PreviousCategory = CurrentCategory;
-                                        CurrentCategory = Category;
-                                        Functions.EventsCloseAnimation(PreviousCategory, function () {
-                                            Functions.CategoriesChangeAnimation();
+                                    var This = $(this),
+                                        Opacity = parseFloat(This.attr('data-opacity')),
+                                        Category = parseInt(This.attr('data-category'), 10);
+                                    if (Opacity > 0) {
+                                        if (Category != CurrentCategory) {
+                                            PreviousCategory = CurrentCategory;
+                                            CurrentCategory = Category;
+                                            Functions.EventsCloseAnimation(PreviousCategory, function () {
+                                                Functions.CategoriesChangeAnimation();
+                                                Functions.EventsEnterAnimation(Category);
+                                            });
+                                        } else if (!EventsOpen[Category] && !EventsOpening[Category]) {
                                             Functions.EventsEnterAnimation(Category);
-                                        });
-                                    } else if (!EventsOpen[Category] && !EventsOpening[Category]) {
-                                        Functions.EventsEnterAnimation(Category);
-                                    } else if (EventsOpen[Category] && !EventsClosing[Category]) {
-                                        Functions.EventsCloseAnimation(Category);
+                                        } else if (EventsOpen[Category] && !EventsClosing[Category]) {
+                                            Functions.EventsCloseAnimation(Category);
+                                        }
                                     }
                                 }
                             })
@@ -1844,6 +1884,7 @@
                     EventsObjectArray = Objects.Events[category],
                     l = EventsObjectArray.length,
                     i = 0,
+                    j = l > 1 ? 1 : 0,
                     o;
                 if (l > 0) {
                     t.killTweensOf(EventsFrame);
@@ -1868,7 +1909,7 @@
                                 transformOrigin: '0% 50%',
                                 delay: i * 0.1,
                                 ease: Power4EaseOut,
-                                onComplete: i === 1 ? function () {
+                                onComplete: i === j ? function () {
                                     EventsOpening[category] = false;
                                     EventsOpen[category] = true;
                                 } : undefined
@@ -2163,7 +2204,11 @@
                             OffsetX: MenuWidth + 10,
                             OffsetY: -2,
                             RotateVertically: false,
-                            RotateClockwise: false
+                            RotateClockwise: false,
+                            CallBackBind: 'click',
+                            CallBack: function () {
+                                if (CategoriesOpen && EventsOpen[CurrentCategory] && !EventOpened && !EventOpening) Functions.EventsLeft();
+                            }
                         })
                         .Position(Width, Height, HalfWidth, HalfHeight);
                     Objects.EventsScrollRightHelper = $('#EventsScrollRightHelper', d).Helper({
@@ -2174,7 +2219,11 @@
                             OffsetX: -20,
                             OffsetY: -2,
                             RotateHorizontally: true,
-                            RotateClockwise: false
+                            RotateClockwise: false,
+                            CallBackBind: 'click',
+                            CallBack: function () {
+                                if (CategoriesOpen && EventsOpen[CurrentCategory] && !EventOpened && !EventOpening) Functions.EventsRight();
+                            }
                         })
                         .Position(Width, Height, HalfWidth, HalfHeight);
                     //Objects.CategoryScrollUpHelper = $('#CategoryScrollUpHelper', d).Helper({
@@ -2266,13 +2315,13 @@
                         }
                     },
                     error: function () {
-                        //Functions.LoadCategories().LoadEvents();
-                        //w.LoadingDone = true;
-                        //w.LoadingCallBack = function () {
-                        //    BackgroundMusic.play();
-                        //    SVGObject.css({opacity: 1});
-                        //    setTimeout(Functions.TeaserStart, 1075);
-                        //};
+                        Functions.LoadCategories().LoadEvents();
+                        w.LoadingDone = true;
+                        w.LoadingCallBack = function () {
+                            BackgroundMusic.play();
+                            SVGObject.css({opacity: 1});
+                            setTimeout(Functions.TeaserStart, 1075);
+                        };
                     }
                 });
             },
@@ -2326,8 +2375,7 @@
                     SVGHeight = Height,
                     SVGMarginTop,
                     SVGMarginLeft = 0,
-                    AspectRatio = Width / Height,
-                    DefaultAspectRatio = 1.78;
+                    AspectRatio = Width / Height;
                 if (AspectRatio > DefaultAspectRatio) {
                     SVGWidth = Width;
                     SVGHeight = Math.ceil(SVGWidth / DefaultAspectRatio);
@@ -2345,8 +2393,22 @@
             PerformResize: function () {
                 Width = w.innerWidth;
                 Height = w.innerHeight;
+                if (Width < MinWidth) Width = MinWidth;
+                if (Height < MinHeight) Height = MinHeight;
                 HalfWidth = Width / 2;
                 HalfHeight = Height / 2;
+                Objects.MainFrame.css({
+                    width: Width,
+                    height: Height
+                });
+                Objects.SiteSection.css({
+                    width: Width,
+                    height: Height
+                });
+                Objects.ContentFrame.css({
+                    width: Width - MenuWidth,
+                    height: Height
+                });
                 Functions.PerformResizeFillByWidth();
                 if (LinksActive) {
                     Objects.FacebookLink.Position(Width, Height, HalfWidth, HalfHeight);
@@ -2497,6 +2559,18 @@
                 if (LecturesOpened) {
                     LecturesOpened = false;
                     Functions.FrameClose(Objects.LecturesFrame, Objects.LecturesLink, Direction);
+                }
+            },
+            TechExpoFrameOpen: function () {
+                if (!TechExpoOpened) {
+                    TechExpoOpened = true;
+                    Functions.FrameOpen(Objects.TechExpoFrame, Objects.TechExpoLink);
+                }
+            },
+            TechExpoFrameClose: function (Direction) {
+                if (TechExpoOpened) {
+                    TechExpoOpened = false;
+                    Functions.FrameClose(Objects.TechExpoFrame, Objects.TechExpoLink, Direction);
                 }
             },
             // Gallery
@@ -3165,47 +3239,49 @@
                 Functions.GalleryFrameClose();
                 Functions.ExhibitionsFrameClose();
                 Functions.LecturesFrameClose();
+                Functions.TechExpoFrameClose();
             });
             Objects.GalleryLink = $('#GalleryLink', d).on('click', function () {
                 Functions.GalleryFrameOpen();
                 Functions.SponsorsFrameClose();
                 Functions.ExhibitionsFrameClose();
                 Functions.LecturesFrameClose();
+                Functions.TechExpoFrameClose();
             });
             Objects.EventsLink = $('#EventsLink', d).on('click', function () {
                 Functions.GalleryFrameClose(1);
                 Functions.SponsorsFrameClose(1);
                 Functions.ExhibitionsFrameClose(1);
                 Functions.LecturesFrameClose(1);
+                Functions.TechExpoFrameClose(1);
             });
             Objects.ExhibitionsLink = $('#ExhibitionsLink', d).on('click', function () {
                 Functions.ExhibitionsFrameOpen();
                 Functions.GalleryFrameClose();
                 Functions.SponsorsFrameClose();
                 Functions.LecturesFrameClose();
+                Functions.TechExpoFrameClose();
             });
             Objects.LecturesLink = $('#LecturesLink', d).on('click', function () {
                 Functions.LecturesFrameOpen();
                 Functions.ExhibitionsFrameClose();
                 Functions.GalleryFrameClose();
                 Functions.SponsorsFrameClose();
+                Functions.TechExpoFrameClose();
             });
-            Objects.SponsorsFrame = $('#SponsorsFrame', d).css({
-                width: Width - MenuWidth,
-                height: Height,
-                left: MenuWidth
+            Objects.TechExpoLink = $('#TechExpoLink', d).on('click', function () {
+                Functions.TechExpoFrameOpen();
+                Functions.GalleryFrameClose();
+                Functions.SponsorsFrameClose();
+                Functions.ExhibitionsFrameClose();
+                Functions.LecturesFrameClose();
             });
-            Objects.GalleryFrame = $('#GalleryFrame', d).css({
-                width: Width - MenuWidth,
-                height: Height,
-                left: MenuWidth
-            });
-            Objects.ExhibitionsFrame = $('#ExhibitionsFrame', d).css({
-                width: Width - MenuWidth,
-                height: Height,
-                left: MenuWidth
-            });
-            Objects.LecturesFrame = $('#LecturesFrame', d).css({
+            Objects.SponsorsFrame = $('#SponsorsFrame', d);
+            Objects.GalleryFrame = $('#GalleryFrame', d);
+            Objects.ExhibitionsFrame = $('#ExhibitionsFrame', d);
+            Objects.LecturesFrame = $('#LecturesFrame', d);
+            Objects.TechExpoFrame = $('#TechExpoFrame', d);
+            Objects.ContentFrame = $('.ContentFrame', d).css({
                 width: Width - MenuWidth,
                 height: Height,
                 left: MenuWidth
@@ -3291,13 +3367,14 @@
                     if (e.keyCode === 13) Functions.TeaserStop();
                 } else if (LinksActive && !SiteSectionActive) {
                     if (!Transiting && e.keyCode === 40) Functions.SectionTransition();
-                } else if (!GalleryOpened && !SponsorsOpened && SiteSectionStarted) {
+                } else if (!GalleryOpened && !SponsorsOpened && !LecturesOpened && !ExhibitionsOpened && !TechExpoOpened && SiteSectionStarted) {
                     switch (e.keyCode) {
                         case 13: // Enter
                             if (!EventsOpen[CurrentCategory] && !EventsOpening[CurrentCategory] && !EventOpened && !EventOpening) {
                                 Functions.EventsEnterAnimation(CurrentCategory);
                             }
-                            else if (EventsOpen[CurrentCategory] && !EventsClosing[CurrentCategory] && !EventOpened && !EventOpening) Functions.EventOpenAnimation(Objects.Events[CurrentCategory][CurrentEvent]);
+                            else if (EventsOpen[CurrentCategory] && !EventsClosing[CurrentCategory] && !EventOpened && !EventOpening)
+                                Functions.EventOpenAnimation(Objects.Events[CurrentCategory][CurrentEvent]);
                             break;
                         case 27: // Escape
                             if (EventOpened && !EventClosing) Functions.EventCloseAnimation(Objects.Events[CurrentCategory][CurrentEvent]);
@@ -3339,10 +3416,12 @@
             }
         })
         .on('mousewheel', function (e) {
-            if (!GalleryOpened && !SponsorsOpened && SiteSectionStarted && CategoriesOpen && !EventsMouseOver && !EventOpened && !EventOpening) {
+            if (SiteSectionActive && !GalleryOpened && !SponsorsOpened
+                && !ExhibitionsOpened && !LecturesOpened && CategoriesOpen && !EventsMouseOver
+                && !EventOpened && !EventOpening) {
                 if (e.deltaY > 0) Functions.CategoryUp();
                 else if (e.deltaY < 0) Functions.CategoryDown();
-            } else if (LinksActive && !Transiting && e.deltaY < 0) {
+            } else if (!SiteSectionActive && LinksActive && !Transiting && e.deltaY < 0) {
                 Functions.SectionTransition();
             }
         });
