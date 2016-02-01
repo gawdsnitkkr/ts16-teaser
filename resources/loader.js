@@ -12,8 +12,6 @@
         LoaderBlip = LoaderSVG.find('#Blip'),
         LoaderOuter = LoaderSVG.find('#Outer'),
         LoaderInner = LoaderSVG.find('#Inner'),
-        LoaderText = LoaderSVG.find('text'),
-        IsFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1,
         Power4EaseOut = Power4.easeOut,
         ElasticEaseOut = Elastic.easeOut.config(2, 1);
     if (AspectRatio > DefaultAspectRatio) {
@@ -23,9 +21,6 @@
         SVGHeight = Math.ceil(SVGWidth / DefaultAspectRatio);
     }
     SVGMarginTop = (Height - SVGHeight) / 2;
-    if (IsFirefox) t.set(LoaderText, {
-        x: '+=15'
-    });
     t.fromTo(LoaderSVG, 0.5, {
         width: SVGWidth,
         height: SVGHeight,
@@ -145,28 +140,9 @@
                     ry: 24
                 },
                 ease: Power4.easeIn
-            }, 0.15);
-            t.to(LoaderText, 1, {
-                attr: {
-                    y: '-=25'
-                },
-                opacity: 1,
-                delay: 1,
-                ease: Power4EaseOut,
-                onComplete: function () {
-                    t.to(LoaderText, 1, {
-                        attr: {
-                            y: '-=25'
-                        },
-                        opacity: 0,
-                        delay: 1.5,
-                        ease: Power4EaseOut,
-                        onComplete: function () {
-                            LoaderSVG.remove();
-                            if (w.LoadingCallBack) w.LoadingCallBack();
-                        }
-                    });
-                }
+            }, 0.15, function () {
+                LoaderSVG.remove();
+                if (w.LoadingCallBack) w.LoadingCallBack();
             });
         }
     }

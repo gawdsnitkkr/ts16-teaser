@@ -173,9 +173,6 @@
                         Functions.DequeAnimation(1, Functions.TabletEnterAnimation);
                     });
                 });
-                setTimeout(function () {
-                    TeaserStarted = true;
-                }, 500);
             },
             QueueExitAnimation: function (callback) {
                 t.staggerTo(SVGElements.PeopleArray, 0.5, {
@@ -1396,9 +1393,25 @@
             },
             TeaserStart: function () {
                 SVGObject.css({opacity: 1});
-                Objects.EnterPrompt.Show();
-                Objects.EnterPromptBase = Objects.EnterPrompt.GetRoot().find('#Base');
-                Functions.EnterPromptAnimation();
+                t.fromTo(SVGElements.SkipText, 1, {
+                    y: '+=50',
+                    opacity: 0
+                }, {
+                    y: '-=25',
+                    opacity: 1,
+                    ease: Power4EaseOut,
+                    onComplete: function () {
+                        TeaserStarted = true;
+                        Objects.EnterPrompt.Show();
+                        Objects.EnterPromptBase = Objects.EnterPrompt.GetRoot().find('#Base');
+                        Functions.EnterPromptAnimation();
+                        t.to(SVGElements.SkipText, 1, {
+                            opacity: 0,
+                            delay: 2,
+                            ease: Power4EaseOut
+                        });
+                    }
+                });
                 Functions.QueueEnterAnimation();
             },
             TeaserStop: function () {
@@ -1432,6 +1445,10 @@
                         }
                     }, 0, function () {
                         Functions.TechspardhaEnterAnimation();
+                    });
+                    t.to(SVGElements.SkipText, 1, {
+                        opacity: 0,
+                        ease: Power4EaseOut
                     });
                 }
             },
@@ -1641,7 +1658,7 @@
                             SmallDescription = (SmallDescription.length > DescriptionLength ? SmallDescription.substring(0, DescriptionLength) + '...' : SmallDescription);
                             EventsObjectArray.push($('<div id="Events-' + Category + '-' + EventsArray[j].replace(' ', '+') + '" class="Event" data-category="' + i + '"  data-event="' + j + '">' +
                                 '<table border="0" cellspacing="0" cellpadding="0"><tbody><tr>' +
-                                '<td class="Head"><span>' + EventsArray[j] + '</span><a class="CloseEvent" href="#CloseEvent"></a></td></tr><tr>' +
+                                '<td class="Head"><span>' + EventsArray[j] + '</span><a class="CloseEvent" href="#"></a></td></tr><tr>' +
                                 '<td class="Content"><div class="SmallDescription">' + SmallDescription + '</div><div class="DetailedContent">' +
                                 ((DescriptionsArray[j].length > 0) ? '<span class="ContentHeader">Description</span><hr><p>' + DescriptionsArray[j] + '</p>' : '') +
                                 ((Rules[i][j].length > 0) ? '<span class="ContentHeader">Rules</span><hr><p>' + Rules[i][j] + '</p>' : '') +
@@ -2314,15 +2331,7 @@
                             };
                         }
                     },
-                    error: function () {
-                        Functions.LoadCategories().LoadEvents();
-                        w.LoadingDone = true;
-                        w.LoadingCallBack = function () {
-                            BackgroundMusic.play();
-                            SVGObject.css({opacity: 1});
-                            setTimeout(Functions.TeaserStart, 1075);
-                        };
-                    }
+                    error: Functions.GetData
                 });
             },
             //GetData: function () {
@@ -2878,11 +2887,11 @@
             },
             GetRoot: function () {
                 return RootObject;
-            },
-            SetCallBack: function (callback) {
-                CallBack = callback;
-                RootObject.on(CallBackBind, CallBack);
             }
+            //SetCallBack: function (callback) {
+            //    CallBack = callback;
+            //    RootObject.on(CallBackBind, CallBack);
+            //}
         };
         if (Element[0].getSVGDocument()) Functions.Init();
         else Element.on('load', Functions.Init);
@@ -3198,6 +3207,7 @@
                 SVGElements.IndiaTextFour = $('#IndiaTextFour', SVGRootObject).css({opacity: 0, display: 'block'});
                 SVGElements.IndiaTextFive = $('#IndiaTextFive', SVGRootObject).css({opacity: 0, display: 'block'});
                 SVGElements.IndiaTextSix = $('#IndiaTextSix', SVGRootObject).css({opacity: 0, display: 'block'});
+                SVGElements.SkipText = $('#SkipText', SVGRootObject).css({opacity: 0, display: 'block'});
                 BackgroundMusic.load();
                 BackgroundMusic.addEventListener('canplaythrough', function () {
                     if (!TeaserStarted) Functions.GetData();
