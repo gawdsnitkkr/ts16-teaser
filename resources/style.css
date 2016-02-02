@@ -365,8 +365,8 @@ body {
     text-decoration: none;
     font-weight: 600;
     outline: none;
-    perspective: 24px;
     color: #9dcc66;
+    margin-left: 10px;
 }
 
 .ContentFrame a:hover {
@@ -374,15 +374,23 @@ body {
     text-decoration: underline;
 }
 
-#GalleryFrame {
-    background-color: #070707 !important;
+#SponsorsFrame {
+    background-color: #cccccc;
+    color: #111111 !important;
 }
 
-#SponsorsFrame h1 {
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+#SponsorsFrame div {
+    display: inline-flex;
+    margin: 30px;
+}
+
+#SponsorsFrame div img {
+    width: auto;
+    height: 100px;
+}
+
+#GalleryFrame {
+    background-color: #070707 !important;
 }
 
 ::-webkit-scrollbar {
