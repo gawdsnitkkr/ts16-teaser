@@ -71,6 +71,7 @@
         opacity,
         shadow,
         scale,
+        galleryLoader,
         hover_button,
         button_SVG,
         left_handle,
@@ -2525,6 +2526,7 @@
             GalleryFrameOpen: function () {
                 if (!GalleryOpened) {
                     GalleryOpened = true;
+                    Functions.galleryLoader();
                     Functions.FrameOpen(Objects.GalleryFrame, Objects.GalleryLink);
                 }
             },
@@ -2592,6 +2594,10 @@
                 });
             },
             show_image: function (element, current) {
+                t.to(galleryLoader,0.2,{
+                    opacity:0,
+                    ease: Power4EaseOut
+                });
                 t.to(element, 0.5, {
                     scale: 0.5,
                     rotationX: '-150deg',
@@ -2601,6 +2607,10 @@
                         element.css({
                             backgroundImage: 'url(https://s3-ap-southeast-1.amazonaws.com/techspardha/gallery+/' + current + '.jpg)',
                             onComplete: function () {
+                                t.to(galleryLoader,0.75,{
+                                    opacity:1,
+                                    ease: Power4EaseOut
+                                });
                                 t.fromTo(element, 0.5, {
                                     //opacity: 0,
                                     scale: 0.5,
@@ -2634,6 +2644,13 @@
                             }
                         });
                     }
+                });
+            },
+            galleryLoader: function(){
+                t.to(galleryLoader,5,{
+                    strokeDashoffset : '+=500',
+                    ease: Linear.easeNone,
+                    onComplete: GalleryOpened ? Functions.galleryLoader : undefined
                 });
             },
             browse: function (element, current, arrow) {
@@ -3300,6 +3317,7 @@
             image_frame = $('#image_frame', d);
             image_window = $('#_image_window', d);
             image_info_display = $('#image_info_display', d);
+            galleryLoader = $('#galleryLoader',d);
             button_SVG = $('#buttonSVG', d);
             gallery_button = $('#_gallery_button', d);
             hover_button = $('.hover_button', d);

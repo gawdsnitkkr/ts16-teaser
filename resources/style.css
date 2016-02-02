@@ -567,6 +567,12 @@ body {
     perspective: 200px
 }
 
+#imageLoader{
+    position: relative;
+    top: 45%;
+    transform: translate(0,-50%);
+}
+
 /*Gallery*/
 
 /*Helper*/
