@@ -143,11 +143,11 @@ body {
 }
 
 /*#RegisterLink object {*/
-    /*margin: -1px 17px 0 3px !important;*/
+/*margin: -1px 17px 0 3px !important;*/
 /*}*/
 
 /*#SponsorsLink {*/
-    /*margin-top: 27px !important;*/
+/*margin-top: 27px !important;*/
 /*}*/
 
 #CategoryFrame {
@@ -387,6 +387,10 @@ body {
 #SponsorsFrame div img {
     width: auto;
     height: 100px;
+}
+
+#TechExpoFrame a {
+    margin-left: 0 !important;
 }
 
 #GalleryFrame {
