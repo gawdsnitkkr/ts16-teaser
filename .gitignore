@@ -39,5 +39,6 @@ Temporary Items
 # WebStorm Temp Fils
 .idea/
 
-#bower
-bower_components/
+#Big Files
+style.css
+main.js
