@@ -565,7 +565,7 @@ body {
 
 #_image_viewbox {
     position: absolute;
-    background: no-repeat center;
+    background: url('https://s3-ap-southeast-1.amazonaws.com/techspardha/gallery+/1.jpg') no-repeat center;
     background-size: cover;
     border: solid #fdfdda 10px;
     perspective: 200px
