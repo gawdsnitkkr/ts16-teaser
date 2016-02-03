@@ -374,6 +374,10 @@ body {
     text-decoration: underline;
 }
 
+#LecturesContainer {
+    display: none;
+}
+
 #SponsorsFrame {
     background-color: #cccccc;
     color: #111111 !important;
@@ -567,10 +571,10 @@ body {
     perspective: 200px
 }
 
-#imageLoader{
+#imageLoader {
     position: relative;
     top: 45%;
-    transform: translate(0,-50%);
+    transform: translate(0, -50%);
 }
 
 /*Gallery*/
@@ -839,16 +843,6 @@ body {
 
 .background-transparent {
     background: transparent !important;
-}
-
-md-ink-bar {
-    background: #fff !important;
-}
-
-md-tab-item span {
-    font-size: 1.1em;
-    letter-spacing: 1px;
-    font-weight: 500;
 }
 
 .pop-up {

@@ -2540,12 +2540,24 @@
                 if (!SponsorsOpened) {
                     SponsorsOpened = true;
                     Functions.FrameOpen(Objects.SponsorsFrame, Objects.SponsorsLink);
+                    t.staggerFromTo(Objects.SponsorsFrameDiv, 1, {
+                        opacity: 0,
+                        y: 50
+                    }, {
+                        opacity: 1,
+                        y: 0,
+                        ease: Power4EaseOut
+                    }, 0.1);
+                    Objects.MousePrompt.Hide();
+                    Objects.KeysPrompt.Hide();
                 }
             },
             SponsorsFrameClose: function (Direction) {
                 if (SponsorsOpened) {
                     SponsorsOpened = false;
                     Functions.FrameClose(Objects.SponsorsFrame, Objects.SponsorsLink, Direction);
+                    Objects.MousePrompt.Show();
+                    Objects.KeysPrompt.Show();
                 }
             },
             ExhibitionsFrameOpen: function () {
@@ -2594,8 +2606,8 @@
                 });
             },
             show_image: function (element, current) {
-                t.to(galleryLoader,0.2,{
-                    opacity:0,
+                t.to(galleryLoader, 0.2, {
+                    opacity: 0,
                     ease: Power4EaseOut
                 });
                 t.to(element, 0.5, {
@@ -2607,8 +2619,8 @@
                         element.css({
                             backgroundImage: 'url(https://s3-ap-southeast-1.amazonaws.com/techspardha/gallery+/' + current + '.jpg)',
                             onComplete: function () {
-                                t.to(galleryLoader,0.75,{
-                                    opacity:1,
+                                t.to(galleryLoader, 0.75, {
+                                    opacity: 1,
                                     ease: Power4EaseOut
                                 });
                                 t.fromTo(element, 0.5, {
@@ -2646,9 +2658,9 @@
                     }
                 });
             },
-            galleryLoader: function(){
-                t.to(galleryLoader,5,{
-                    strokeDashoffset : '+=500',
+            galleryLoader: function () {
+                t.to(galleryLoader, 5, {
+                    strokeDashoffset: '+=500',
                     ease: Linear.easeNone,
                     onComplete: GalleryOpened ? Functions.galleryLoader : undefined
                 });
@@ -3304,6 +3316,7 @@
                 Functions.LecturesFrameClose();
             });
             Objects.SponsorsFrame = $('#SponsorsFrame', d);
+            Objects.SponsorsFrameDiv = Objects.SponsorsFrame.find('div');
             Objects.GalleryFrame = $('#GalleryFrame', d);
             Objects.ExhibitionsFrame = $('#ExhibitionsFrame', d);
             Objects.LecturesFrame = $('#LecturesFrame', d);
@@ -3317,7 +3330,7 @@
             image_frame = $('#image_frame', d);
             image_window = $('#_image_window', d);
             image_info_display = $('#image_info_display', d);
-            galleryLoader = $('#galleryLoader',d);
+            galleryLoader = $('#galleryLoader', d);
             button_SVG = $('#buttonSVG', d);
             gallery_button = $('#_gallery_button', d);
             hover_button = $('.hover_button', d);
