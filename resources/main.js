@@ -21,16 +21,25 @@
         Paused = false,
         TimeOutArray = [],
         IsFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1,
-        Categories = ['Managerial', 'Quizzes', 'Fun Zone', 'Online Events', 'Paper Events', 'Technopolis',
-            'Design', 'Brain Storming', 'Future Builder'],
-        Events = [[], [], [], [], [], [], [], [], []],
-        Descriptions = [[], [], [], [], [], [], [], [], []],
-        Rules = [[], [], [], [], [], [], [], [], []],
-        DateOfEvent = [[], [], [], [], [], [], [], [], []],
-        TimeOfEvent = [[], [], [], [], [], [], [], [], []],
-        Venue = [[], [], [], [], [], [], [], [], []],
-        Coordinator = [[], [], [], [], [], [], [], [], []],
-        PhoneNumber = [[], [], [], [], [], [], [], [], []],
+    //Categories = ['Managerial', 'Quizzes', 'Fun Zone', 'Online Events', 'Paper Events', 'Technopolis',
+    //    'Design', 'Brain Storming', 'Future Builder', 'Mechnium', 'Design & Build', 'Code Conclave', 'ElectroVolt', 'Robotic Challenge'],
+    //Events = [[], [], [], [], [], [], [], [], [], [], [], []],
+    //Descriptions = [[], [], [], [], [], [], [], [], [], [], [], []],
+    //Rules = [[], [], [], [], [], [], [], [], [], [], [], []],
+    //DateOfEvent = [[], [], [], [], [], [], [], [], [], [], [], []],
+    //TimeOfEvent = [[], [], [], [], [], [], [], [], []],
+    //Venue = [[], [], [], [], [], [], [], [], [], [], [], []],
+    //Coordinator = [[], [], [], [], [], [], [], [], [], [], [], []],
+    //PhoneNumber = [[], [], [], [], [], [], [], [], [], [], [], []],
+        Categories = [],
+        Events = [],
+        Descriptions = [],
+        Rules = [],
+        DateOfEvent = [],
+        TimeOfEvent = [],
+        Venue = [],
+        Coordinator = [],
+        PhoneNumber = [],
         CategoriesTop = [],
         CurrentCategory = 0,
         PreviousCategory = 0,
@@ -1626,7 +1635,7 @@
                 Objects.Events = [];
                 Objects.EventsFrames = [];
                 for (; i < l; i++) {
-                    Category = Categories[i].replace(' ', '+');
+                    Category = Categories[i].replace(new RegExp(' |&', 'g'), '+');
                     EventsArray = Events[i];
                     DescriptionsArray = Descriptions[i];
                     m = EventsArray.length;
@@ -2272,35 +2281,19 @@
              * @return {number}
              */
             GetCategoryIndex: function (categoryName) {
-                switch (categoryName) {
-                    case 'Managerial':
-                        return 0;
-                        break;
-                    case 'Quizzes':
-                        return 1;
-                        break;
-                    case 'Fun Zone':
-                        return 2;
-                        break;
-                    case 'Online Events':
-                        return 3;
-                        break;
-                    case 'Paper Events':
-                        return 4;
-                        break;
-                    case 'Technopolis':
-                        return 5;
-                        break;
-                    case 'Design':
-                        return 6;
-                        break;
-                    case 'Brain Storming':
-                        return 7;
-                        break;
-                    case 'Future Builder':
-                        return 8;
-                        break;
-                }
+                var Index = Categories.indexOf(categoryName);
+                if (Index === -1) {
+                    Categories.push(categoryName);
+                    Events.push([]);
+                    Descriptions.push([]);
+                    Rules.push([]);
+                    DateOfEvent.push([]);
+                    TimeOfEvent.push([]);
+                    Venue.push([]);
+                    Coordinator.push([]);
+                    PhoneNumber.push([]);
+                    return Categories.length - 1;
+                } else return Index;
             },
             GetData: function () {
                 $.get({
