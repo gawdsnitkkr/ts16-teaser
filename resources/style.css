@@ -366,6 +366,21 @@ body {
     font-size: 1.1em;
     font-weight: 400;
     display: inline !important;
+    color: #9dcc66;
+}
+
+.ContentFrame .Portrait {
+    display: inline;
+    margin: 0.5em 0 -1.25em 0;
+}
+
+.ContentFrame ul {
+    text-align: justify;
+    font-size: 1em;
+    font-weight: 200;
+    letter-spacing: 0.1em;
+    margin: -0.5em 0 1em 0.5em;
+    padding: 0 0 0 3em;
 }
 
 .ContentFrame a {

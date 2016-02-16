@@ -127,23 +127,29 @@
                 }
             });
         } else {
-            t.staggerTo([LoaderOuter, LoaderInner], 1, {
-                opacity: 0,
-                scale: 0,
+            t.staggerTo([LoaderOuter, LoaderInner], 1.5, {
+                scale: 40,
                 rotation: '+=360',
                 transformOrigin: '50% 50%',
                 ease: Back.easeIn
-            }, 0.15);
+            }, 0.15, function () {
+                t.to(LoaderSVG, 1, {
+                    opacity: 0,
+                    ease: Power4EaseOut,
+                    onComplete: function () {
+                        LoaderSVG.remove();
+                    }
+                });
+                if (w.LoadingCallBack) w.LoadingCallBack();
+            });
             t.staggerTo([LoaderOuter, LoaderInner], 1, {
                 attr: {
                     rx: 24,
                     ry: 24
                 },
-                ease: Power4.easeIn
-            }, 0.15, function () {
-                LoaderSVG.remove();
-                if (w.LoadingCallBack) w.LoadingCallBack();
-            });
+                delay: 0.2,
+                ease: Power4EaseOut
+            }, 0);
         }
     }
 })(window, jQuery, TweenMax);
