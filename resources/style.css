@@ -101,7 +101,7 @@ body {
     font-size: 1.1em;
     font-family: 'Segoe UI', 'Open Sans', sans-serif-light, sans-serif;
     letter-spacing: 0.1em;
-    top: 185px;
+    top: 165px;
     left: 0;
     color: #cecece;
     width: 230px;
@@ -109,7 +109,7 @@ body {
 }
 
 #Logo {
-    margin-top: 45px;
+    margin-top: 30px;
     margin-bottom: 20px;
 }
 
@@ -117,7 +117,7 @@ body {
     text-decoration: none;
     font-size: 1.2em;
     font-weight: 600;
-    margin: 30px 0 0 50px;
+    margin: 30px 0 0 40px;
     display: flex;
     outline: none;
     perspective: 24px;
@@ -139,16 +139,16 @@ body {
 }
 
 #RegisterLink {
-    margin: 50px 0 -2px 50px !important;
+    margin: 40px 0 -2px 40px !important;
 }
 
 /*#RegisterLink object {*/
 /*margin: -1px 17px 0 3px !important;*/
 /*}*/
 
-/*#SponsorsLink {*/
-/*margin-top: 27px !important;*/
-/*}*/
+#SponsorsLink {
+    margin-top: 26px !important;
+}
 
 #CategoryFrame {
     display: block;
@@ -349,11 +349,12 @@ body {
     font-weight: 400;
     font-size: 1.1em;
     display: inline-block;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
 }
 
 .ContentFrame p span {
-    display: inline-block;
+    display: none;
+    /*display: inline-block;*/
     margin-top: 5px;
 }
 
@@ -361,12 +362,18 @@ body {
     font-size: 1em !important;
 }
 
+.ContentFrame .Emphasis {
+    font-size: 1.1em;
+    font-weight: 400;
+    display: inline !important;
+}
+
 .ContentFrame a {
     text-decoration: none;
     font-weight: 600;
     outline: none;
     color: #9dcc66;
-    margin-left: 10px;
+    /*margin-left: 10px;*/
 }
 
 .ContentFrame a:hover {
@@ -375,11 +382,11 @@ body {
 }
 
 #LecturesContainer {
-    display: none;
+    /*display: none;*/
 }
 
 #SponsorsFrame {
-    background-color: #cccccc;
+    background-color: #ffffff;
     color: #111111 !important;
 }
 
@@ -882,6 +889,14 @@ body {
 .border-top-bottom-1 {
     border-top: 1px solid #fff;
     border-bottom: 1px solid #fff;
+}
+
+.login iframe {
+    width: 100%;
+    height: 70vh;
+    border: 0;
+    margin: 0;
+    padding: 0;
 }
 
 /*Helper*/

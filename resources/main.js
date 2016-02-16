@@ -60,6 +60,7 @@
         ExhibitionsOpened = false,
         LecturesOpened = false,
         TechExpoOpened = false,
+        StartupFairOpened = false,
         CategoriesFrameLeft = 275,
         CategoriesFrameTop = HalfHeight - 180,
         MenuWidth = 230,
@@ -2325,7 +2326,16 @@
                             };
                         }
                     },
-                    error: Functions.GetData
+                    //error: Functions.GetData
+                    error: function () {
+                        Functions.LoadCategories().LoadEvents();
+                        w.LoadingDone = true;
+                        w.LoadingCallBack = function () {
+                            BackgroundMusic.play();
+                            SVGObject.css({opacity: 1});
+                            setTimeout(Functions.TeaserStart, 1075);
+                        };
+                    }
                 });
             },
             //GetData: function () {
@@ -2587,6 +2597,18 @@
                 if (TechExpoOpened) {
                     TechExpoOpened = false;
                     Functions.FrameClose(Objects.TechExpoFrame, Objects.TechExpoLink, Direction);
+                }
+            },
+            StartupFairFrameOpen: function () {
+                if (!StartupFairOpened) {
+                    StartupFairOpened = true;
+                    Functions.FrameOpen(Objects.StartupFairFrame, Objects.StartupFairLink);
+                }
+            },
+            StartupFairFrameClose: function (Direction) {
+                if (StartupFairOpened) {
+                    StartupFairOpened = false;
+                    Functions.FrameClose(Objects.StartupFairFrame, Objects.StartupFairLink, Direction);
                 }
             },
             // Gallery
@@ -3272,6 +3294,7 @@
                 Functions.ExhibitionsFrameClose();
                 Functions.LecturesFrameClose();
                 Functions.TechExpoFrameClose();
+                Functions.StartupFairFrameClose();
             });
             Objects.GalleryLink = $('#GalleryLink', d).on('click', function () {
                 Functions.GalleryFrameOpen();
@@ -3279,6 +3302,7 @@
                 Functions.ExhibitionsFrameClose();
                 Functions.LecturesFrameClose();
                 Functions.TechExpoFrameClose();
+                Functions.StartupFairFrameClose();
             });
             Objects.EventsLink = $('#EventsLink', d).on('click', function () {
                 Functions.GalleryFrameClose(1);
@@ -3286,6 +3310,7 @@
                 Functions.ExhibitionsFrameClose(1);
                 Functions.LecturesFrameClose(1);
                 Functions.TechExpoFrameClose(1);
+                Functions.StartupFairFrameClose(1);
             });
             Objects.ExhibitionsLink = $('#ExhibitionsLink', d).on('click', function () {
                 Functions.ExhibitionsFrameOpen();
@@ -3293,6 +3318,7 @@
                 Functions.SponsorsFrameClose();
                 Functions.LecturesFrameClose();
                 Functions.TechExpoFrameClose();
+                Functions.StartupFairFrameClose();
             });
             Objects.LecturesLink = $('#LecturesLink', d).on('click', function () {
                 Functions.LecturesFrameOpen();
@@ -3300,6 +3326,7 @@
                 Functions.GalleryFrameClose();
                 Functions.SponsorsFrameClose();
                 Functions.TechExpoFrameClose();
+                Functions.StartupFairFrameClose();
             });
             Objects.TechExpoLink = $('#TechExpoLink', d).on('click', function () {
                 Functions.TechExpoFrameOpen();
@@ -3307,6 +3334,15 @@
                 Functions.SponsorsFrameClose();
                 Functions.ExhibitionsFrameClose();
                 Functions.LecturesFrameClose();
+                Functions.StartupFairFrameClose();
+            });
+            Objects.StartupFairLink = $('#StartupFairLink', d).on('click', function () {
+                Functions.StartupFairFrameOpen();
+                Functions.GalleryFrameClose();
+                Functions.SponsorsFrameClose();
+                Functions.ExhibitionsFrameClose();
+                Functions.LecturesFrameClose();
+                Functions.TechExpoFrameClose();
             });
             Objects.SponsorsFrame = $('#SponsorsFrame', d);
             Objects.SponsorsFrameDiv = Objects.SponsorsFrame.find('div');
@@ -3314,6 +3350,7 @@
             Objects.ExhibitionsFrame = $('#ExhibitionsFrame', d);
             Objects.LecturesFrame = $('#LecturesFrame', d);
             Objects.TechExpoFrame = $('#TechExpoFrame', d);
+            Objects.StartupFairFrame = $('#StartupFairFrame', d);
             Objects.ContentFrame = $('.ContentFrame', d).css({
                 width: Width - MenuWidth,
                 height: Height,
