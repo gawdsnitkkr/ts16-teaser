@@ -2326,16 +2326,7 @@
                             };
                         }
                     },
-                    //error: Functions.GetData
-                    error: function () {
-                        Functions.LoadCategories().LoadEvents();
-                        w.LoadingDone = true;
-                        w.LoadingCallBack = function () {
-                            BackgroundMusic.play();
-                            SVGObject.css({opacity: 1});
-                            setTimeout(Functions.TeaserStart, 1075);
-                        };
-                    }
+                    error: Functions.GetData
                 });
             },
             //GetData: function () {
