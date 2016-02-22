@@ -2296,7 +2296,7 @@
                     return Categories.length - 1;
                 } else return Index;
             },
-            OnGetDataSucess: function(){
+            OnGetDataSuccess: function(){
                 Functions.LoadCategories().LoadEvents();
                 w.LoadingDone = true;
                 w.LoadingCallBack = function () {
@@ -2326,10 +2326,10 @@
                                 DateOfEvent[category].push(event.dateOfEvent);
                                 TimeOfEvent[category].push(event.timeOfEvent);
                             }
-                            Functions.OnGetDataSucess();
+                            Functions.OnGetDataSuccess();
                         }
                     },
-                    error: Functions.OnGetDataSucess
+                    error: Functions.GetData
                 });
             },
             //GetData: function () {
