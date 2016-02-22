@@ -286,6 +286,63 @@ body {
     text-align: justify !important;
 }
 
+#ExhibitionsFrame img {
+    width: 200px;
+    margin: 1em 2em 1em 2em;
+    float: left;
+}
+
+#ExhibitionsFrame #ImageDRDO {
+    float: right !important;
+    width: 150px !important;
+    -webkit-border-radius: 75px;
+    -moz-border-radius: 75px;
+    border-radius: 75px;
+}
+
+#ExhibitionsFrame #ParagraphGoogleGlass {
+    margin-top: 3em !important;
+}
+
+#ExhibitionsFrame #ParagraphGoogleGlass img {
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+}
+
+#ExhibitionsFrame #ParagraphNVIDIA {
+    margin-top: 3.5em !important;
+}
+
+#ExhibitionsFrame #ParagraphNVIDIA img {
+    float: right !important;
+    margin-top: -1em !important;
+}
+
+#ExhibitionsFrame #ImageHexapod {
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+}
+
+#ExhibitionsFrame #ImageKinect {
+    float: right !important;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    margin-top: 5em !important;
+}
+
+#ExhibitionsFrame #ParagraphSyma {
+    margin-bottom: 8em;
+}
+#ExhibitionsFrame #ParagraphSyma img {
+    float: left;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+}
+
 .ContactDetail {
     display: none;
     background-color: #18181b;
@@ -328,14 +385,6 @@ body {
     margin-left: 1.1em;
 }
 
-.ContentFrame h4 {
-    font-weight: 400;
-    font-size: 1.6em;
-    text-align: left;
-    margin-left: 1.2em;
-    margin-bottom: 2px;
-}
-
 .ContentFrame p {
     text-align: justify;
     font-size: 1em;
@@ -352,12 +401,6 @@ body {
     margin-bottom: 3px;
 }
 
-.ContentFrame p span {
-    display: none;
-    /*display: inline-block;*/
-    margin-top: 5px;
-}
-
 .ContentFrame p span * {
     font-size: 1em !important;
 }
@@ -369,17 +412,12 @@ body {
     color: #9dcc66;
 }
 
-.ContentFrame .Portrait {
-    display: inline;
-    margin: 0.5em 0 -1.25em 0;
-}
-
 .ContentFrame ul {
     text-align: justify;
     font-size: 1em;
     font-weight: 200;
     letter-spacing: 0.1em;
-    margin: -0.5em 0 1em 0.5em;
+    margin: 0 0 0 0.5em;
     padding: 0 0 0 3em;
 }
 
@@ -396,8 +434,31 @@ body {
     text-decoration: underline;
 }
 
-#LecturesContainer {
-    /*display: none;*/
+.LecturesContainer {
+    display: inline-flex;
+    width: 40%;
+    margin-top: 0.5em;
+}
+
+.LecturesContainer * {
+    text-align: center !important;
+}
+
+.LecturesContainer .Portrait {
+    display: inline;
+    border-radius: 50%;
+    margin-top: 0.5em;
+    width: 140px;
+}
+
+.LecturesContainer h4 {
+    font-weight: 400;
+    font-size: 1.65em;
+    margin-bottom: 2px;
+}
+
+.LecturesContainer b {
+    margin-bottom: 0.5em;
 }
 
 #SponsorsFrame {

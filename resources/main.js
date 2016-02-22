@@ -2296,6 +2296,15 @@
                     return Categories.length - 1;
                 } else return Index;
             },
+            OnGetDataSucess: function(){
+                Functions.LoadCategories().LoadEvents();
+                w.LoadingDone = true;
+                w.LoadingCallBack = function () {
+                    BackgroundMusic.play();
+                    SVGObject.css({opacity: 1});
+                    setTimeout(Functions.TeaserStart, 1075);
+                };
+            },
             GetData: function () {
                 $.get({
                     url: 'http://manage.techspardha.org/events/',
@@ -2317,16 +2326,10 @@
                                 DateOfEvent[category].push(event.dateOfEvent);
                                 TimeOfEvent[category].push(event.timeOfEvent);
                             }
-                            Functions.LoadCategories().LoadEvents();
-                            w.LoadingDone = true;
-                            w.LoadingCallBack = function () {
-                                BackgroundMusic.play();
-                                SVGObject.css({opacity: 1});
-                                setTimeout(Functions.TeaserStart, 1075);
-                            };
+                            Functions.OnGetDataSucess();
                         }
                     },
-                    error: Functions.GetData
+                    error: Functions.OnGetDataSucess
                 });
             },
             //GetData: function () {
@@ -3503,7 +3506,7 @@
             }
         }
         dO.on(EventKey, function () {
-            if (!LinksActive) {
+            if (w.LoadingDone && !LinksActive) {
                 if (!Paused) {
                     Paused = true;
                     BackgroundMusic.pause();
